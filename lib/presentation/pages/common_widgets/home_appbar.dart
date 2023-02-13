@@ -1,51 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:tocopedia/presentation/pages/features/home/search_page.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/product_search_bar.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
-  const HomeAppBar({Key? key}) : super(key: key);
+  final String query;
+
+  const HomeAppBar({Key? key, this.query = ""}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return SafeArea(
       child: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Container(
-                child: Material(
-                  borderRadius: BorderRadius.circular(10),
-                  elevation: 1,
-                  child: TextFormField(
-                    onFieldSubmitted: (value) {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          SearchPage.routeName, ModalRoute.withName("/"),
-                          arguments: value);
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.search_rounded,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.only(top: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Search Tocopedia',
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: ProductSearchBar(query: query),
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),

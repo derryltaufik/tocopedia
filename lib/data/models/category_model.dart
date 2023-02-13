@@ -24,6 +24,16 @@ class CategoryModel {
     );
   }
 
+  factory CategoryModel.fromEntity(Category category) {
+    return CategoryModel(
+      id: category.id,
+      name: category.name,
+      createdAt: category.createdAt,
+      updatedAt: category.updatedAt,
+      v: category.v,
+    );
+  }
+
 //<editor-fold desc="Data Methods">
   const CategoryModel({
     required this.name,

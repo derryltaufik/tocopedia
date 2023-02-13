@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
-import 'package:tocopedia/data/repositories/user_repository_impl.dart';
-import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/buyer_navigation_bar.dart';
+import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 import 'package:tocopedia/injection.dart' as di;
@@ -28,6 +24,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => di.locator<UserProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<ProductProvider>(),
         )
       ],
       child: Consumer<UserProvider>(builder: (context, userProvider, child) {
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: Colors.green,
+            colorSchemeSeed: Colors.lightGreen,
 
             // colorSchemeSeed: const Color.fromRGBO(17, 164, 94, 1),
           ),

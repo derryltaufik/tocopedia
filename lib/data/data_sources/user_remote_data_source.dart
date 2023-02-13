@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/common/exception.dart';
-import 'package:tocopedia/common/secret.dart';
+import 'package:tocopedia/common/env_variables.dart';
 import 'package:tocopedia/data/models/address_model.dart';
 import 'package:tocopedia/data/models/user_model.dart';
 import 'package:http/http.dart' as http;

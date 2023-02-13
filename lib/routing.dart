@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
-import 'package:tocopedia/presentation/pages/features/home/search_page.dart';
+import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 
@@ -38,11 +39,17 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     //     builder: (context) =>
     //         CategoryPage(category: routeSettings.arguments as String),
     //   );
-    case SearchPage.routeName:
+    case SearchProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) =>
-            SearchPage(searchQuery: routeSettings.arguments as String),
+            SearchProductPage(searchQuery: routeSettings.arguments as String),
+      );
+    case ViewProductPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            ViewProductPage(productId: routeSettings.arguments as String),
       );
     // case ProductDetailsPage.routeName:
     //   return MaterialPageRoute(
