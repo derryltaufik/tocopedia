@@ -19,6 +19,7 @@ class UserProvider with ChangeNotifier {
   final GetUser _getUser;
   final UpdateUser _updateUser;
 
+
   User? _user;
 
   User? get user => _user;

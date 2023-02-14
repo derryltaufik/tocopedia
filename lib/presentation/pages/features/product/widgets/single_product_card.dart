@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tocopedia/domains/entities/product.dart';
@@ -21,8 +22,12 @@ class SingleProductCard extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1 / 1,
-              child: Image.network(
-                product.images[0],
+              child: CachedNetworkImage(
+                imageUrl: product.images[0],
+                progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 fit: BoxFit.cover,
               ),
             ),

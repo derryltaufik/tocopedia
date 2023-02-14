@@ -1,3 +1,5 @@
+import 'package:tocopedia/domains/entities/cart_item.dart';
+
 class Cart {
   Cart({
     required this.id,
@@ -14,16 +16,4 @@ class Cart {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
-}
-
-class CartItem {
-  CartItem({
-    required this.productId,
-    required this.quantity,
-    required this.id,
-  });
-
-  final String productId;
-  final int quantity;
-  final String id;
 }

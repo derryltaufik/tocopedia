@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/cart_button.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/product_search_bar.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -21,12 +22,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconButton(
-                icon: Badge(
-                    label: Text("10"),
-                    child: Icon(Icons.shopping_cart_outlined, size: 25)),
-                onPressed: () {},
-              ),
+              child: CartButton(),
             ),
           ],
         ),

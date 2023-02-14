@@ -10,6 +10,7 @@ import 'package:tocopedia/presentation/providers/provider_state.dart';
 class ProductProvider with ChangeNotifier {
   final GetProduct _getProduct;
   final SearchProduct _searchProduct;
+  final String? _authToken;
 
   Product? _product;
 
@@ -23,11 +24,13 @@ class ProductProvider with ChangeNotifier {
 
   String get message => _message;
 
-  ProductProvider({
-    required GetProduct getProduct,
-    required SearchProduct searchProduct,
-  })  : _searchProduct = searchProduct,
-        _getProduct = getProduct;
+  ProductProvider(
+      {required GetProduct getProduct,
+      required SearchProduct searchProduct,
+      required String? authToken})
+      : _searchProduct = searchProduct,
+        _getProduct = getProduct,
+        _authToken = authToken;
 
   ProviderState _searchProductState = ProviderState.empty;
 

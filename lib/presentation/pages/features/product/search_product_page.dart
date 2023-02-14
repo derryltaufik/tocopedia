@@ -37,7 +37,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
     return Scaffold(
       appBar: HomeAppBar(query: widget.searchQuery),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0).copyWith(bottom: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

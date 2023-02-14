@@ -1,0 +1,113 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:tocopedia/domains/entities/cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
+import 'package:tocopedia/domains/use_cases/product/get_product.dart';
+import 'package:tocopedia/presentation/providers/provider_state.dart';
+
+class CartProvider with ChangeNotifier {
+  final GetCart _getCart;
+  final AddToCart _addToCart;
+  final RemoveFromCart _removeFromCart;
+  final UpdateCart _updateCart;
+  final ClearCart _clearCart;
+  final GetProduct _getProduct;
+  final String? _authToken;
+
+  Cart? _cart;
+
+  Cart? get cart => _cart;
+
+  String _message = "";
+
+  String get message => _message;
+
+  String? get token => _authToken;
+
+  int get totalItemCount {
+    if (_cart == null) return 0;
+    if (_cart!.cartItems.isEmpty) return 0;
+    int total = 0;
+    for (var cartItem in _cart!.cartItems) {
+      total += cartItem.quantity;
+    }
+    return total;
+  }
+
+  CartProvider(
+      {required GetCart getCart,
+      required AddToCart addToCart,
+      required RemoveFromCart removeFromCart,
+      required UpdateCart updateCart,
+      required ClearCart clearCart,
+      required GetProduct getProduct,
+      required String? authToken})
+      : _getCart = getCart,
+        _addToCart = addToCart,
+        _removeFromCart = removeFromCart,
+        _updateCart = updateCart,
+        _clearCart = clearCart,
+        _getProduct = getProduct,
+        _authToken = authToken;
+
+  ProviderState _getCartState = ProviderState.empty;
+
+  ProviderState get getCartState => _getCartState;
+
+  ProviderState _addCartState = ProviderState.empty;
+
+  ProviderState get addCartState => _addCartState;
+
+  Future<void> addToCart(String productId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      _addCartState = ProviderState.loading;
+      notifyListeners();
+      final cart = await _addToCart.execute(_authToken!, productId);
+      _cart = cart;
+      _addCartState = ProviderState.loaded;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
+      _addCartState = ProviderState.error;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getCart() async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      _getCartState = ProviderState.loading;
+      notifyListeners();
+      final cart = await _getCart.execute(_authToken!);
+      _cart = cart;
+      _getCartState = ProviderState.loaded;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
+      _getCartState = ProviderState.error;
+      notifyListeners();
+    }
+  }
+
+  Future<void> init() async {
+    try {
+      if (_verifyToken()) {
+        _cart = await _getCart.execute(_authToken!);
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  bool _verifyToken() {
+    return (_authToken != null && _authToken!.isNotEmpty);
+  }
+}
