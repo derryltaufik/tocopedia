@@ -14,6 +14,8 @@ import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
+import 'package:tocopedia/domains/use_cases/cart/select_cart_item.dart';
+import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
@@ -72,6 +74,8 @@ void init() {
   locator.registerLazySingleton(() => AddToCart(locator()));
   locator.registerLazySingleton(() => RemoveFromCart(locator()));
   locator.registerLazySingleton(() => UpdateCart(locator()));
+  locator.registerLazySingleton(() => SelectCartItem(locator()));
+  locator.registerLazySingleton(() => UnselectCartItem(locator()));
   locator.registerLazySingleton(() => ClearCart(locator()));
 
   locator.registerFactory(
@@ -99,6 +103,8 @@ void init() {
       getCart: locator(),
       removeFromCart: locator(),
       updateCart: locator(),
+      selectCartItem: locator(),
+      unselectCartItem: locator(),
       getProduct: locator(),
       authToken: param1,
     ),

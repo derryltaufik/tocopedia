@@ -49,7 +49,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
         return Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
-            Container(
+            SizedBox(
               height: double.infinity,
               child: SingleChildScrollView(
                 child: Column(

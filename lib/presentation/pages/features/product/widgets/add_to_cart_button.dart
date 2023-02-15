@@ -17,14 +17,14 @@ class AddToCartButton extends StatelessWidget {
     final theme = Theme.of(context);
     await cartProvider.addToCart(productId);
 
-    if (cartProvider.addCartState == ProviderState.error) {
+    if (cartProvider.updateCartState == ProviderState.error) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(cartProvider.message),
           behavior: SnackBarBehavior.floating,
         ));
       }
-    } else if (cartProvider.addCartState == ProviderState.loaded) {
+    } else if (cartProvider.updateCartState == ProviderState.loaded) {
       if (context.mounted) {
         showModalBottomSheet(
           context: context,
@@ -50,8 +50,10 @@ class AddToCartButton extends StatelessWidget {
                         SizedBox(width: 5),
                         FilledButton(
                           child: const Text('See Cart'),
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(CartPage.routeName),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushNamed(CartPage.routeName);
+                          },
                         ),
                       ],
                     ),

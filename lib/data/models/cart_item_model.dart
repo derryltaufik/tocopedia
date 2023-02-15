@@ -6,12 +6,14 @@ class CartItemModel {
   final String productId;
   final int quantity;
   final String id;
+  final bool selected;
 
   CartItem toEntity() {
     return CartItem(
       id: id,
       productId: productId,
       quantity: quantity,
+      selected: selected,
     );
   }
 
@@ -25,6 +27,7 @@ class CartItemModel {
     required this.productId,
     required this.quantity,
     required this.id,
+    required this.selected,
   });
 
   @override
@@ -34,25 +37,29 @@ class CartItemModel {
           runtimeType == other.runtimeType &&
           productId == other.productId &&
           quantity == other.quantity &&
-          id == other.id);
+          id == other.id &&
+          selected == other.selected);
 
   @override
-  int get hashCode => productId.hashCode ^ quantity.hashCode ^ id.hashCode;
+  int get hashCode =>
+      productId.hashCode ^ quantity.hashCode ^ id.hashCode ^ selected.hashCode;
 
   @override
   String toString() {
-    return 'CartItemModel{ productId: $productId, quantity: $quantity, id: $id,}';
+    return 'CartItemModel{ productId: $productId, quantity: $quantity, id: $id, selected: $selected,}';
   }
 
   CartItemModel copyWith({
     String? productId,
     int? quantity,
     String? id,
+    bool? selected,
   }) {
     return CartItemModel(
       productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
       id: id ?? this.id,
+      selected: selected ?? this.selected,
     );
   }
 
@@ -60,6 +67,7 @@ class CartItemModel {
     return {
       'product_id': productId,
       'quantity': quantity,
+      'selected': selected,
       '_id': id,
     };
   }
@@ -68,6 +76,7 @@ class CartItemModel {
     return CartItemModel(
       productId: map['product_id'] as String,
       quantity: map['quantity'] as int,
+      selected: map['selected'] as bool,
       id: map['_id'] as String,
     );
   }

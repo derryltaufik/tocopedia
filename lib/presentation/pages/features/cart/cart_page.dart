@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
 
@@ -21,14 +23,15 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
+//https://hesam-kamalan.medium.com/how-to-prevent-the-keyboard-pushes-a-widget-up-on-flutter-873569449927
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Cart")),
-      body: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        children: [
-          Container(
+    final theme = Theme.of(context);
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(title: Text("Cart")),
+          body: SizedBox(
             height: double.infinity,
             child: Consumer<CartProvider>(
               builder: (context, cartProvider, child) {
@@ -39,24 +42,67 @@ class _CartPageState extends State<CartPage> {
                   return Center(child: Text(cartProvider.message));
                 }
                 final cartItems = cartProvider.cart!.cartItems;
-                return ListView.builder(
+                final productMap = cartProvider.productMap;
+                print(productMap);
+                return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(thickness: 0),
                   itemCount: cartItems.length,
                   itemBuilder: (context, index) {
                     final cartItem = cartItems[index];
-                    return ListTile(
-                      title: Text(cartItem.productId),
+                    return CartItemTile(
+                      cartItem: cartItem,
+                      key: Key(cartItem.id),
                     );
                   },
                 );
               },
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(child: Text("Checkout"), onPressed: () {}),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Material(
+            elevation: 20,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(1),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Consumer<CartProvider>(
+                  builder: (context, cartProvider, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      NumberFormat.currency(
+                              decimalDigits: 0, locale: "id_ID", symbol: "Rp")
+                          .format(cartProvider.totalPrice),
+                      style: theme.textTheme.titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    FilledButton(
+                        style: FilledButton.styleFrom(
+                            textStyle: theme.textTheme.titleMedium),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Text("Buy (${cartProvider.totalItemCount})"),
+                        ),
+                        onPressed: () {}),
+                  ],
+                );
+              }),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

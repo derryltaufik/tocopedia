@@ -26,9 +26,9 @@ class _AuthPageState extends State<AuthPage> {
   final _authFormKey = GlobalKey<FormState>();
   AuthFormMode _formMode = AuthFormMode.login;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void submitForm(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -75,8 +75,9 @@ class _AuthPageState extends State<AuthPage> {
       body: SafeArea(
         child: Consumer<UserProvider>(
           builder: (context, value, child) {
-            if (value.autoLoginState == ProviderState.loading)
+            if (value.autoLoginState == ProviderState.loading) {
               return Center(child: CircularProgressIndicator());
+            }
 
             return Center(
               child: SingleChildScrollView(
