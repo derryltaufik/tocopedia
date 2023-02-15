@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,11 +45,18 @@ class _CartItemTileState extends State<CartItemTile> {
         }
       },
     );
+    _quantityFocus.addListener(_handleFocusChange);
+  }
+
+  //update quantity when unfocused
+  void _handleFocusChange() {
+    if (!_quantityFocus.hasFocus) {
+      updateQuantity();
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _quantityController.dispose();
     _quantityFocus.dispose();
@@ -58,6 +67,8 @@ class _CartItemTileState extends State<CartItemTile> {
     setState(() {
       quantity++;
       _quantityController.text = quantity.toStringAsFixed(0);
+      _quantityController.selection =
+          TextSelection.collapsed(offset: _quantityController.text.length);
     });
     updateCart(context);
   }
@@ -67,6 +78,8 @@ class _CartItemTileState extends State<CartItemTile> {
     setState(() {
       quantity--;
       _quantityController.text = quantity.toStringAsFixed(0);
+      _quantityController.selection =
+          TextSelection.collapsed(offset: _quantityController.text.length);
     });
     updateCart(context);
   }
@@ -74,12 +87,19 @@ class _CartItemTileState extends State<CartItemTile> {
   // edit quantity directly
   void updateQuantity() {
     setState(() {
-      quantity = int.parse(_quantityController.text);
+      quantity = max(int.tryParse(_quantityController.text) ?? 1, 1);
+
+      _quantityController.text = quantity.toStringAsFixed(0);
+      _quantityController.selection =
+          TextSelection.collapsed(offset: _quantityController.text.length);
     });
+
+    updateCart(context);
   }
 
   // run when clicking + or - button or when updating quantity manually
   void updateCart(BuildContext context) async {
+    print("test");
     await Provider.of<CartProvider>(context, listen: false)
         .updateCart(widget.cartItem.productId, quantity);
   }
@@ -102,8 +122,6 @@ class _CartItemTileState extends State<CartItemTile> {
 
   @override
   Widget build(BuildContext context) {
-    print("build ${product?.id} quantity $quantity");
-
     final theme = Theme.of(context);
 
     if (loading || product == null) {
@@ -219,11 +237,9 @@ class _CartItemTileState extends State<CartItemTile> {
                       style: theme.textTheme.bodySmall,
                       keyboardType: TextInputType.number,
                       controller: _quantityController,
-                      onTapOutside: (event) {
-                        updateQuantity();
+                      onEditingComplete: () {
                         FocusScope.of(context).unfocus();
                       },
-                      onEditingComplete: () => updateQuantity(),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         NumericalRangeFormatter(min: 1, max: product!.stock)
@@ -272,12 +288,12 @@ class NumericalRangeFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     if (newValue.text == '' || int.parse(newValue.text) < min) {
-      String newText = min.toStringAsFixed(0);
-      return const TextEditingValue().copyWith(
-          text: newText,
-          selection:
-              TextSelection.fromPosition(TextPosition(offset: newText.length)));
-      //if > product stock, set to product stock
+      // String newText = min.toStringAsFixed(0);
+      // return const TextEditingValue().copyWith(
+      //     text: newText,
+      //     selection:
+      //         TextSelection.fromPosition(TextPosition(offset: newText.length)));
+      // //if > product stock, set to product stock
     } else {
       String newText = max.toStringAsFixed(0);
 
@@ -288,5 +304,6 @@ class NumericalRangeFormatter extends TextInputFormatter {
                   TextPosition(offset: newText.length)))
           : newValue;
     }
+    return newValue;
   }
 }

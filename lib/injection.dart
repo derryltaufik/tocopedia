@@ -17,6 +17,7 @@ import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/select_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
+import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
@@ -69,6 +70,7 @@ void init() {
 
   locator.registerLazySingleton(() => GetProduct(locator()));
   locator.registerLazySingleton(() => SearchProduct(locator()));
+  locator.registerLazySingleton(() => GetPopularProducts(locator()));
 
   locator.registerLazySingleton(() => GetCart(locator()));
   locator.registerLazySingleton(() => AddToCart(locator()));
@@ -92,6 +94,7 @@ void init() {
     (String? param1, _) => ProductProvider(
       getProduct: locator(),
       searchProduct: locator(),
+      getPopularProducts: locator(),
       authToken: param1,
     ),
   );

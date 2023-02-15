@@ -29,33 +29,37 @@ class _CartPageState extends State<CartPage> {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        Scaffold(
-          appBar: AppBar(title: Text("Cart")),
-          body: SizedBox(
-            height: double.infinity,
-            child: Consumer<CartProvider>(
-              builder: (context, cartProvider, child) {
-                if (cartProvider.getCartState == ProviderState.empty ||
-                    cartProvider.getCartState == ProviderState.loading) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (cartProvider.getCartState == ProviderState.error) {
-                  return Center(child: Text(cartProvider.message));
-                }
-                final cartItems = cartProvider.cart!.cartItems;
-                final productMap = cartProvider.productMap;
-                print(productMap);
-                return ListView.separated(
-                  separatorBuilder: (context, index) => Divider(thickness: 0),
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    final cartItem = cartItems[index];
-                    return CartItemTile(
-                      cartItem: cartItem,
-                      key: Key(cartItem.id),
-                    );
-                  },
-                );
-              },
+        GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            appBar: AppBar(title: Text("Cart")),
+            body: SizedBox(
+              height: double.infinity,
+              child: Consumer<CartProvider>(
+                builder: (context, cartProvider, child) {
+                  if (cartProvider.getCartState == ProviderState.empty ||
+                      cartProvider.getCartState == ProviderState.loading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (cartProvider.getCartState == ProviderState.error) {
+                    return Center(child: Text(cartProvider.message));
+                  }
+                  final cartItems = cartProvider.cart!.cartItems;
+                  if (cartItems.isEmpty) {
+                    return Center(child: Text("Your cart is empty!"));
+                  }
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => Divider(thickness: 0),
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      final cartItem = cartItems[index];
+                      return CartItemTile(
+                        cartItem: cartItem,
+                        key: Key(cartItem.id),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
+import 'package:tocopedia/presentation/pages/features/transaction/transaction_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 
 class BuyerNavBar extends StatefulWidget {
@@ -17,9 +18,7 @@ class _BuyerNavBarState extends State<BuyerNavBar> {
     Scaffold(
       body: Text("Wishlist"),
     ),
-    Scaffold(
-      body: Text("Transactions"),
-    ),
+    TransactionPage(),
     UserPage(),
   ];
 

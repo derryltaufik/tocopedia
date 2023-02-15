@@ -17,4 +17,6 @@ abstract class ProductRepository {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder});
+
+  Future<List<Product>> getPopularProducts();
 }

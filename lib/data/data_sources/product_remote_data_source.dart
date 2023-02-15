@@ -17,6 +17,8 @@ abstract class ProductRemoteDataSource {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder});
+
+  Future<List<ProductModel>> getPopularProducts();
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -56,6 +58,23 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         "sort-by": sortBy,
         "sort-order": sortOrder
       }..removeWhere((key, value) => value == null || value.toString().isEmpty),
+    );
+
+    final response = await client.get(url, headers: defaultHeader);
+
+    final responseBody = json.decode(response.body);
+    if (response.statusCode ~/ 100 == 2) {
+      return List<ProductModel>.from(
+          responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<List<ProductModel>> getPopularProducts() async {
+    final url = Uri.parse(BASE_URL).replace(
+      path: '/products/popular',
     );
 
     final response = await client.get(url, headers: defaultHeader);
