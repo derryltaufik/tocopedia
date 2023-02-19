@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
-import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
+import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_detail_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
 
@@ -47,17 +47,7 @@ class _CartPageState extends State<CartPage> {
                   if (cartItems.isEmpty) {
                     return Center(child: Text("Your cart is empty!"));
                   }
-                  return ListView.separated(
-                    separatorBuilder: (context, index) => Divider(thickness: 0),
-                    itemCount: cartItems.length,
-                    itemBuilder: (context, index) {
-                      final cartItem = cartItems[index];
-                      return CartItemTile(
-                        cartItem: cartItem,
-                        key: Key(cartItem.id),
-                      );
-                    },
-                  );
+                  return Container();
                 },
               ),
             ),
@@ -82,26 +72,26 @@ class _CartPageState extends State<CartPage> {
               ),
               child: Consumer<CartProvider>(
                   builder: (context, cartProvider, child) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          rupiahFormatter.format(cartProvider.totalPrice),
-                          style: theme.textTheme.titleLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      rupiahFormatter.format(cartProvider.totalPrice),
+                      style: theme.textTheme.titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    FilledButton(
+                        style: FilledButton.styleFrom(
+                            textStyle: theme.textTheme.titleMedium),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Text(
+                              "Buy (${cartProvider.totalSelectedItemCount})"),
                         ),
-                        FilledButton(
-                            style: FilledButton.styleFrom(
-                                textStyle: theme.textTheme.titleMedium),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                              child: Text(
-                                  "Buy (${cartProvider.totalSelectedItemCount})"),
-                            ),
-                            onPressed: () {}),
-                      ],
-                    );
-                  }),
+                        onPressed: () {}),
+                  ],
+                );
+              }),
             ),
           ),
         ),

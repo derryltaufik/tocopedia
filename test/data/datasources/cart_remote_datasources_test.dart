@@ -12,10 +12,11 @@ void main() {
   });
 
   group("Get Cart", () {
-    test('should return User Model when the response code is 200', () async {
+    test('get cart', () async {
       try {
         final result = await dataSource.getCart(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U5MWNiY2NiMzE5OWQyNTQ1NTBiM2IiLCJpYXQiOjE2NzYyMjE2Mjh9.ITiQgXN-72cJl6sSj1KW9c_aCQQ50SB_zDaLvEEMKt0");
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2YyMjcwYjM0MjE1MDdhNTlmZjgyZDMiLCJpYXQiOjE2NzY4MTQwOTJ9.9bPeBjcKnIisAeZw-S7FJnglx2c19vgZHddCF1W1OS0",
+        );
         print(result.toString());
       } on SocketException catch (e) {
         print(e);

@@ -1,4 +1,5 @@
 import 'package:tocopedia/domains/entities/cart_item.dart';
+import 'package:tocopedia/domains/entities/cart_item_detail.dart';
 
 class Cart {
   Cart({

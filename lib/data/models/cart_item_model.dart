@@ -1,86 +1,62 @@
 import 'dart:convert';
 
-import 'package:tocopedia/data/models/product_model.dart';
+import 'package:tocopedia/data/models/cart_item_detail_model.dart';
+import 'package:tocopedia/data/models/user_model.dart';
 import 'package:tocopedia/domains/entities/cart_item.dart';
+import 'package:tocopedia/domains/entities/cart_item_detail.dart';
 
 class CartItemModel {
-  final ProductModel product;
-  final int quantity;
-  final String id;
-  final bool selected;
+  CartItemModel({
+    this.seller,
+    this.id,
+    this.cartItemDetails,
+  });
+
+  final UserModel? seller;
+  final String? id;
+  final List<CartItemDetailModel>? cartItemDetails;
 
   CartItem toEntity() {
     return CartItem(
-      id: id,
-      product: product.toEntity(),
-      quantity: quantity,
-      selected: selected,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory CartItemModel.fromJson(String source) =>
-      CartItemModel.fromMap(json.decode(source));
-
-//<editor-fold desc="Data Methods">
-  const CartItemModel({
-    required this.product,
-    required this.quantity,
-    required this.id,
-    required this.selected,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is CartItemModel &&
-          runtimeType == other.runtimeType &&
-          product == other.product &&
-          quantity == other.quantity &&
-          id == other.id &&
-          selected == other.selected);
-
-  @override
-  int get hashCode =>
-      product.hashCode ^ quantity.hashCode ^ id.hashCode ^ selected.hashCode;
-
-  @override
-  String toString() {
-    return 'CartItemModel{ product: $product, quantity: $quantity, id: $id, selected: $selected,}';
+        id: id,
+        seller: seller?.toEntity(),
+        cartItemDetails: cartItemDetails == null
+            ? null
+            : List<CartItemDetail>.from(
+                cartItemDetails!.map((e) => e.toEntity())));
   }
 
   CartItemModel copyWith({
-    ProductModel? product,
-    int? quantity,
+    UserModel? seller,
     String? id,
-    bool? selected,
-  }) {
-    return CartItemModel(
-      product: product ?? this.product,
-      quantity: quantity ?? this.quantity,
-      id: id ?? this.id,
-      selected: selected ?? this.selected,
-    );
-  }
+    List<CartItemDetailModel>? cartItemDetails,
+  }) =>
+      CartItemModel(
+        seller: seller ?? this.seller,
+        id: id ?? this.id,
+        cartItemDetails: cartItemDetails ?? this.cartItemDetails,
+      );
 
-  Map<String, dynamic> toMap() {
-    return {
-      'product': product,
-      'quantity': quantity,
-      'selected': selected,
-      '_id': id,
-    };
-  }
+  factory CartItemModel.fromJson(String str) =>
+      CartItemModel.fromMap(json.decode(str));
 
-  factory CartItemModel.fromMap(Map<String, dynamic> map) {
-    return CartItemModel(
-      product: ProductModel.fromMap(map['product']),
-      quantity: map['quantity'] as int,
-      selected: map['selected'] as bool,
-      id: map['_id'] as String,
-    );
-  }
+  String toJson() => json.encode(toMap());
 
-//</editor-fold>
+  factory CartItemModel.fromMap(Map<String, dynamic> json) => CartItemModel(
+        seller:
+            json["seller"] == null ? null : UserModel.fromMap(json["seller"]),
+        id: json["_id"],
+        cartItemDetails: json["cart_item_details"] == null
+            ? []
+            : List<CartItemDetailModel>.from(json["cart_item_details"]!
+                .map((x) => CartItemDetailModel.fromMap(x))),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "seller": seller,
+        "_id": id,
+        "cart_item_details": cartItemDetails == null
+            ? []
+            : List<dynamic>.from(cartItemDetails!.map((x) => x.toMap())),
+      };
 }

@@ -1,15 +1,14 @@
-import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/domains/entities/cart_item_detail.dart';
+import 'package:tocopedia/domains/entities/user.dart';
 
 class CartItem {
   CartItem({
-    required this.product,
-    required this.quantity,
+    required this.seller,
     required this.id,
-    required this.selected,
+    required this.cartItemDetails,
   });
 
-  final Product product;
-  final int quantity;
-  final String id;
-  final bool selected;
+  final User? seller;
+  final String? id;
+  final List<CartItemDetail>? cartItemDetails;
 }

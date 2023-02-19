@@ -12,12 +12,12 @@ void main() {
   });
 
   group("Get Cart", () {
-    test('should return User Model when the response code is 200', () async {
+    test('should dfsdfsd0', () async {
       try {
         final result = await repository.getCart(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2VlNDcyNTE4MDQxZjQ5NmIwYjA3NmEiLCJpYXQiOjE2NzY1NjAxNjV9.XUx8gQaHroW9XSfbjtQixtEBdtSc96Mvc5PIh3BBg8k");
-
-        print(result.cartItems[0].quantity);
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2YyMjcwYjM0MjE1MDdhNTlmZjgyZDMiLCJpYXQiOjE2NzY4MTQwOTJ9.9bPeBjcKnIisAeZw-S7FJnglx2c19vgZHddCF1W1OS0",
+        );
+        print(result.cartItems[0].cartItemDetails![0]);
       } catch (e) {
         rethrow;
       }

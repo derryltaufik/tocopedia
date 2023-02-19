@@ -105,7 +105,6 @@ class AddressModel {
   }
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
-    print(map['owner']);
     return AddressModel(
       id: map['_id'],
       owner: map['owner'],

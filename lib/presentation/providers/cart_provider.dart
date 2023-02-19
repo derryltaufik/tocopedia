@@ -38,7 +38,9 @@ class CartProvider with ChangeNotifier {
     if (_cart!.cartItems.isEmpty) return 0;
     int total = 0;
     for (var cartItem in _cart!.cartItems) {
-      total += cartItem.quantity;
+      for (var cartItemDetail in cartItem.cartItemDetails!) {
+        total += cartItemDetail.quantity!;
+      }
     }
     return total;
   }
@@ -48,7 +50,11 @@ class CartProvider with ChangeNotifier {
     if (_cart!.cartItems.isEmpty) return 0;
     int total = 0;
     for (var cartItem in _cart!.cartItems) {
-      if (cartItem.selected) total += cartItem.quantity;
+      for (var cartItemDetail in cartItem.cartItemDetails!) {
+        if (cartItemDetail.selected!) {
+          total += cartItemDetail.quantity!;
+        }
+      }
     }
     return total;
   }
@@ -58,8 +64,10 @@ class CartProvider with ChangeNotifier {
     if (_cart!.cartItems.isEmpty) return 0;
     int total = 0;
     for (var cartItem in _cart!.cartItems) {
-      if (cartItem.selected) {
-        total += cartItem.quantity * cartItem.product.price!;
+      for (var cartItemDetail in cartItem.cartItemDetails!) {
+        if (cartItemDetail.selected!) {
+          total += cartItemDetail.quantity! * cartItemDetail.product!.price!;
+        }
       }
     }
     return total;

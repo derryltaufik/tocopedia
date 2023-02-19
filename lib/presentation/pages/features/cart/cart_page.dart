@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_detail_tile.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
@@ -48,14 +49,13 @@ class _CartPageState extends State<CartPage> {
                     return Center(child: Text("Your cart is empty!"));
                   }
                   return ListView.separated(
-                    separatorBuilder: (context, index) => Divider(thickness: 0),
+                    padding: EdgeInsets.only(bottom: 100),
+                    separatorBuilder: (context, index) =>
+                        Divider(thickness: 5),
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final cartItem = cartItems[index];
-                      return CartItemTile(
-                        cartItem: cartItem,
-                        key: Key(cartItem.id),
-                      );
+                      return CartItemTile(cartItem: cartItem);
                     },
                   );
                 },
