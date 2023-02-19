@@ -82,7 +82,7 @@ class _EditUserPageState extends State<EditUserPage> {
                         children: [
                           TextFormField(
                             key: Key("name_field"),
-                            controller: _nameController..text = user.name,
+                            controller: _nameController..text = user.name!,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.person_rounded),
                               hintText: 'Name',

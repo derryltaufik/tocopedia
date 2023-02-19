@@ -1,9 +1,13 @@
+import 'package:tocopedia/domains/entities/order.dart';
+import 'package:tocopedia/domains/entities/order_item_detail.dart';
+import 'package:tocopedia/domains/entities/user.dart';
+
 class OrderItem {
   OrderItem({
     required this.id,
-    required this.orderId,
-    required this.buyerId,
-    required this.sellerId,
+    required this.order,
+    required this.buyer,
+    required this.seller,
     required this.products,
     required this.subtotal,
     required this.quantityTotal,
@@ -14,34 +18,16 @@ class OrderItem {
     required this.v,
   });
 
-  final String id;
-  final String orderId;
-  final String buyerId;
-  final String sellerId;
-  final List<OrderItemProduct> products;
-  final int subtotal;
-  final int quantityTotal;
-  final String airwaybill;
-  final String status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
-}
-
-class OrderItemProduct {
-  OrderItemProduct({
-    required this.productId,
-    required this.productName,
-    required this.productPrice,
-    required this.productImage,
-    required this.quantity,
-    required this.id,
-  });
-
-  final String productId;
-  final String productName;
-  final int productPrice;
-  final String productImage;
-  final int quantity;
-  final String id;
+  final String? id;
+  final Order? order;
+  final User? buyer;
+  final User? seller;
+  final List<OrderItemDetail>? products;
+  final int? subtotal;
+  final int? quantityTotal;
+  final String? airwaybill;
+  final String? status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 }

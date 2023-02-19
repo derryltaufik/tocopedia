@@ -15,7 +15,7 @@ void main() {
     test('should return User Model when the response code is 200', () async {
       try {
         final result = await repository.getCart(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U5MWNiY2NiMzE5OWQyNTQ1NTBiM2IiLCJpYXQiOjE2NzYyMjE2Mjh9.ITiQgXN-72cJl6sSj1KW9c_aCQQ50SB_zDaLvEEMKt0");
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2VlNDcyNTE4MDQxZjQ5NmIwYjA3NmEiLCJpYXQiOjE2NzY1NjAxNjV9.XUx8gQaHroW9XSfbjtQixtEBdtSc96Mvc5PIh3BBg8k");
 
         print(result.cartItems[0].quantity);
       } catch (e) {

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:tocopedia/domains/entities/category.dart';
 
 class CategoryModel {
-  final String name;
-  final String id;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  final String? name;
+  final String? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 
   String toJson() => json.encode(toMap());
 
@@ -95,11 +95,13 @@ class CategoryModel {
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
-      name: map['name'] as String,
-      id: map['_id'] as String,
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      v: map['__v'] as int,
+      name: map['name'],
+      id: map['_id'],
+      createdAt:
+          map['createdAt'] == null ? null : DateTime.parse(map['createdAt']),
+      updatedAt:
+          map['updatedAt'] == null ? null : DateTime.parse(map['updatedAt']),
+      v: map['__v'],
     );
   }
 

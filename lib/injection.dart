@@ -1,13 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:tocopedia/data/data_sources/cart_remote_data_source.dart';
+import 'package:tocopedia/data/data_sources/order_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
 import 'package:tocopedia/data/repositories/cart_repository_impl.dart';
+import 'package:tocopedia/data/repositories/order_repository_impl.dart';
 import 'package:tocopedia/data/repositories/product_repository_impl.dart';
 import 'package:tocopedia/data/repositories/user_repository_impl.dart';
 import 'package:tocopedia/domains/repositories/cart_repository.dart';
+import 'package:tocopedia/domains/repositories/order_repository.dart';
 import 'package:tocopedia/domains/repositories/product_repository.dart';
 import 'package:tocopedia/domains/repositories/user_repository.dart';
 import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
@@ -17,6 +20,11 @@ import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/select_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
+import 'package:tocopedia/domains/use_cases/order/cancel_order.dart';
+import 'package:tocopedia/domains/use_cases/order/checkout.dart';
+import 'package:tocopedia/domains/use_cases/order/get_order.dart';
+import 'package:tocopedia/domains/use_cases/order/get_user_orders.dart';
+import 'package:tocopedia/domains/use_cases/order/pay_order.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
@@ -27,6 +35,7 @@ import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
+import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
@@ -43,6 +52,8 @@ void init() {
       () => ProductRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<CartRemoteDataSource>(
       () => CartRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<OrderRemoteDataSource>(
+      () => OrderRemoteDataSourceImpl(client: locator()));
 
   locator.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(
@@ -57,6 +68,11 @@ void init() {
   );
   locator.registerLazySingleton<CartRepository>(
     () => CartRepositoryImpl(
+      remoteDataSource: locator(),
+    ),
+  );
+  locator.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(
       remoteDataSource: locator(),
     ),
   );
@@ -79,6 +95,12 @@ void init() {
   locator.registerLazySingleton(() => SelectCartItem(locator()));
   locator.registerLazySingleton(() => UnselectCartItem(locator()));
   locator.registerLazySingleton(() => ClearCart(locator()));
+
+  locator.registerLazySingleton(() => GetOrder(locator()));
+  locator.registerLazySingleton(() => GetUserOrders(locator()));
+  locator.registerLazySingleton(() => Checkout(locator()));
+  locator.registerLazySingleton(() => PayOrder(locator()));
+  locator.registerLazySingleton(() => CancelOrder(locator()));
 
   locator.registerFactory(
     () => UserProvider(
@@ -109,6 +131,17 @@ void init() {
       selectCartItem: locator(),
       unselectCartItem: locator(),
       getProduct: locator(),
+      authToken: param1,
+    ),
+  );
+
+  locator.registerFactoryParam(
+    (String? param1, _) => OrderProvider(
+      cancelOrder: locator(),
+      checkout: locator(),
+      getOrder: locator(),
+      getUserOrders: locator(),
+      payOrder: locator(),
       authToken: param1,
     ),
   );

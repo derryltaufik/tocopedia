@@ -21,6 +21,17 @@ void main() {
     });
   });
 
+  group("Login User", () {
+    test('should return User Model when the response code is 200', () async {
+      try {
+        final result = await dataSource.login("asdfasdf@asdf.com", "asdfasdf");
+        print(result.toString());
+      } catch (e) {
+        print(e);
+      }
+    });
+  });
+
   group("Update User", () {
     test('should return User Model when the response code is 200', () async {
       try {

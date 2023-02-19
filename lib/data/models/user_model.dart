@@ -4,15 +4,15 @@ import 'package:tocopedia/data/models/address_model.dart';
 import 'package:tocopedia/domains/entities/user.dart';
 
 class UserModel {
-  final String id;
-  final String name;
-  final String email;
-  final String password;
+  final String? id;
+  final String? name;
+  final String? email;
+  final String? password;
   final AddressModel? defaultAddress;
-  final String token;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  final String? token;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 
   User toEntity() {
     return User(
@@ -25,6 +25,22 @@ class UserModel {
       token: token,
       updatedAt: updatedAt,
       v: v,
+    );
+  }
+
+  factory UserModel.fromEntity(User user) {
+    return UserModel(
+      id: user.id,
+      token: user.token,
+      updatedAt: user.updatedAt,
+      createdAt: user.createdAt,
+      v: user.v,
+      name: user.name,
+      password: user.password,
+      email: user.email,
+      defaultAddress: user.defaultAddress == null
+          ? null
+          : AddressModel.fromEntity(user.defaultAddress!),
     );
   }
 
@@ -118,17 +134,19 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['_id'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
+      id: map['_id'],
+      name: map['name'],
+      email: map['email'],
+      password: map['password'],
       defaultAddress: map['default_address'] == null
           ? null
           : AddressModel.fromMap(map['default_address']),
       token: map['token'] ?? "",
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      v: map['__v'] as int,
+      createdAt:
+          map['createdAt'] == null ? null : DateTime.parse(map['createdAt']),
+      updatedAt:
+          map['updatedAt'] == null ? null : DateTime.parse(map['updatedAt']),
+      v: map['__v'],
     );
   }
 

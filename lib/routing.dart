@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/cart_page.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
+import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
@@ -45,6 +46,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => CartPage(),
+      );
+
+    case ViewOrderPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            ViewOrderPage(orderId: routeSettings.arguments as String),
       );
     default:
       return MaterialPageRoute(

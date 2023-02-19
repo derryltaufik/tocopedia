@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 
@@ -23,7 +24,7 @@ class SingleProductCard extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1 / 1,
               child: CachedNetworkImage(
-                imageUrl: product.images[0],
+                imageUrl: product.images![0],
                 progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
@@ -36,12 +37,11 @@ class SingleProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name,
+                  Text(product.name!,
                       maxLines: 2, overflow: TextOverflow.ellipsis),
                   SizedBox(height: 3),
                   Text(
-                    NumberFormat.currency(
-                            decimalDigits: 0, locale: "id_ID", symbol: "Rp")
+                    rupiahFormatter
                         .format(product.price),
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.w700, fontSize: 17),
@@ -65,7 +65,7 @@ class SingleProductCard extends StatelessWidget {
                             endIndent: 6,
                           ),
                         ],
-                        if (product.totalSold > 0)
+                        if (product.totalSold != null && product.totalSold! > 0)
                           Text(
                             "Sold ${NumberFormat.compact().format(product.totalSold)}",
                             style: theme.textTheme.bodyMedium!

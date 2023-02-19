@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/cart.dart';
-import 'package:tocopedia/domains/entities/cart_item.dart';
-import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
@@ -31,15 +29,21 @@ class CartProvider with ChangeNotifier {
 
   String _message = "";
 
-  final Map<String, Product> _productMap = {};
-
   String get message => _message;
 
   String? get token => _authToken;
 
-  Map<String, Product> get productMap => _productMap;
-
   int get totalItemCount {
+    if (_cart == null) return 0;
+    if (_cart!.cartItems.isEmpty) return 0;
+    int total = 0;
+    for (var cartItem in _cart!.cartItems) {
+      total += cartItem.quantity;
+    }
+    return total;
+  }
+
+  int get totalSelectedItemCount {
     if (_cart == null) return 0;
     if (_cart!.cartItems.isEmpty) return 0;
     int total = 0;
@@ -54,9 +58,8 @@ class CartProvider with ChangeNotifier {
     if (_cart!.cartItems.isEmpty) return 0;
     int total = 0;
     for (var cartItem in _cart!.cartItems) {
-      if (!productMap.containsKey(cartItem.productId)) return 0;
       if (cartItem.selected) {
-        total += cartItem.quantity * productMap[cartItem.productId]!.price;
+        total += cartItem.quantity * cartItem.product.price!;
       }
     }
     return total;
@@ -145,8 +148,10 @@ class CartProvider with ChangeNotifier {
       if (!_verifyToken()) throw Exception("You need to login");
       // _updateCartState = ProviderState.loading;
       // notifyListeners();
+
       final cart = await _updateCart.execute(_authToken!, productId, quantity);
       _cart = cart;
+
       // _updateCartState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
@@ -163,25 +168,12 @@ class CartProvider with ChangeNotifier {
       notifyListeners();
       final cart = await _getCart.execute(_authToken!);
       _cart = cart;
-      for (CartItem cartItem in _cart!.cartItems) {
-        final product = await _getProduct.execute(cartItem.productId);
-        productMap.putIfAbsent(product.id, () => product);
-      }
       _getCartState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
       _message = e.toString();
       _getCartState = ProviderState.error;
       notifyListeners();
-    }
-  }
-
-  Future<Product> getProduct(CartItem cartItem) async {
-    try {
-      final product = productMap[cartItem.productId];
-      return product!;
-    } catch (e) {
-      rethrow;
     }
   }
 

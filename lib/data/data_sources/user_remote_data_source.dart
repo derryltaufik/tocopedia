@@ -59,6 +59,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     );
 
     final responseBody = json.decode(response.body);
+
     if (response.statusCode ~/ 100 == 2) {
       return UserModel.fromMap(responseBody["data"]["user"]);
     }

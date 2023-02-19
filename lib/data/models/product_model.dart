@@ -1,30 +1,31 @@
 import 'dart:convert';
 
 import 'package:tocopedia/data/models/category_model.dart';
+import 'package:tocopedia/data/models/user_model.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 
 class ProductModel {
-  final String id;
-  final String ownerId;
-  final String name;
-  final List<String> images;
-  final int price;
-  final int stock;
+  final String? id;
+  final UserModel? owner;
+  final String? name;
+  final List<String>? images;
+  final int? price;
+  final int? stock;
   final String? sku;
-  final String description;
-  final String status;
-  final CategoryModel category;
-  final int totalSold;
+  final String? description;
+  final String? status;
+  final CategoryModel? category;
+  final int? totalSold;
   final int? totalRating;
   final double? averageRating;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 
   Product toEntity() {
     return Product(
       id: id,
-      ownerId: ownerId,
+      owner: owner?.toEntity(),
       name: name,
       images: images,
       price: price,
@@ -32,10 +33,10 @@ class ProductModel {
       sku: sku,
       description: description,
       status: status,
-      category: category.toEntity(),
+      category: category?.toEntity(),
       totalSold: totalSold,
-      totalRating: totalRating ?? totalRating,
-      averageRating: averageRating ?? averageRating,
+      totalRating: totalRating,
+      averageRating: averageRating,
       createdAt: createdAt,
       updatedAt: updatedAt,
       v: v,
@@ -50,18 +51,18 @@ class ProductModel {
 //<editor-fold desc="Data Methods">
   const ProductModel({
     required this.id,
-    required this.ownerId,
+    required this.owner,
     required this.name,
     required this.images,
     required this.price,
     required this.stock,
-    this.sku,
+    required this.sku,
     required this.description,
     required this.status,
     required this.category,
     required this.totalSold,
-    this.totalRating,
-    this.averageRating,
+    required this.totalRating,
+    required this.averageRating,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -73,7 +74,7 @@ class ProductModel {
       (other is ProductModel &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          ownerId == other.ownerId &&
+          owner == other.owner &&
           name == other.name &&
           images == other.images &&
           price == other.price &&
@@ -92,7 +93,7 @@ class ProductModel {
   @override
   int get hashCode =>
       id.hashCode ^
-      ownerId.hashCode ^
+      owner.hashCode ^
       name.hashCode ^
       images.hashCode ^
       price.hashCode ^
@@ -110,12 +111,12 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel{ id: $id, ownerId: $ownerId, name: $name, images: $images, price: $price, stock: $stock, sku: $sku, description: $description, status: $status, category: $category, totalSold: $totalSold, totalRating: $totalRating, averageRating: $averageRating, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+    return 'ProductModel{ id: $id, owner: $owner, name: $name, images: $images, price: $price, stock: $stock, sku: $sku, description: $description, status: $status, category: $category, totalSold: $totalSold, totalRating: $totalRating, averageRating: $averageRating, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
   }
 
   ProductModel copyWith({
     String? id,
-    String? ownerId,
+    UserModel? owner,
     String? name,
     List<String>? images,
     int? price,
@@ -133,7 +134,7 @@ class ProductModel {
   }) {
     return ProductModel(
       id: id ?? this.id,
-      ownerId: ownerId ?? this.ownerId,
+      owner: owner ?? this.owner,
       name: name ?? this.name,
       images: images ?? this.images,
       price: price ?? this.price,
@@ -154,7 +155,7 @@ class ProductModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'ownerId': ownerId,
+      'owner': owner,
       'name': name,
       'images': images,
       'price': price,
@@ -174,24 +175,30 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      id: map['_id'] as String,
-      ownerId: map['owner_id'] as String,
-      name: map['name'] as String,
-      images: List<String>.from(map['images'].map((x) => x)),
-      price: map['price'] as int,
-      stock: map['stock'] as int,
+      id: map['_id'],
+      owner: map['owner'] == null ? null : UserModel.fromMap(map['owner']),
+      name: map['name'],
+      images: map['images'] == null
+          ? null
+          : List<String>.from(map['images'].map((x) => x)),
+      price: map['price'],
+      stock: map['stock'],
       sku: map['sku'],
-      description: map['description'] as String,
-      status: map['status'] as String,
-      category: CategoryModel.fromMap(map['category']),
-      totalSold: map['total_sold'] as int,
+      description: map['description'],
+      status: map['status'],
+      category: map['category'] == null
+          ? null
+          : CategoryModel.fromMap(map['category']),
+      totalSold: map['total_sold'],
       totalRating: map['total_rating'],
       averageRating: map['average_rating'] == null
           ? null
           : map['average_rating']!.toDouble(),
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      v: map['__v'] as int,
+      createdAt:
+          map['createdAt'] == null ? null : DateTime.parse(map['createdAt']),
+      updatedAt:
+          map['updatedAt'] == null ? null : DateTime.parse(map['createdAt']),
+      v: map['__v'],
     );
   }
 

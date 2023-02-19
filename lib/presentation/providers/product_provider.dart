@@ -112,4 +112,8 @@ class ProductProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  bool _verifyToken() {
+    return (_authToken != null && _authToken!.isNotEmpty);
+  }
 }

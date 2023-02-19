@@ -31,7 +31,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> saveUser(User user) async {
-    final token = user.token;
+    final token = user.token!;
 
     try {
       await localDataSource.saveToken(token);

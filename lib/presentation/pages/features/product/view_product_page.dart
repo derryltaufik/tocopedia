@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/add_to_cart_button.dart';
@@ -55,7 +56,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProductImageCarousel(images: product.images),
+                    ProductImageCarousel(images: product.images!),
                     SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -66,11 +67,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                NumberFormat.currency(
-                                        decimalDigits: 0,
-                                        locale: "id_ID",
-                                        symbol: "Rp")
-                                    .format(product.price),
+                                rupiahFormatter.format(product.price),
                                 style: theme.textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold, fontSize: 20),
                               ),
@@ -80,10 +77,10 @@ class _ViewProductPageState extends State<ViewProductPage> {
                             ],
                           ),
                           Text(
-                            product.name,
+                            product.name!,
                             style: theme.textTheme.bodyLarge,
                           ),
-                          if (product.totalSold > 0)
+                          if (product.totalSold! > 0)
                             Text(
                               "Sold ${NumberFormat.decimalPattern("id_ID").format(product.totalSold)}",
                               style: theme.textTheme.bodyMedium!
@@ -103,7 +100,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                               style: theme.textTheme.titleMedium!
                                   .copyWith(fontWeight: FontWeight.bold)),
                           SizedBox(height: 5),
-                          Text(product.description),
+                          Text(product.description!),
                         ],
                       ),
                     ),
@@ -112,7 +109,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                 ),
               ),
             ),
-            AddToCartButton(productId: product.id),
+            AddToCartButton(productId: product.id!),
           ],
         );
       }),

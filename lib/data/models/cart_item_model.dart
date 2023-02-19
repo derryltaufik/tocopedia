@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:tocopedia/data/models/product_model.dart';
 import 'package:tocopedia/domains/entities/cart_item.dart';
 
 class CartItemModel {
-  final String productId;
+  final ProductModel product;
   final int quantity;
   final String id;
   final bool selected;
@@ -11,7 +12,7 @@ class CartItemModel {
   CartItem toEntity() {
     return CartItem(
       id: id,
-      productId: productId,
+      product: product.toEntity(),
       quantity: quantity,
       selected: selected,
     );
@@ -24,7 +25,7 @@ class CartItemModel {
 
 //<editor-fold desc="Data Methods">
   const CartItemModel({
-    required this.productId,
+    required this.product,
     required this.quantity,
     required this.id,
     required this.selected,
@@ -35,28 +36,28 @@ class CartItemModel {
       identical(this, other) ||
       (other is CartItemModel &&
           runtimeType == other.runtimeType &&
-          productId == other.productId &&
+          product == other.product &&
           quantity == other.quantity &&
           id == other.id &&
           selected == other.selected);
 
   @override
   int get hashCode =>
-      productId.hashCode ^ quantity.hashCode ^ id.hashCode ^ selected.hashCode;
+      product.hashCode ^ quantity.hashCode ^ id.hashCode ^ selected.hashCode;
 
   @override
   String toString() {
-    return 'CartItemModel{ productId: $productId, quantity: $quantity, id: $id, selected: $selected,}';
+    return 'CartItemModel{ product: $product, quantity: $quantity, id: $id, selected: $selected,}';
   }
 
   CartItemModel copyWith({
-    String? productId,
+    ProductModel? product,
     int? quantity,
     String? id,
     bool? selected,
   }) {
     return CartItemModel(
-      productId: productId ?? this.productId,
+      product: product ?? this.product,
       quantity: quantity ?? this.quantity,
       id: id ?? this.id,
       selected: selected ?? this.selected,
@@ -65,7 +66,7 @@ class CartItemModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'product_id': productId,
+      'product': product,
       'quantity': quantity,
       'selected': selected,
       '_id': id,
@@ -74,7 +75,7 @@ class CartItemModel {
 
   factory CartItemModel.fromMap(Map<String, dynamic> map) {
     return CartItemModel(
-      productId: map['product_id'] as String,
+      product: ProductModel.fromMap(map['product']),
       quantity: map['quantity'] as int,
       selected: map['selected'] as bool,
       id: map['_id'] as String,

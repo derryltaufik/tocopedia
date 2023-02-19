@@ -19,7 +19,6 @@ class UserProvider with ChangeNotifier {
   final GetUser _getUser;
   final UpdateUser _updateUser;
 
-
   User? _user;
 
   User? get user => _user;
@@ -116,7 +115,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final User user = await _updateUser.execute(_user!.token,
+      final User user = await _updateUser.execute(_user!.token!,
           name: name, defaultAddress: defaultAddress, password: password);
       _user = user;
       _updateUserState = ProviderState.loaded;

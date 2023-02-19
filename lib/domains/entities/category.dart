@@ -7,9 +7,9 @@ class Category {
     required this.v,
   });
 
-  final String name;
-  final String id;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  final String? name;
+  final String? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 }

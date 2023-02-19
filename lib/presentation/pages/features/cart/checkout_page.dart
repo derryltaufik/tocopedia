@@ -82,27 +82,26 @@ class _CartPageState extends State<CartPage> {
               ),
               child: Consumer<CartProvider>(
                   builder: (context, cartProvider, child) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      rupiahFormatter.format(cartProvider.totalPrice),
-                      style: theme.textTheme.titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                          textStyle: theme.textTheme.titleMedium),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Text(
-                            "Buy (${cartProvider.totalSelectedItemCount})"),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ],
-                );
-              }),
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          rupiahFormatter.format(cartProvider.totalPrice),
+                          style: theme.textTheme.titleLarge!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        FilledButton(
+                            style: FilledButton.styleFrom(
+                                textStyle: theme.textTheme.titleMedium),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: Text(
+                                  "Buy (${cartProvider.totalSelectedItemCount})"),
+                            ),
+                            onPressed: () {}),
+                      ],
+                    );
+                  }),
             ),
           ),
         ),

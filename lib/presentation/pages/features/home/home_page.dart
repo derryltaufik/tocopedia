@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
+import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
@@ -69,6 +70,12 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FilledButton(
+        onPressed: () => Navigator.of(context).pushNamed(
+            ViewOrderPage.routeName,
+            arguments: "63f1135dfeae10510618ce71"),
+        child: Text("asdf"),
       ),
     );
   }

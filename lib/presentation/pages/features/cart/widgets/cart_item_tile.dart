@@ -3,10 +3,9 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/cart_item.dart';
-import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
 class CartItemTile extends StatefulWidget {
@@ -19,9 +18,8 @@ class CartItemTile extends StatefulWidget {
 }
 
 class _CartItemTileState extends State<CartItemTile> {
-  Product? product;
-  bool selected = true;
   bool loading = true;
+  bool selected = true;
   final TextEditingController _quantityController = TextEditingController();
   final FocusNode _quantityFocus = FocusNode();
   int quantity = 0;
@@ -30,21 +28,16 @@ class _CartItemTileState extends State<CartItemTile> {
   void initState() {
     super.initState();
 
-    Future.microtask(
-      () async {
-        product = await Provider.of<CartProvider>(context, listen: false)
-            .getProduct(widget.cartItem);
-        if (mounted) {
-          setState(() {
-            product = product;
-            loading = false;
-            selected = widget.cartItem.selected;
-            quantity = widget.cartItem.quantity;
-            _quantityController.text = quantity.toString();
-          });
-        }
-      },
-    );
+    Future.microtask(() {
+      if (mounted) {
+        setState(() {
+          loading = false;
+          selected = widget.cartItem.selected;
+          quantity = widget.cartItem.quantity;
+          _quantityController.text = quantity.toString();
+        });
+      }
+    });
     _quantityFocus.addListener(_handleFocusChange);
   }
 
@@ -99,30 +92,30 @@ class _CartItemTileState extends State<CartItemTile> {
 
   // run when clicking + or - button or when updating quantity manually
   void updateCart(BuildContext context) async {
-    print("test");
     await Provider.of<CartProvider>(context, listen: false)
-        .updateCart(widget.cartItem.productId, quantity);
+        .updateCart(widget.cartItem.product.id!, quantity);
   }
 
   void toggleCartItem(BuildContext context, bool value) async {
     setState(() => selected = value);
     if (value) {
       await Provider.of<CartProvider>(context, listen: false)
-          .selectCartItem(widget.cartItem.productId);
+          .selectCartItem(widget.cartItem.product.id!);
     } else {
       await Provider.of<CartProvider>(context, listen: false)
-          .unselectCartItem(widget.cartItem.productId);
+          .unselectCartItem(widget.cartItem.product.id!);
     }
   }
 
   void deleteCartItem(BuildContext context) async {
     await Provider.of<CartProvider>(context, listen: false)
-        .updateCart(widget.cartItem.productId, 0);
+        .updateCart(widget.cartItem.product.id!, 0);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final product = widget.cartItem.product;
 
     if (loading || product == null) {
       return ListTile(
@@ -150,7 +143,7 @@ class _CartItemTileState extends State<CartItemTile> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: CachedNetworkImage(
-                        imageUrl: product!.images[0],
+                        imageUrl: product.images![0],
                         fit: BoxFit.cover,
                         progressIndicatorBuilder: (_, __, downloadProgress) =>
                             Center(
@@ -166,18 +159,14 @@ class _CartItemTileState extends State<CartItemTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          product!.name,
+                          product.name!,
                           style: theme.textTheme.bodyLarge,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 3),
                         Text(
-                          NumberFormat.currency(
-                                  decimalDigits: 0,
-                                  locale: "id_ID",
-                                  symbol: "Rp")
-                              .format(product!.price),
+                          rupiahFormatter.format(product.price),
                           style: theme.textTheme.titleMedium,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -242,14 +231,14 @@ class _CartItemTileState extends State<CartItemTile> {
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        NumericalRangeFormatter(min: 1, max: product!.stock)
+                        NumericalRangeFormatter(min: 1, max: product.stock!)
                       ],
                     ),
                   ),
                   // Text("${widget.cartItem.quantity}"),
                   AbsorbPointer(
                     absorbing:
-                        int.parse(_quantityController.text) < product!.stock
+                        int.parse(_quantityController.text) < product.stock!
                             ? false
                             : true,
                     child: GestureDetector(
@@ -260,7 +249,7 @@ class _CartItemTileState extends State<CartItemTile> {
                             .copyWith(left: 0),
                         child: Icon(Icons.add,
                             color: int.parse(_quantityController.text) <
-                                    product!.stock
+                                    product.stock!
                                 ? theme.primaryColor
                                 : Colors.black12),
                       ),

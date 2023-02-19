@@ -23,17 +23,17 @@ class UserPage extends StatelessWidget {
               children: [
                 Icon(Icons.account_circle, size: 100),
                 SizedBox(height: 30),
-                Text(user.name,
+                Text(user.name!,
                     style: theme.textTheme.titleLarge!
                         .copyWith(fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
                 Text(
-                  user.email,
+                  user.email!,
                   style: theme.textTheme.bodyLarge,
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Member Since ${DateFormat('d MMMM y').format(user.createdAt)}",
+                  "Member Since ${DateFormat('d MMMM y').format(user.createdAt!)}",
                   style: theme.textTheme.bodyMedium,
                 ),
                 SizedBox(height: 20),

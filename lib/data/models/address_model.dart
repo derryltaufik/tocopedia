@@ -1,26 +1,27 @@
 import 'dart:convert';
 
+import 'package:tocopedia/data/models/user_model.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 
 class AddressModel {
-  final String id;
-  final String ownerId;
-  final String label;
-  final String completeAddress;
+  final String? id;
+  final UserModel? owner;
+  final String? label;
+  final String? completeAddress;
   final String? notes;
-  final String receiverName;
-  final String receiverPhone;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+  final String? receiverName;
+  final String? receiverPhone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
 
 //<editor-fold desc="Data Methods">
   const AddressModel({
     required this.id,
-    required this.ownerId,
+    required this.owner,
     required this.label,
     required this.completeAddress,
-    this.notes,
+    required this.notes,
     required this.receiverName,
     required this.receiverPhone,
     required this.createdAt,
@@ -34,7 +35,7 @@ class AddressModel {
       (other is AddressModel &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          ownerId == other.ownerId &&
+          owner == other.owner &&
           label == other.label &&
           completeAddress == other.completeAddress &&
           notes == other.notes &&
@@ -47,7 +48,7 @@ class AddressModel {
   @override
   int get hashCode =>
       id.hashCode ^
-      ownerId.hashCode ^
+      owner.hashCode ^
       label.hashCode ^
       completeAddress.hashCode ^
       notes.hashCode ^
@@ -59,12 +60,12 @@ class AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel{ id: $id, ownerId: $ownerId, label: $label, completeAddress: $completeAddress, notes: $notes, receiverName: $receiverName, receiverPhone: $receiverPhone, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+    return 'AddressModel{ id: $id, owner: $owner, label: $label, completeAddress: $completeAddress, notes: $notes, receiverName: $receiverName, receiverPhone: $receiverPhone, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
   }
 
   AddressModel copyWith({
     String? id,
-    String? ownerId,
+    UserModel? owner,
     String? label,
     String? completeAddress,
     String? notes,
@@ -76,7 +77,7 @@ class AddressModel {
   }) {
     return AddressModel(
       id: id ?? this.id,
-      ownerId: ownerId ?? this.ownerId,
+      owner: owner ?? this.owner,
       label: label ?? this.label,
       completeAddress: completeAddress ?? this.completeAddress,
       notes: notes ?? this.notes,
@@ -91,7 +92,7 @@ class AddressModel {
   Map<String, dynamic> toMap() {
     return {
       '_id': id,
-      'owner_id': ownerId,
+      'owner': owner,
       'label': label,
       'complete_address': completeAddress,
       'notes': notes,
@@ -104,17 +105,20 @@ class AddressModel {
   }
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
+    print(map['owner']);
     return AddressModel(
-      id: map['_id'] as String,
-      ownerId: map['owner_id'] as String,
-      label: map['label'] as String,
-      completeAddress: map['complete_address'] as String,
+      id: map['_id'],
+      owner: map['owner'],
+      label: map['label'],
+      completeAddress: map['complete_address'],
       notes: map['notes'],
-      receiverName: map['receiver_name'] as String,
-      receiverPhone: map['receiver_phone'] as String,
-      createdAt: DateTime.parse(map['createdAt']),
-      updatedAt: DateTime.parse(map['updatedAt']),
-      v: map['__v'] as int,
+      receiverName: map['receiver_name'],
+      receiverPhone: map['receiver_phone'],
+      createdAt:
+          map["createdAt"] == null ? null : DateTime.parse(map["createdAt"]),
+      updatedAt:
+          map["updatedAt"] == null ? null : DateTime.parse(map["updatedAt"]),
+      v: map['__v'],
     );
   }
 
@@ -126,7 +130,7 @@ class AddressModel {
   Address toEntity() {
     return Address(
       id: id,
-      ownerId: ownerId,
+      owner: owner?.toEntity(),
       label: label,
       completeAddress: completeAddress,
       notes: notes,
@@ -141,7 +145,7 @@ class AddressModel {
   factory AddressModel.fromEntity(Address address) {
     return AddressModel(
       id: address.id,
-      ownerId: address.ownerId,
+      owner: address.owner == null ? null : UserModel.fromEntity(address.owner!),
       label: address.label,
       completeAddress: address.completeAddress,
       notes: address.notes,

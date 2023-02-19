@@ -6,7 +6,6 @@ import 'package:tocopedia/domains/entities/cart_item.dart';
 
 class CartModel {
   final String id;
-  final String ownerId;
   final List<CartItemModel> cartItemsModel;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -15,7 +14,6 @@ class CartModel {
   Cart toEntity() {
     return Cart(
         id: id,
-        ownerId: ownerId,
         cartItems: List<CartItem>.from(cartItemsModel.map((e) => e.toEntity())),
         v: v,
         createdAt: createdAt,
@@ -30,7 +28,6 @@ class CartModel {
 //<editor-fold desc="Data Methods">
   const CartModel({
     required this.id,
-    required this.ownerId,
     required this.cartItemsModel,
     required this.createdAt,
     required this.updatedAt,
@@ -43,7 +40,6 @@ class CartModel {
       (other is CartModel &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          ownerId == other.ownerId &&
           cartItemsModel == other.cartItemsModel &&
           createdAt == other.createdAt &&
           updatedAt == other.updatedAt &&
@@ -52,7 +48,6 @@ class CartModel {
   @override
   int get hashCode =>
       id.hashCode ^
-      ownerId.hashCode ^
       cartItemsModel.hashCode ^
       createdAt.hashCode ^
       updatedAt.hashCode ^
@@ -60,12 +55,11 @@ class CartModel {
 
   @override
   String toString() {
-    return 'CartModel{ id: $id, ownerId: $ownerId, cartItemsModel: $cartItemsModel, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+    return 'CartModel{ id: $id,  cartItemsModel: $cartItemsModel, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
   }
 
   CartModel copyWith({
     String? id,
-    String? ownerId,
     List<CartItemModel>? cartItemsModel,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -73,7 +67,6 @@ class CartModel {
   }) {
     return CartModel(
       id: id ?? this.id,
-      ownerId: ownerId ?? this.ownerId,
       cartItemsModel: cartItemsModel ?? this.cartItemsModel,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -84,7 +77,6 @@ class CartModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'owner_id': ownerId,
       'cartItemsModel': cartItemsModel,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -95,7 +87,6 @@ class CartModel {
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
       id: map['_id'] as String,
-      ownerId: map['owner_id'] as String,
       cartItemsModel: List<CartItemModel>.from(
           map['cart_items'].map((x) => CartItemModel.fromMap(x))),
       createdAt: DateTime.parse(map['createdAt']),
