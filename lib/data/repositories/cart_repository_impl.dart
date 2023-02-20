@@ -58,6 +58,26 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
+  Future<Cart> selectSeller(String token, String sellerId) async {
+    try {
+      final result = await remoteDataSource.selectSeller(token, sellerId);
+      return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Cart> unselectSeller(String token, String sellerId) async {
+    try {
+      final result = await remoteDataSource.unselectSeller(token, sellerId);
+      return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<Cart> updateCart(String token, String productId, int quantity) async {
     try {
       final result =

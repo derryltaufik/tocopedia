@@ -17,6 +17,10 @@ abstract class CartRemoteDataSource {
 
   Future<CartModel> unSelectCartItem(String token, String productId);
 
+  Future<CartModel> selectSeller(String token, String sellerId);
+
+  Future<CartModel> unselectSeller(String token, String sellerId);
+
   Future<CartModel> updateCart(String token, String productId, int quantity);
 
   Future<CartModel> clearCart(String token);
@@ -109,8 +113,41 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   }
 
   @override
+  Future<CartModel> selectSeller(String token, String sellerId) async {
+    final url =
+        Uri.parse(BASE_URL).replace(path: '/cart/select/seller/$sellerId');
+    final response = await client.patch(url,
+        headers: defaultHeader
+          ..addEntries({"Authorization": "Bearer $token"}.entries));
+
+    final responseBody = json.decode(response.body);
+    if (response.statusCode ~/ 100 == 2) {
+      return CartModel.fromMap(responseBody["data"]["cart"]);
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
   Future<CartModel> unSelectCartItem(String token, String productId) async {
     final url = Uri.parse(BASE_URL).replace(path: '/cart/unselect/$productId');
+
+    final response = await client.patch(url,
+        headers: defaultHeader
+          ..addEntries({"Authorization": "Bearer $token"}.entries));
+
+    final responseBody = json.decode(response.body);
+    if (response.statusCode ~/ 100 == 2) {
+      return CartModel.fromMap(responseBody["data"]["cart"]);
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<CartModel> unselectSeller(String token, String sellerId) async {
+    final url =
+        Uri.parse(BASE_URL).replace(path: '/cart/unselect/seller/$sellerId');
 
     final response = await client.patch(url,
         headers: defaultHeader

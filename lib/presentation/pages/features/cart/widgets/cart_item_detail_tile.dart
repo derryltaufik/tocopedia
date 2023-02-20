@@ -10,8 +10,14 @@ import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
 class CartItemDetailTile extends StatefulWidget {
   final CartItemDetail cartItemDetail;
+  final ValueNotifier<bool> checkBoxNotifier;
+  final Function updateCheckBoxState;
 
-  const CartItemDetailTile({Key? key, required this.cartItemDetail})
+  const CartItemDetailTile(
+      {Key? key,
+      required this.cartItemDetail,
+      required this.checkBoxNotifier,
+      required this.updateCheckBoxState})
       : super(key: key);
 
   @override
@@ -40,6 +46,12 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
       }
     });
     _quantityFocus.addListener(_handleFocusChange);
+
+    //to synchronize shop checkbox with product checkbox
+    widget.checkBoxNotifier.addListener(() {
+      setState(() => selected = widget.checkBoxNotifier.value);
+      widget.updateCheckBoxState(widget.cartItemDetail.id, selected);
+    });
   }
 
   //update quantity when unfocused
@@ -52,6 +64,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
   @override
   void dispose() {
     super.dispose();
+
     _quantityController.dispose();
     _quantityFocus.dispose();
   }
@@ -99,6 +112,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
 
   void toggleCartItem(BuildContext context, bool value) async {
     setState(() => selected = value);
+    widget.updateCheckBoxState(widget.cartItemDetail.id, selected);
     if (value) {
       await Provider.of<CartProvider>(context, listen: false)
           .selectCartItem(widget.cartItemDetail.product!.id!);
@@ -236,7 +250,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
                       ],
                     ),
                   ),
-                  // Text("${widget.cartItemDetail.quantity}"),
+                  // Text("${widget.cartItem.quantity}"),
                   AbsorbPointer(
                     absorbing:
                         int.parse(_quantityController.text) < product.stock!

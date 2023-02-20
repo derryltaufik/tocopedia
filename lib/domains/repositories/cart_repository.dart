@@ -11,6 +11,10 @@ abstract class CartRepository {
 
   Future<Cart> unselectCartItem(String token, String productId);
 
+  Future<Cart> selectSeller(String token, String sellerId);
+
+  Future<Cart> unselectSeller(String token, String sellerId);
+
   Future<Cart> updateCart(String token, String productId, int quantity);
 
   Future<Cart> clearCart(String token);

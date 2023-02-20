@@ -7,7 +7,9 @@ import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/select_cart_item.dart';
+import 'package:tocopedia/domains/use_cases/cart/select_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
+import 'package:tocopedia/domains/use_cases/cart/unselect_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
@@ -21,6 +23,8 @@ class CartProvider with ChangeNotifier {
   final GetProduct _getProduct;
   final SelectCartItem _selectCartItem;
   final UnselectCartItem _unselectCartItem;
+  final SelectSeller _selectSeller;
+  final UnselectSeller _unselectSeller;
   final String? _authToken;
 
   Cart? _cart;
@@ -82,6 +86,8 @@ class CartProvider with ChangeNotifier {
       required GetProduct getProduct,
       required SelectCartItem selectCartItem,
       required UnselectCartItem unselectCartItem,
+      required SelectSeller selectSeller,
+      required UnselectSeller unselectSeller,
       required String? authToken})
       : _getCart = getCart,
         _addToCart = addToCart,
@@ -91,6 +97,8 @@ class CartProvider with ChangeNotifier {
         _getProduct = getProduct,
         _unselectCartItem = unselectCartItem,
         _selectCartItem = selectCartItem,
+        _selectSeller = selectSeller,
+        _unselectSeller = unselectSeller,
         _authToken = authToken;
 
   ProviderState _getCartState = ProviderState.empty;
@@ -121,6 +129,26 @@ class CartProvider with ChangeNotifier {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
       final cart = await _selectCartItem.execute(_authToken!, productId);
+      _cart = cart;
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  Future<void> selectSeller(String sellerId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      final cart = await _selectSeller.execute(_authToken!, sellerId);
+      _cart = cart;
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> unselectSeller(String sellerId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      final cart = await _unselectSeller.execute(_authToken!, sellerId);
       _cart = cart;
       notifyListeners();
     } catch (e) {}
