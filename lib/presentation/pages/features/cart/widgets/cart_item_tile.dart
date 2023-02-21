@@ -13,7 +13,7 @@ class CartItemTile extends StatefulWidget {
   State<CartItemTile> createState() => _CartItemTileState();
 }
 
-class _CartItemTileState extends State<CartItemTile> with ChangeNotifier {
+class _CartItemTileState extends State<CartItemTile> {
   late final ValueNotifier<bool> _shopCheckboxNotifier;
   final Map<String, bool> childrenValues = {};
 
@@ -41,7 +41,6 @@ class _CartItemTileState extends State<CartItemTile> with ChangeNotifier {
   @override
   void dispose() {
     _shopCheckboxNotifier.dispose();
-    dispose();
     super.dispose();
   }
 
