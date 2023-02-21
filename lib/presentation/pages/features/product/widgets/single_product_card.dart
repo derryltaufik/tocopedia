@@ -41,38 +41,35 @@ class SingleProductCard extends StatelessWidget {
                       maxLines: 2, overflow: TextOverflow.ellipsis),
                   SizedBox(height: 3),
                   Text(
-                    rupiahFormatter
-                        .format(product.price),
+                    rupiahFormatter.format(product.price),
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.w700, fontSize: 17),
                   ),
                   SizedBox(height: 3),
-                  IntrinsicHeight(
-                    child: Row(
-                      children: [
-                        if (product.averageRating != null) ...[
-                          Icon(
-                            Icons.star_rounded,
-                            color: theme.primaryColor,
-                          ),
-                          Text(
-                            product.averageRating!.toStringAsFixed(1),
-                            style: theme.textTheme.bodyMedium!
-                                .copyWith(color: Colors.black54),
-                          ),
-                          VerticalDivider(
-                            indent: 6,
-                            endIndent: 6,
-                          ),
-                        ],
-                        if (product.totalSold != null && product.totalSold! > 0)
-                          Text(
-                            "Sold ${NumberFormat.compact().format(product.totalSold)}",
-                            style: theme.textTheme.bodyMedium!
-                                .copyWith(color: Colors.black54),
-                          ),
+                  Row(
+                    children: [
+                      if (product.averageRating != null) ...[
+                        Icon(
+                          Icons.star_rounded,
+                          color: theme.primaryColor,
+                        ),
+                        Text(
+                          product.averageRating!.toStringAsFixed(1),
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(color: Colors.black54),
+                        ),
+                        VerticalDivider(
+                          indent: 6,
+                          endIndent: 6,
+                        ),
                       ],
-                    ),
+                      if (product.totalSold != null && product.totalSold! > 0)
+                        Text(
+                          "Sold ${NumberFormat.compact().format(product.totalSold)}",
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(color: Colors.black54),
+                        ),
+                    ],
                   )
                 ],
               ),

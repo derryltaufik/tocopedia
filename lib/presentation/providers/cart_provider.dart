@@ -213,6 +213,16 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  Cart getCheckoutCart() {
+    final cart = _cart!.copyWith(); //cloning cart
+    for (var cartItem in cart.cartItems) {
+      cartItem.cartItemDetails!
+          .removeWhere((element) => element.selected == false);
+    }
+    cart.cartItems.removeWhere((element) => element.cartItemDetails!.isEmpty);
+    return cart;
+  }
+
   Future<void> init() async {
     try {
       if (_verifyToken()) {

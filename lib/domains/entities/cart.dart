@@ -1,5 +1,4 @@
 import 'package:tocopedia/domains/entities/cart_item.dart';
-import 'package:tocopedia/domains/entities/cart_item_detail.dart';
 
 class Cart {
   Cart({
@@ -15,4 +14,20 @@ class Cart {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
+
+  Cart copyWith({
+    String? id,
+    List<CartItem>? cartItems,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? v,
+  }) {
+    return Cart(
+      id: id ?? this.id,
+      cartItems: cartItems ?? this.cartItems,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
+    );
+  }
 }

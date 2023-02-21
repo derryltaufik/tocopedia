@@ -49,7 +49,9 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
 
     //to synchronize shop checkbox with product checkbox
     widget.checkBoxNotifier.addListener(() {
-      setState(() => selected = widget.checkBoxNotifier.value);
+      if (mounted) {
+        setState(() => selected = widget.checkBoxNotifier.value);
+      }
     });
   }
 

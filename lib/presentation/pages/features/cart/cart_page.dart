@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
-import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_detail_tile.dart';
+import 'package:tocopedia/presentation/pages/features/cart/checkout_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/provider_state.dart';
@@ -84,21 +84,30 @@ class _CartPageState extends State<CartPage> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      rupiahFormatter.format(cartProvider.totalPrice),
-                      style: theme.textTheme.titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                    Text.rich(
+                      TextSpan(
+                          text: "Total Price\n",
+                          style: theme.textTheme.titleSmall,
+                          children: [
+                            TextSpan(
+                                text: rupiahFormatter
+                                    .format(cartProvider.totalPrice),
+                                style: theme.textTheme.titleLarge!
+                                    .copyWith(fontWeight: FontWeight.bold))
+                          ]),
                     ),
                     FilledButton(
-                      style: FilledButton.styleFrom(
-                          textStyle: theme.textTheme.titleMedium),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Text(
-                            "Buy (${cartProvider.totalSelectedItemCount})"),
-                      ),
-                      onPressed: () {},
-                    ),
+                        style: FilledButton.styleFrom(
+                            textStyle: theme.textTheme.titleMedium),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Text(
+                              "Buy (${cartProvider.totalSelectedItemCount})"),
+                        ),
+                        onPressed: cartProvider.totalSelectedItemCount == 0
+                            ? null
+                            : () => Navigator.of(context)
+                                .pushNamed(CheckoutPage.routeName)),
                   ],
                 );
               }),

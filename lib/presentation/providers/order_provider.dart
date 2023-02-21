@@ -61,6 +61,16 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  Future<Order> checkOut(String addressId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      final order = await _checkout.execute(_authToken!, addressId);
+      return order;
+    } on Exception catch (e) {
+      rethrow;
+    }
+  }
+
   bool _verifyToken() {
     return (_authToken != null && _authToken!.isNotEmpty);
   }
