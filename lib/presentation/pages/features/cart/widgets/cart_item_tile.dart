@@ -4,6 +4,15 @@ import 'package:tocopedia/domains/entities/cart_item.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_detail_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
+class ShopCheckboxNotifier extends ValueNotifier<bool> {
+  ShopCheckboxNotifier(super.value);
+
+  void setValue(bool value) {
+    this.value = value;
+    notifyListeners();
+  }
+}
+
 class CartItemTile extends StatefulWidget {
   final CartItem cartItem;
 
@@ -14,8 +23,9 @@ class CartItemTile extends StatefulWidget {
 }
 
 class _CartItemTileState extends State<CartItemTile> {
-  late final ValueNotifier<bool> _shopCheckboxNotifier;
-  final Map<String, bool> childrenValues = {};
+  late final ShopCheckboxNotifier _shopCheckboxNotifier;
+  final Map<String, bool> childrenValues =
+      {}; //to keep track all children checkbox states
 
   late bool checked;
 
@@ -30,10 +40,10 @@ class _CartItemTileState extends State<CartItemTile> {
       if (element.selected! == false) foundFalse = true;
     }
     if (foundFalse) {
-      _shopCheckboxNotifier = ValueNotifier(false);
+      _shopCheckboxNotifier = ShopCheckboxNotifier(false);
       checked = false;
     } else {
-      _shopCheckboxNotifier = ValueNotifier(true);
+      _shopCheckboxNotifier = ShopCheckboxNotifier(true);
       checked = true;
     }
   }
@@ -48,8 +58,8 @@ class _CartItemTileState extends State<CartItemTile> {
     setState(() {
       checked = value;
     });
-    _shopCheckboxNotifier.value = value;
-    _shopCheckboxNotifier.notifyListeners();
+    _shopCheckboxNotifier.setValue(value);
+    childrenValues.updateAll((_, __) => value);
 
     if (value) {
       await Provider.of<CartProvider>(context, listen: false)
@@ -60,13 +70,11 @@ class _CartItemTileState extends State<CartItemTile> {
     }
   }
 
-  void foo(String cartItemId, bool value) {
+  void _updateCheckboxState(String cartItemId, bool value) {
     childrenValues[cartItemId] = value;
 
     bool newState = false;
-    print(childrenValues.entries);
-    if (!childrenValues.containsValue(false) &&
-        childrenValues.length == widget.cartItem.cartItemDetails!.length) {
+    if (!childrenValues.containsValue(false)) {
       newState = true;
     }
 
@@ -100,7 +108,7 @@ class _CartItemTileState extends State<CartItemTile> {
           itemBuilder: (context, index) {
             final cartItemDetail = widget.cartItem.cartItemDetails![index];
             return CartItemDetailTile(
-              updateCheckBoxState: foo,
+              updateCheckBoxState: _updateCheckboxState,
               checkBoxNotifier: _shopCheckboxNotifier,
               cartItemDetail: cartItemDetail,
               key: Key(cartItemDetail.id!),

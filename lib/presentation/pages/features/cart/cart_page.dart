@@ -50,8 +50,7 @@ class _CartPageState extends State<CartPage> {
                   }
                   return ListView.separated(
                     padding: EdgeInsets.only(bottom: 100),
-                    separatorBuilder: (context, index) =>
-                        Divider(thickness: 5),
+                    separatorBuilder: (context, index) => Divider(thickness: 5),
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final cartItem = cartItems[index];
