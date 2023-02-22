@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/loading_dialog.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/checkout_item_tile.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
@@ -19,25 +20,7 @@ class CheckoutPage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          // The background color
-          backgroundColor: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                // The loading indicator
-                CircularProgressIndicator(),
-                SizedBox(
-                  height: 15,
-                ),
-                // Some text
-                Text('Loading...')
-              ],
-            ),
-          ),
-        );
+        return LoadingDialog();
       },
     );
     try {
