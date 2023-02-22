@@ -6,7 +6,7 @@ import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ProductProvider with ChangeNotifier {
   final GetProduct _getProduct;

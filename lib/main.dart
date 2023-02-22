@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/buyer_navigation_bar.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
+import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
@@ -44,6 +45,11 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<OrderProvider>(),
           update: (_, value, __) =>
               di.locator<OrderProvider>(param1: value.user?.token),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, OrderItemProvider>(
+          create: (_) => di.locator<OrderItemProvider>(),
+          update: (_, value, __) =>
+              di.locator<OrderItemProvider>(param1: value.user?.token),
         ),
       ],
       child: Consumer<UserProvider>(builder: (context, userProvider, child) {

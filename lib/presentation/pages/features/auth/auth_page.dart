@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 enum AuthFormMode { signUp, login }

@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/order.dart';
 import 'package:tocopedia/presentation/pages/features/order/widgets/single_order_card.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ViewAllOrdersPage extends StatefulWidget {
   static const String routeName = "/orders/view-all";
@@ -27,8 +26,9 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Your Orders")),
-        body: Consumer<OrderProvider>(builder: (context, orderProvider, child) {
+      appBar: AppBar(title: Text("Your Orders")),
+      body: Consumer<OrderProvider>(
+        builder: (context, orderProvider, child) {
           if (orderProvider.getUserOrdersState == ProviderState.loading) {
             return Center(child: CircularProgressIndicator());
           }
@@ -53,6 +53,8 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
               },
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }

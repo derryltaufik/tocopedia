@@ -35,6 +35,11 @@ class OrderItemModel {
   final DateTime? updatedAt;
   final int? v;
 
+  @override
+  String toString() {
+    return 'OrderItemModel{ id: $id, order: $order, buyer: $buyer, seller: $seller, products: $products, subtotal: $subtotal, quantityTotal: $quantityTotal, airwaybill: $airwaybill, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+  }
+
   OrderItem toEntity() {
     return OrderItem(
       id: id,

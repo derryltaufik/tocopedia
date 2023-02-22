@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/pages/features/cart/cart_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class AddToCartButton extends StatelessWidget {
   const AddToCartButton({

@@ -12,7 +12,7 @@ import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class CartProvider with ChangeNotifier {
   final GetCart _getCart;

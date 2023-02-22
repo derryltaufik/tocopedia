@@ -8,7 +8,7 @@ import 'package:tocopedia/domains/entities/order_item_detail.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/loading_dialog.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ViewOrderPage extends StatefulWidget {
   static const String routeName = "orders/view";

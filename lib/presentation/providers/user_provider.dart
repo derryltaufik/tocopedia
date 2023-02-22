@@ -9,7 +9,7 @@ import 'package:tocopedia/domains/use_cases/user/login.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class UserProvider with ChangeNotifier {
   final SignUp _signUp;

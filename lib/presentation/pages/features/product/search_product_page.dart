@@ -5,7 +5,7 @@ import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class SearchProductPage extends StatefulWidget {
   static const routeName = "/products/search";

@@ -31,6 +31,11 @@ class OrderItemDetailModel {
     );
   }
 
+  @override
+  String toString() {
+    return 'OrderItemDetailModel{ product: $product, productName: $productName, productPrice: $productPrice, productImage: $productImage, quantity: $quantity, id: $id,}';
+  }
+
   OrderItemDetailModel copyWith({
     ProductModel? product,
     String? productName,

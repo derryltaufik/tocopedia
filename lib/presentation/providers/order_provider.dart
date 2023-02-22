@@ -7,7 +7,7 @@ import 'package:tocopedia/domains/use_cases/order/checkout.dart';
 import 'package:tocopedia/domains/use_cases/order/get_order.dart';
 import 'package:tocopedia/domains/use_cases/order/get_user_orders.dart';
 import 'package:tocopedia/domains/use_cases/order/pay_order.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class OrderProvider with ChangeNotifier {
   final GetOrder _getOrder;
@@ -78,7 +78,7 @@ class OrderProvider with ChangeNotifier {
 
       final orderList = await _getUserOrders.execute(_authToken!);
       orderList
-        ..removeWhere((element) =>
+        .removeWhere((element) =>
             element.status != "unpaid" &&
                 DateTime.now().difference(element.createdAt!).inHours > 24);
       _orderList = orderList;

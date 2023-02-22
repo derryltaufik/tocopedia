@@ -7,7 +7,7 @@ import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/add_to_cart_button.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/product_image_carousel.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ViewProductPage extends StatefulWidget {
   static const String routeName = "products/view";

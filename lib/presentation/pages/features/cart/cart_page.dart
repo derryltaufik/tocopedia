@@ -4,7 +4,7 @@ import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/presentation/pages/features/cart/checkout_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
-import 'package:tocopedia/presentation/providers/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class CartPage extends StatefulWidget {
   static const String routeName = "/cart";
@@ -99,15 +99,15 @@ class _CartPageState extends State<CartPage> {
                     FilledButton(
                         style: FilledButton.styleFrom(
                             textStyle: theme.textTheme.titleMedium),
+                        onPressed: cartProvider.totalSelectedItemCount == 0
+                            ? null
+                            : () => Navigator.of(context)
+                                .pushNamed(CheckoutPage.routeName),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30.0),
                           child: Text(
                               "Buy (${cartProvider.totalSelectedItemCount})"),
-                        ),
-                        onPressed: cartProvider.totalSelectedItemCount == 0
-                            ? null
-                            : () => Navigator.of(context)
-                                .pushNamed(CheckoutPage.routeName)),
+                        )),
                   ],
                 );
               }),
