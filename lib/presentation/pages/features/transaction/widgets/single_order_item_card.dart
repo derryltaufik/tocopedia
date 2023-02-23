@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/order_item_status_enum.dart';
+import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
 
 class SingleOrderItemCard extends StatelessWidget {
@@ -15,11 +16,10 @@ class SingleOrderItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    print(orderItem.status);
     final statusEnum = Status.fromString(orderItem.status!);
     return GestureDetector(
-      // onTap: () => Navigator.of(context)
-      //     .pushNamed(ViewOrderPage.routeName, arguments: order.id),
+      onTap: () => Navigator.of(context)
+          .pushNamed(ViewOrderItemPage.routeName, arguments: orderItem.id),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
@@ -41,7 +41,8 @@ class SingleOrderItemCard extends StatelessWidget {
                       )
                     ],
                   ),
-                  OrderStatusCard(text: orderItem.status!, color: statusEnum.color),
+                  OrderStatusCard(
+                      text: orderItem.status!, color: statusEnum.color),
                 ],
               ),
               Divider(),

@@ -8,6 +8,8 @@ import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class TransactionPage extends StatefulWidget {
+  static const String routeName = "/transactions";
+
   const TransactionPage({Key? key}) : super(key: key);
 
   @override

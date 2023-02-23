@@ -9,6 +9,7 @@ import 'package:tocopedia/presentation/pages/features/product/search_product_pag
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
+import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -64,6 +65,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => ViewAllOrdersPage(),
+      );
+
+    case ViewOrderItemPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            ViewOrderItemPage(orderItemId: routeSettings.arguments as String),
       );
     default:
       return MaterialPageRoute(

@@ -197,19 +197,20 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
                             order.address!, orderItem, theme);
                       },
                     ).toList(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        OutlinedButton(
-                            onPressed: () => cancelOrder(context),
-                            child: Text("Cancel Order")),
-                        SizedBox(width: 20),
-                        Expanded(
-                            child: FilledButton(
-                                onPressed: () => payOrder(context),
-                                child: Text("Pay Now")))
-                      ],
-                    ),
+                    if (order.status! == "unpaid")
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          OutlinedButton(
+                              onPressed: () => cancelOrder(context),
+                              child: Text("Cancel Order")),
+                          SizedBox(width: 20),
+                          Expanded(
+                              child: FilledButton(
+                                  onPressed: () => payOrder(context),
+                                  child: Text("Pay Now")))
+                        ],
+                      ),
                   ],
                 ),
               ),

@@ -122,6 +122,7 @@ class CartProvider with ChangeNotifier {
       _message = e.toString();
       _updateCartState = ProviderState.error;
       notifyListeners();
+      rethrow;
     }
   }
 
