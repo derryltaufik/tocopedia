@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/buyer_navigation_bar.dart';
+import 'package:tocopedia/presentation/providers/category_provider.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => di.locator<UserProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<CategoryProvider>(),
         ),
         ChangeNotifierProxyProvider<UserProvider, ProductProvider>(
           create: (_) => di.locator<ProductProvider>(),

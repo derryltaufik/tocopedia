@@ -38,7 +38,7 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
 
           final orders = orderProvider.orderList;
 
-          if (orders?.isEmpty ?? false) {
+          if (orders == null || orders.isEmpty) {
             return Center(child: Text("You don't have any order."));
           }
 
@@ -46,7 +46,7 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
             padding: const EdgeInsets.all(8.0),
             child: ListView.separated(
               separatorBuilder: (context, index) => SizedBox(height: 15),
-              itemCount: orders!.length,
+              itemCount: orders.length,
               itemBuilder: (context, index) {
                 final Order order = orders[index];
                 return SingleOrderCard(order: order);

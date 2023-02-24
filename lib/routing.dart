@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/cart_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/checkout_page.dart';
@@ -37,7 +38,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) =>
-            SearchProductPage(searchQuery: routeSettings.arguments as String),
+            SearchProductPage(searchArguments: routeSettings.arguments as SearchArguments),
       );
     case ViewProductPage.routeName:
       return MaterialPageRoute(

@@ -1,17 +1,20 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:tocopedia/data/data_sources/cart_remote_data_source.dart';
+import 'package:tocopedia/data/data_sources/category_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_item_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
 import 'package:tocopedia/data/repositories/cart_repository_impl.dart';
+import 'package:tocopedia/data/repositories/category_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_item_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_repository_impl.dart';
 import 'package:tocopedia/data/repositories/product_repository_impl.dart';
 import 'package:tocopedia/data/repositories/user_repository_impl.dart';
 import 'package:tocopedia/domains/repositories/cart_repository.dart';
+import 'package:tocopedia/domains/repositories/category_repository.dart';
 import 'package:tocopedia/domains/repositories/order_item_repository.dart';
 import 'package:tocopedia/domains/repositories/order_repository.dart';
 import 'package:tocopedia/domains/repositories/product_repository.dart';
@@ -25,6 +28,8 @@ import 'package:tocopedia/domains/use_cases/cart/select_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
+import 'package:tocopedia/domains/use_cases/category/get_all_categories.dart';
+import 'package:tocopedia/domains/use_cases/category/get_category.dart';
 import 'package:tocopedia/domains/use_cases/order/cancel_order.dart';
 import 'package:tocopedia/domains/use_cases/order/checkout.dart';
 import 'package:tocopedia/domains/use_cases/order/get_order.dart';
@@ -46,6 +51,7 @@ import 'package:tocopedia/domains/use_cases/user/login.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
+import 'package:tocopedia/presentation/providers/category_provider.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
@@ -61,6 +67,8 @@ void init() {
       () => UserRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<UserLocalDataSource>(
       () => UserLocalDataSourceImpl());
+  locator.registerLazySingleton<CategoryRemoteDataSource>(
+      () => CategoryRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<ProductRemoteDataSource>(
       () => ProductRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<CartRemoteDataSource>(
@@ -74,6 +82,11 @@ void init() {
     () => UserRepositoryImpl(
       remoteDataSource: locator(),
       localDataSource: locator(),
+    ),
+  );
+  locator.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(
+      remoteDataSource: locator(),
     ),
   );
   locator.registerLazySingleton<ProductRepository>(
@@ -103,6 +116,9 @@ void init() {
   locator.registerLazySingleton(() => GetUser(locator()));
   locator.registerLazySingleton(() => AutoLogin(locator()));
   locator.registerLazySingleton(() => UpdateUser(locator()));
+
+  locator.registerLazySingleton(() => GetCategory(locator()));
+  locator.registerLazySingleton(() => GetAllCategories(locator()));
 
   locator.registerLazySingleton(() => GetProduct(locator()));
   locator.registerLazySingleton(() => SearchProduct(locator()));
@@ -142,6 +158,14 @@ void init() {
       updateUser: locator(),
     ),
   );
+
+  locator.registerFactory(
+    () => CategoryProvider(
+      getAllCategories: locator(),
+      getCategory: locator(),
+    ),
+  );
+
   locator.registerFactoryParam(
     (String? param1, _) => ProductProvider(
       getProduct: locator(),

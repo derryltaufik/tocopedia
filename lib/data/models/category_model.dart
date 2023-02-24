@@ -5,6 +5,7 @@ import 'package:tocopedia/domains/entities/category.dart';
 class CategoryModel {
   final String? name;
   final String? id;
+  final String? image;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
@@ -18,6 +19,7 @@ class CategoryModel {
     return Category(
       id: id,
       name: name,
+      image: image,
       createdAt: createdAt,
       updatedAt: updatedAt,
       v: v,
@@ -28,6 +30,7 @@ class CategoryModel {
     return CategoryModel(
       id: category.id,
       name: category.name,
+      image: category.image,
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,
       v: category.v,
@@ -35,9 +38,11 @@ class CategoryModel {
   }
 
 //<editor-fold desc="Data Methods">
+
   const CategoryModel({
     required this.name,
     required this.id,
+    required this.image,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -50,6 +55,7 @@ class CategoryModel {
           runtimeType == other.runtimeType &&
           name == other.name &&
           id == other.id &&
+          image == other.image &&
           createdAt == other.createdAt &&
           updatedAt == other.updatedAt &&
           v == other.v);
@@ -58,18 +64,20 @@ class CategoryModel {
   int get hashCode =>
       name.hashCode ^
       id.hashCode ^
+      image.hashCode ^
       createdAt.hashCode ^
       updatedAt.hashCode ^
       v.hashCode;
 
   @override
   String toString() {
-    return 'CategoryModel{ name: $name, id: $id, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+    return 'CategoryModel{ name: $name, id: $id, image: $image, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
   }
 
   CategoryModel copyWith({
     String? name,
     String? id,
+    String? image,
     DateTime? createdAt,
     DateTime? updatedAt,
     int? v,
@@ -77,33 +85,34 @@ class CategoryModel {
     return CategoryModel(
       name: name ?? this.name,
       id: id ?? this.id,
+      image: image ?? this.image,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       v: v ?? this.v,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'id': id,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'v': v,
-    };
-  }
+  factory CategoryModel.fromMap(Map<String, dynamic> json) => CategoryModel(
+        id: json["_id"],
+        name: json["name"],
+        image: json["image"],
+        v: json["__v"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+      );
 
-  factory CategoryModel.fromMap(Map<String, dynamic> map) {
-    return CategoryModel(
-      name: map['name'],
-      id: map['_id'],
-      createdAt:
-          map['createdAt'] == null ? null : DateTime.parse(map['createdAt']),
-      updatedAt:
-          map['updatedAt'] == null ? null : DateTime.parse(map['updatedAt']),
-      v: map['__v'],
-    );
-  }
+  Map<String, dynamic> toMap() => {
+        "_id": id,
+        "name": name,
+        "image": image,
+        "__v": v,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+      };
 
 //</editor-fold>
 }

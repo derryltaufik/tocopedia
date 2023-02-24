@@ -7,6 +7,7 @@ import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 
 class ProductProvider with ChangeNotifier {
   final GetProduct _getProduct;
@@ -52,24 +53,18 @@ class ProductProvider with ChangeNotifier {
 
   ProviderState get getProductState => _getProductState;
 
-  Future<void> searchProduct(
-      {String? query,
-      Category? category,
-      int? minimumPrice,
-      int? maximumPrice,
-      String? sortBy,
-      String? sortOrder}) async {
+  Future<void> searchProduct(SearchArguments searchArguments) async {
     try {
       _searchProductState = ProviderState.loading;
       notifyListeners();
 
       final products = await _searchProduct.execute(
-        query: query,
-        category: category,
-        maximumPrice: maximumPrice,
-        minimumPrice: minimumPrice,
-        sortBy: sortBy,
-        sortOrder: sortOrder,
+        query: searchArguments.searchQuery,
+        sortOrder: searchArguments.sortSelection?.orderBy,
+        sortBy: searchArguments.sortSelection?.sortBy,
+        minimumPrice: searchArguments.minimumPrice,
+        maximumPrice: searchArguments.maximumPrice,
+        category: searchArguments.category,
       );
       _searchedProduct = products;
       _searchProductState = ProviderState.loaded;
@@ -79,6 +74,13 @@ class ProductProvider with ChangeNotifier {
       _searchProductState = ProviderState.error;
       notifyListeners();
     }
+  }
+
+  Set<Category> getSearchedProductCategories() {
+    final Set<Category> categoriesSet = <Category>{};
+    _searchedProduct
+        ?.forEach((product) => categoriesSet.add(product.category!));
+    return categoriesSet;
   }
 
   Future<void> getPopularProducts() async {

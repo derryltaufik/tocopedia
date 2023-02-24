@@ -48,21 +48,26 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder}) async {
+
+    final queryParams = ({
+      "q": query,
+      "category": category?.id,
+      "min-price": minimumPrice,
+      "max-price": maximumPrice,
+      "sort-by": sortBy,
+      "sort-order": sortOrder
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty))
+        .map((key, value) => MapEntry(key, value.toString()));
+
     final url = Uri.parse(BASE_URL).replace(
       path: '/products/search',
-      queryParameters: {
-        "q": query,
-        "category": category?.id,
-        "min-price": minimumPrice,
-        "max-price": maximumPrice,
-        "sort-by": sortBy,
-        "sort-order": sortOrder
-      }..removeWhere((key, value) => value == null || value.toString().isEmpty),
+      queryParameters: queryParams,
     );
 
     final response = await client.get(url, headers: defaultHeader);
 
     final responseBody = json.decode(response.body);
+
     if (response.statusCode ~/ 100 == 2) {
       return List<ProductModel>.from(
           responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
