@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
 
 class ProductSearchBar extends StatelessWidget {
@@ -17,8 +18,8 @@ class ProductSearchBar extends StatelessWidget {
       child: TextFormField(
         initialValue: query,
         onFieldSubmitted: (value) {
-          Navigator.of(context)
-              .pushNamed(SearchProductPage.routeName, arguments: value);
+          Navigator.of(context).pushNamed(SearchProductPage.routeName,
+              arguments: SearchArguments(searchQuery: value));
         },
         decoration: InputDecoration(
           prefixIcon: const Icon(

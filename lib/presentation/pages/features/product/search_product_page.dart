@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
+import 'package:tocopedia/presentation/pages/features/product/widgets/filter_bottom_sheet.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
+//TODO bug: when opening multiple search page & user press back, search result shows the same result from provider
 class SearchProductPage extends StatefulWidget {
   static const routeName = "/products/search";
 
-  final String searchQuery;
+  final SearchArguments searchArguments;
 
-  const SearchProductPage({
-    super.key,
-    required this.searchQuery,
-  });
+  const SearchProductPage({super.key, required this.searchArguments});
 
   @override
   State<SearchProductPage> createState() => _SearchProductPageState();
@@ -27,22 +27,32 @@ class _SearchProductPageState extends State<SearchProductPage> {
     super.initState();
     Future.microtask(() {
       Provider.of<ProductProvider>(context, listen: false)
-          .searchProduct(query: widget.searchQuery);
+          .searchProduct(widget.searchArguments);
     });
+  }
+
+  Future<void> filter(BuildContext context) async {
+    //TODO bottomsheet should know current filter
+    final searchArguments = await showFilterBottomSheet(context);
+    //TODO should detect if there's no change, don't call searchProduct
+    if (searchArguments != null && context.mounted) {
+      await Provider.of<ProductProvider>(context, listen: false)
+          .searchProduct(searchArguments);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: HomeAppBar(query: widget.searchQuery),
+      appBar: HomeAppBar(query: widget.searchArguments.searchQuery ?? ""),
       body: Padding(
         padding: const EdgeInsets.all(10.0).copyWith(bottom: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Search results for: \"${widget.searchQuery}\"",
+              "Search results for: \"${widget.searchArguments.searchQuery ?? ""}\"",
               style: theme.textTheme.titleMedium,
             ),
             Flexible(
@@ -77,7 +87,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
         ),
       ),
       floatingActionButton: FilledButton.icon(
-        onPressed: () {},
+        onPressed: () => filter(context),
         icon: Icon(Icons.filter_alt_outlined),
         label: Text("Sort & Filter"),
       ),
