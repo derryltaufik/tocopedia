@@ -7,7 +7,6 @@ import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/filter_bottom_sheet.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
-import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 //TODO bug: when opening multiple search page & user press back, search result shows the same result from provider
 class SearchProductPage extends StatefulWidget {
@@ -22,13 +21,30 @@ class SearchProductPage extends StatefulWidget {
 }
 
 class _SearchProductPageState extends State<SearchProductPage> {
+  late SearchArguments _searchArguments;
+  late final _searchProduct =
+      Provider.of<ProductProvider>(context, listen: false).searchProduct;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      Provider.of<ProductProvider>(context, listen: false)
-          .searchProduct(widget.searchArguments);
-    });
+
+    _searchArguments = widget.searchArguments;
+  }
+
+  Future<void> filter(BuildContext context) async {
+
+    final searchArguments =
+        await showFilterBottomSheet(context, _searchArguments);
+    FocusManager.instance.primaryFocus
+        ?.unfocus(); // to fix autofocused on search textfield https://github.com/flutter/flutter/issues/54277
+
+    if (searchArguments != null) {
+      setState(() {
+        _searchArguments = searchArguments;
+      });
+    }
+
   }
 
   Future<void> filter(BuildContext context) async {
@@ -43,6 +59,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(_searchArguments.toString());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: HomeAppBar(query: widget.searchArguments.searchQuery ?? ""),
@@ -56,32 +73,31 @@ class _SearchProductPageState extends State<SearchProductPage> {
               style: theme.textTheme.titleMedium,
             ),
             Flexible(
-              child: Consumer<ProductProvider>(
-                  builder: (context, productProvider, child) {
-                if (productProvider.searchProductState ==
-                    ProviderState.loading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (productProvider.searchProductState == ProviderState.error) {
-                  return Center(child: Text(productProvider.message));
-                }
+              child: FutureBuilder(
+                  future: _searchProduct(_searchArguments),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final products = snapshot.data!;
 
-                final products = productProvider.searchedProduct!;
+                      if (products.isEmpty) {
+                        return Center(
+                            child: Text(
+                                "Product not found... Try another keyword"));
+                      }
 
-                if (products.isEmpty) {
-                  return Center(
-                      child: Text("Product not found... Try another keyword"));
-                }
-
-                return MasonryGridView.count(
-                  crossAxisCount: 2,
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final Product product = products[index];
-                    return SingleProductCard(product: product);
-                  },
-                );
-              }),
+                      return MasonryGridView.count(
+                        crossAxisCount: 2,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final Product product = products[index];
+                          return SingleProductCard(product: product);
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('${snapshot.error}'));
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }),
             )
           ],
         ),

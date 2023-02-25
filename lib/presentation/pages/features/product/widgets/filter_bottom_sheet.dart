@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
@@ -6,21 +7,30 @@ import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart
 import 'package:tocopedia/presentation/pages/common_widgets/rupiah_text_field.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
-Future<SearchArguments?> showFilterBottomSheet(context) {
+
+//https://web.archive.org/web/20230225174447/https://appunite.com/blog/how-to-scroll-your-bottom-sheet-differently-with-flutter
+
+Future<SearchArguments?> showFilterBottomSheet(
+    BuildContext context, SearchArguments searchArguments) {
   return showModalBottomSheet<SearchArguments>(
     context: context,
     isScrollControlled: true,
     builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.5,
-        maxChildSize: 0.9,
-        minChildSize: 0.5,
-        snap: true,
-        snapSizes: const [0.5, 0.9],
-        expand: false,
-        builder: (context, scrollController) {
-          return FilterBottomSheet(
-              context: context, scrollController: scrollController);
-        }),
+      initialChildSize: 0.5,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      snap: true,
+      snapSizes: const [0.5, 0.9],
+      expand: false,
+      builder: (context, scrollController) {
+        return FilterBottomSheet(
+          context: context,
+          scrollController: scrollController,
+          initialSearchArguments: searchArguments,
+        );
+      },
+    ),
+
   );
 }
 
@@ -29,10 +39,13 @@ class FilterBottomSheet extends StatefulWidget {
     super.key,
     required this.scrollController,
     required this.context,
+    required this.initialSearchArguments,
+
   });
 
   final ScrollController scrollController;
   final BuildContext context;
+  final SearchArguments initialSearchArguments;
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -48,8 +61,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    selectedSort = widget.initialSearchArguments.sortSelection;
+    selectedCategory = widget.initialSearchArguments.category;
+    if (widget.initialSearchArguments.minimumPrice != null) {
+      // https://github.com/flutter/flutter/issues/30369
+      minPriceController.text = RupiahInputFormatter()
+          .format(widget.initialSearchArguments.minimumPrice.toString());
+    }
+    if (widget.initialSearchArguments.maximumPrice != null) {
+      maxPriceController.text = RupiahInputFormatter()
+          .format(widget.initialSearchArguments.minimumPrice.toString());
+    }
     categorySelection = Provider.of<ProductProvider>(context, listen: false)
         .getSearchedProductCategories();
   }
@@ -174,3 +197,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     );
   }
 }
+
+extension on TextInputFormatter {
+  String format(String text) {
+    return formatEditUpdate(
+      const TextEditingValue(),
+      TextEditingValue(
+        text: text,
+        selection: TextSelection(
+          baseOffset: text.length,
+          extentOffset: text.length,
+        ),
+      ),
+    ).text;
+  }
+}
+

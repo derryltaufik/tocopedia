@@ -61,4 +61,5 @@ class RupiahInputFormatter extends TextInputFormatter {
       selection: TextSelection.collapsed(offset: newText.length),
     );
   }
+
 }
