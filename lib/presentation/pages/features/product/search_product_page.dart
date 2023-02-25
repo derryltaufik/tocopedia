@@ -33,7 +33,6 @@ class _SearchProductPageState extends State<SearchProductPage> {
   }
 
   Future<void> filter(BuildContext context) async {
-
     final searchArguments =
         await showFilterBottomSheet(context, _searchArguments);
     FocusManager.instance.primaryFocus
@@ -43,17 +42,6 @@ class _SearchProductPageState extends State<SearchProductPage> {
       setState(() {
         _searchArguments = searchArguments;
       });
-    }
-
-  }
-
-  Future<void> filter(BuildContext context) async {
-    //TODO bottomsheet should know current filter
-    final searchArguments = await showFilterBottomSheet(context);
-    //TODO should detect if there's no change, don't call searchProduct
-    if (searchArguments != null && context.mounted) {
-      await Provider.of<ProductProvider>(context, listen: false)
-          .searchProduct(searchArguments);
     }
   }
 
