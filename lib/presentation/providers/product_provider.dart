@@ -53,10 +53,10 @@ class ProductProvider with ChangeNotifier {
 
   ProviderState get getProductState => _getProductState;
 
-  Future<void> searchProduct(SearchArguments searchArguments) async {
+  Future<List<Product>?> searchProduct(SearchArguments searchArguments) async {
     try {
-      _searchProductState = ProviderState.loading;
-      notifyListeners();
+      // _searchProductState = ProviderState.loading;
+      // notifyListeners();
 
       final products = await _searchProduct.execute(
         query: searchArguments.searchQuery,
@@ -67,12 +67,14 @@ class ProductProvider with ChangeNotifier {
         category: searchArguments.category,
       );
       _searchedProduct = products;
-      _searchProductState = ProviderState.loaded;
-      notifyListeners();
+      // _searchProductState = ProviderState.loaded;
+      // notifyListeners();
+      return _searchedProduct;
     } catch (e) {
-      _message = e.toString();
-      _searchProductState = ProviderState.error;
-      notifyListeners();
+      // _message = e.toString();
+      // _searchProductState = ProviderState.error;
+      // notifyListeners();
+      rethrow;
     }
   }
 

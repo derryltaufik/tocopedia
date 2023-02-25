@@ -38,4 +38,20 @@ class SearchArguments {
       minimumPrice.hashCode ^
       maximumPrice.hashCode ^
       sortSelection.hashCode;
+
+  SearchArguments copyWith({
+    String? searchQuery,
+    Category? category,
+    int? minimumPrice,
+    int? maximumPrice,
+    SortSelection? sortSelection,
+  }) {
+    return SearchArguments(
+      searchQuery: searchQuery ?? this.searchQuery,
+      category: category ?? this.category,
+      minimumPrice: minimumPrice ?? this.minimumPrice,
+      maximumPrice: maximumPrice ?? this.maximumPrice,
+      sortSelection: sortSelection ?? this.sortSelection,
+    );
+  }
 }
