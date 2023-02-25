@@ -39,6 +39,7 @@ class SearchArguments {
       maximumPrice.hashCode ^
       sortSelection.hashCode;
 
+
   SearchArguments copyWith({
     String? searchQuery,
     Category? category,
@@ -54,4 +55,5 @@ class SearchArguments {
       sortSelection: sortSelection ?? this.sortSelection,
     );
   }
+
 }

@@ -8,6 +8,7 @@ import 'package:tocopedia/presentation/pages/features/product/widgets/filter_bot
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
+//TODO bug: when opening multiple search page & user press back, search result shows the same result from provider
 class SearchProductPage extends StatefulWidget {
   static const routeName = "/products/search";
 
@@ -27,6 +28,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
   @override
   void initState() {
     super.initState();
+
     _searchArguments = widget.searchArguments;
   }
 
@@ -41,6 +43,17 @@ class _SearchProductPageState extends State<SearchProductPage> {
       setState(() {
         _searchArguments = searchArguments;
       });
+    }
+
+  }
+
+  Future<void> filter(BuildContext context) async {
+    //TODO bottomsheet should know current filter
+    final searchArguments = await showFilterBottomSheet(context);
+    //TODO should detect if there's no change, don't call searchProduct
+    if (searchArguments != null && context.mounted) {
+      await Provider.of<ProductProvider>(context, listen: false)
+          .searchProduct(searchArguments);
     }
   }
 

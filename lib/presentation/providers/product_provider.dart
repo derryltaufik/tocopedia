@@ -53,7 +53,9 @@ class ProductProvider with ChangeNotifier {
 
   ProviderState get getProductState => _getProductState;
 
+
   Future<List<Product>?> searchProduct(SearchArguments searchArguments) async {
+
     try {
       // _searchProductState = ProviderState.loading;
       // notifyListeners();

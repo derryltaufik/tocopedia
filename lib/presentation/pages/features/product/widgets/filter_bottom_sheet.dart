@@ -7,6 +7,7 @@ import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart
 import 'package:tocopedia/presentation/pages/common_widgets/rupiah_text_field.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
+
 //https://web.archive.org/web/20230225174447/https://appunite.com/blog/how-to-scroll-your-bottom-sheet-differently-with-flutter
 
 Future<SearchArguments?> showFilterBottomSheet(
@@ -29,6 +30,7 @@ Future<SearchArguments?> showFilterBottomSheet(
         );
       },
     ),
+
   );
 }
 
@@ -38,6 +40,7 @@ class FilterBottomSheet extends StatefulWidget {
     required this.scrollController,
     required this.context,
     required this.initialSearchArguments,
+
   });
 
   final ScrollController scrollController;
@@ -70,7 +73,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       maxPriceController.text = RupiahInputFormatter()
           .format(widget.initialSearchArguments.minimumPrice.toString());
     }
-
     categorySelection = Provider.of<ProductProvider>(context, listen: false)
         .getSearchedProductCategories();
   }
@@ -210,3 +212,4 @@ extension on TextInputFormatter {
     ).text;
   }
 }
+
