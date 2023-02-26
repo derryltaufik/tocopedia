@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
+import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 class SingleAddressCard extends StatelessWidget {
   final Address address;
@@ -9,6 +11,11 @@ class SingleAddressCard extends StatelessWidget {
   const SingleAddressCard(
       {Key? key, required this.address, this.isDefault = true})
       : super(key: key);
+
+  void setAsDefault(BuildContext context) {
+    Provider.of<UserProvider>(context, listen: false)
+        .updateUser(addressId: address.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +82,10 @@ class SingleAddressCard extends StatelessWidget {
                         child: OutlinedButton(
                             onPressed: () {}, child: Text("Change Address"))),
                     SizedBox(width: 5),
-                    OutlinedButton(
-                        onPressed: () {}, child: Icon(Icons.more_horiz)),
+                    if (!isDefault)
+                      OutlinedButton(
+                          onPressed: () => setAsDefault(context),
+                          child: Icon(Icons.more_horiz)),
                   ],
                 )
               ],

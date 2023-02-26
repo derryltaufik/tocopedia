@@ -27,9 +27,7 @@ class CartProvider with ChangeNotifier {
   final UnselectSeller _unselectSeller;
   final String? _authToken;
 
-  Cart? _cart;
-
-  Cart? get cart => _cart;
+  Cart? cart;
 
   String _message = "";
 
@@ -38,10 +36,10 @@ class CartProvider with ChangeNotifier {
   String? get token => _authToken;
 
   int get totalItemCount {
-    if (_cart == null) return 0;
-    if (_cart!.cartItems.isEmpty) return 0;
+    if (cart == null) return 0;
+    if (cart!.cartItems.isEmpty) return 0;
     int total = 0;
-    for (var cartItem in _cart!.cartItems) {
+    for (var cartItem in cart!.cartItems) {
       for (var cartItemDetail in cartItem.cartItemDetails!) {
         total += cartItemDetail.quantity!;
       }
@@ -50,10 +48,10 @@ class CartProvider with ChangeNotifier {
   }
 
   int get totalSelectedItemCount {
-    if (_cart == null) return 0;
-    if (_cart!.cartItems.isEmpty) return 0;
+    if (cart == null) return 0;
+    if (cart!.cartItems.isEmpty) return 0;
     int total = 0;
-    for (var cartItem in _cart!.cartItems) {
+    for (var cartItem in cart!.cartItems) {
       for (var cartItemDetail in cartItem.cartItemDetails!) {
         if (cartItemDetail.selected!) {
           total += cartItemDetail.quantity!;
@@ -64,10 +62,10 @@ class CartProvider with ChangeNotifier {
   }
 
   int get totalPrice {
-    if (_cart == null) return 0;
-    if (_cart!.cartItems.isEmpty) return 0;
+    if (cart == null) return 0;
+    if (cart!.cartItems.isEmpty) return 0;
     int total = 0;
-    for (var cartItem in _cart!.cartItems) {
+    for (var cartItem in cart!.cartItems) {
       for (var cartItemDetail in cartItem.cartItemDetails!) {
         if (cartItemDetail.selected!) {
           total += cartItemDetail.quantity! * cartItemDetail.product!.price!;
@@ -114,8 +112,8 @@ class CartProvider with ChangeNotifier {
       if (!_verifyToken()) throw Exception("You need to login");
       _updateCartState = ProviderState.loading;
       notifyListeners();
-      final cart = await _addToCart.execute(_authToken!, productId);
-      _cart = cart;
+      final tempCart = await _addToCart.execute(_authToken!, productId);
+      cart = tempCart;
       _updateCartState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
@@ -129,8 +127,8 @@ class CartProvider with ChangeNotifier {
   Future<void> selectCartItem(String productId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      final cart = await _selectCartItem.execute(_authToken!, productId);
-      _cart = cart;
+      final tempCart = await _selectCartItem.execute(_authToken!, productId);
+      cart = tempCart;
       notifyListeners();
     } catch (e) {}
   }
@@ -138,8 +136,8 @@ class CartProvider with ChangeNotifier {
   Future<void> selectSeller(String sellerId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      final cart = await _selectSeller.execute(_authToken!, sellerId);
-      _cart = cart;
+      final tempCart = await _selectSeller.execute(_authToken!, sellerId);
+      cart = tempCart;
       notifyListeners();
     } catch (e) {
       print(e.toString());
@@ -149,8 +147,8 @@ class CartProvider with ChangeNotifier {
   Future<void> unselectSeller(String sellerId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      final cart = await _unselectSeller.execute(_authToken!, sellerId);
-      _cart = cart;
+      final tempCart = await _unselectSeller.execute(_authToken!, sellerId);
+      cart = tempCart;
       notifyListeners();
     } catch (e) {}
   }
@@ -158,8 +156,8 @@ class CartProvider with ChangeNotifier {
   Future<void> unselectCartItem(String productId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      final cart = await _unselectCartItem.execute(_authToken!, productId);
-      _cart = cart;
+      final tempCart = await _unselectCartItem.execute(_authToken!, productId);
+      cart = tempCart;
       notifyListeners();
     } catch (e) {}
   }
@@ -169,8 +167,8 @@ class CartProvider with ChangeNotifier {
       if (!_verifyToken()) throw Exception("You need to login");
       // _updateCartState = ProviderState.loading;
       // notifyListeners();
-      final cart = await _removeFromCart.execute(_authToken!, productId);
-      _cart = cart;
+      final tempCart = await _removeFromCart.execute(_authToken!, productId);
+      cart = tempCart;
       // _updateCartState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
@@ -186,8 +184,9 @@ class CartProvider with ChangeNotifier {
       // _updateCartState = ProviderState.loading;
       // notifyListeners();
 
-      final cart = await _updateCart.execute(_authToken!, productId, quantity);
-      _cart = cart;
+      final tempCart =
+          await _updateCart.execute(_authToken!, productId, quantity);
+      cart = tempCart;
 
       // _updateCartState = ProviderState.loaded;
       notifyListeners();
@@ -203,8 +202,8 @@ class CartProvider with ChangeNotifier {
       if (!_verifyToken()) throw Exception("You need to login");
       _getCartState = ProviderState.loading;
       notifyListeners();
-      final cart = await _getCart.execute(_authToken!);
-      _cart = cart;
+      final tempCart = await _getCart.execute(_authToken!);
+      cart = tempCart;
       _getCartState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
@@ -215,19 +214,20 @@ class CartProvider with ChangeNotifier {
   }
 
   Cart getCheckoutCart() {
-    final cart = _cart!.copyWith(); //cloning cart
-    for (var cartItem in cart.cartItems) {
+    final tempCart = cart!.copyWith(); //cloning cart
+    for (var cartItem in tempCart.cartItems) {
       cartItem.cartItemDetails!
           .removeWhere((element) => element.selected == false);
     }
-    cart.cartItems.removeWhere((element) => element.cartItemDetails!.isEmpty);
-    return cart;
+    tempCart.cartItems
+        .removeWhere((element) => element.cartItemDetails!.isEmpty);
+    return tempCart;
   }
 
   Future<void> init() async {
     try {
       if (_verifyToken()) {
-        _cart = await _getCart.execute(_authToken!);
+        cart = await _getCart.execute(_authToken!);
         notifyListeners();
       }
     } catch (e) {

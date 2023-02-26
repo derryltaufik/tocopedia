@@ -41,10 +41,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<UserProvider, CartProvider>(
           create: (_) => di.locator<CartProvider>(),
-          update: (_, value, __) {
+          update: (_, value, previousCartProvider) {
             final cartProvider =
                 di.locator<CartProvider>(param1: value.user?.token);
-            cartProvider.init(); //fetch cart immediately
+            cartProvider.cart = previousCartProvider?.cart;
+            if (cartProvider.cart == null) {
+              cartProvider.init(); //fetch cart immediately
+            }
             return cartProvider;
           },
         ),
@@ -60,8 +63,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<UserProvider, AddressProvider>(
           create: (_) => di.locator<AddressProvider>(),
-          update: (_, value, __) =>
-              di.locator<AddressProvider>(param1: value.user?.token),
+          update: (_, value, previousAddressProvider) =>
+              di.locator<AddressProvider>(param1: value.user?.token)
+                ..addressesList = previousAddressProvider?.addressesList,
         ),
       ],
       child: Consumer<UserProvider>(builder: (context, userProvider, child) {
@@ -80,7 +84,9 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor:  Colors.lightGreen,),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.lightGreen,
+            ),
             // colorSchemeSeed: Colors.lightGreen,
 
             // colorSchemeSeed: const Color.fromRGBO(17, 164, 94, 1),

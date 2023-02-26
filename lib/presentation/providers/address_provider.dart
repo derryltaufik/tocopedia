@@ -19,9 +19,7 @@ class AddressProvider with ChangeNotifier {
 
   String get message => _message;
 
-  List<Address>? _addressesList;
-
-  List<Address>? get addressesList => _addressesList;
+  List<Address>? addressesList;
 
   ProviderState _getUserAddressesState = ProviderState.empty;
 
@@ -49,7 +47,7 @@ class AddressProvider with ChangeNotifier {
       notifyListeners();
 
       final addresses = await _getUserAddresses.execute(_authToken!);
-      _addressesList = addresses;
+      addressesList = addresses;
       _getUserAddressesState = ProviderState.loaded;
       notifyListeners();
 
