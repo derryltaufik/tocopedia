@@ -13,5 +13,5 @@ abstract class UserRepository {
   Future<User> getUser(String token);
 
   Future<User> updateUser(String token,
-      {String? name, String? password, Address? defaultAddress});
+      {String? name, Address? defaultAddress});
 }

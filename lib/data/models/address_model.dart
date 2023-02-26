@@ -107,7 +107,7 @@ class AddressModel {
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
       id: map['_id'],
-      owner: map['owner'],
+      owner: UserModel.fromMap(map['owner']),
       label: map['label'],
       completeAddress: map['complete_address'],
       notes: map['notes'],

@@ -10,6 +10,6 @@ class UpdateUser {
   Future<User> execute(String token,
       {String? name, String? password, Address? defaultAddress}) {
     return repository.updateUser(token,
-        password: password, defaultAddress: defaultAddress, name: name);
+        defaultAddress: defaultAddress, name: name);
   }
 }

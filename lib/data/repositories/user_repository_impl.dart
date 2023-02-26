@@ -15,10 +15,9 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> updateUser(String token,
-      {String? name, String? password, Address? defaultAddress}) async {
+      {String? name, Address? defaultAddress}) async {
     try {
       final userModel = await remoteDataSource.updateUser(token,
-          password: password,
           defaultAddress: defaultAddress != null
               ? AddressModel.fromEntity(defaultAddress)
               : null,
