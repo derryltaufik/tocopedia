@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/rupiah_text_field.dart';
-import 'package:tocopedia/presentation/providers/product_provider.dart';
 
 //https://web.archive.org/web/20230225174447/https://appunite.com/blog/how-to-scroll-your-bottom-sheet-differently-with-flutter
 
@@ -102,7 +100,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Stack(
-
       children: [
         SingleChildScrollView(
           controller: widget.scrollController,
@@ -132,7 +129,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         style: theme.textTheme.titleLarge!
                             .copyWith(fontWeight: FontWeight.bold)),
                     GestureDetector(
-                        onTap: () => resetFilter(), child: Text("Reset"))
+                        onTap: () => resetFilter(),
+                        child: Text(
+                          "Reset",
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: theme.primaryColor),
+                        ))
                   ],
                 ),
                 SizedBox(height: 15),
@@ -198,14 +201,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   }).toList(),
                 ),
                 SizedBox(height: 10),
-
               ],
             ),
           ),
         ),
         Align(
           alignment: AlignmentDirectional.bottomCenter,
-
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: FilledButton(
