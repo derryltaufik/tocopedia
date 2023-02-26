@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/common/exception.dart';
 import 'package:tocopedia/common/env_variables.dart';
-import 'package:tocopedia/data/models/address_model.dart';
 import 'package:tocopedia/data/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +14,7 @@ abstract class UserRemoteDataSource {
   Future<UserModel> getUser(String token);
 
   Future<UserModel> updateUser(String token,
-      {String? name, String? password, AddressModel? defaultAddress});
+      {String? name, String? addressId});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -88,7 +87,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> updateUser(String token,
-      {String? name, String? password, AddressModel? defaultAddress}) async {
+      {String? name,String? addressId}) async {
     final url = Uri.parse(BASE_URL).replace(path: '/users');
     final response = await client.patch(
       url,
@@ -96,8 +95,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
         ..addEntries({"Authorization": "Bearer $token"}.entries),
       body: json.encode({
         "name": name,
-        "password": password,
-        "defaultAddress": defaultAddress?.id,
+        "default_address": addressId,
       }..removeWhere((key, value) => value == null)),
     );
 

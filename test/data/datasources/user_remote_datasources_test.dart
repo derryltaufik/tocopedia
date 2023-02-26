@@ -36,9 +36,10 @@ void main() {
     test('should return User Model when the response code is 200', () async {
       try {
         final result = await dataSource.updateUser(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U4ZDhjMDEzNDRmMjEyMmEyZjZiMzYiLCJpYXQiOjE2NzYyMDQyMjR9.4dS1CCFEhU6ZNiqsfKaBd3JQYnNnOgkFQyb1DLOPZXw",
-            name: "Agus Setiono Updated",
-            password: "asdfasdfasdf");
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2Y4NWVhY2FmOWI1YzdiMTEwZGNkNzEiLCJpYXQiOjE2Nzc0MjgwMzd9.czXf62kLxO6hua4njIHikZ6fKTwqa3B9pDz9zEbBTs4",
+          name: "Agus Setiono Updated",
+          addressId: "63fb69eec9c6e15bade9a738",
+        );
         print(result.toString());
       } on SocketException catch (e) {
       } on Exception catch (e) {}

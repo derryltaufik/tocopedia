@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/domains/entities/user.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
 import 'package:tocopedia/domains/use_cases/user/get_user.dart';
@@ -109,14 +108,13 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateUser(
-      {String? name, String? password, Address? defaultAddress}) async {
+  Future<void> updateUser({String? name, String? addressId}) async {
     _updateUserState = ProviderState.loading;
     notifyListeners();
 
     try {
       final User user = await _updateUser.execute(_user!.token!,
-          name: name, defaultAddress: defaultAddress, password: password);
+          name: name, addressId: addressId);
       _user = user;
       _updateUserState = ProviderState.loaded;
       notifyListeners();

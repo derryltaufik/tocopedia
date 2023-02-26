@@ -43,7 +43,7 @@ class SingleAddressCard extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  "Home",
+                  address.label!,
                   style: theme.textTheme.labelLarge!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),

@@ -14,16 +14,12 @@ class EditUserPage extends StatefulWidget {
 
 class _EditUserPageState extends State<EditUserPage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   final _editUserFormKey = GlobalKey<FormState>();
 
   void submitForm(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_editUserFormKey.currentState!.validate()) {
       await userProvider.updateUser(
-        password: _passwordController.text.isNotEmpty
-            ? _passwordController.text
-            : null,
         name: _nameController.text.isNotEmpty ? _nameController.text : null,
       );
     }
@@ -53,14 +49,11 @@ class _EditUserPageState extends State<EditUserPage> {
     // TODO: implement dispose
     super.dispose();
     _nameController.dispose();
-    _passwordController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider
-        .of<UserProvider>(context, listen: false)
-        .user!;
+    final user = Provider.of<UserProvider>(context, listen: false).user!;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -73,9 +66,8 @@ class _EditUserPageState extends State<EditUserPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.account_circle, size: 100),
-                SizedBox(height: 30),
                 Padding(
-                  padding: const EdgeInsets.all(30).copyWith(top: 0),
+                  padding: const EdgeInsets.all(30),
                   child: Form(
                       key: _editUserFormKey,
                       child: Column(
@@ -96,35 +88,13 @@ class _EditUserPageState extends State<EditUserPage> {
                               return null;
                             },
                           ),
-                          SizedBox(height: 10),
-                          // TextFormField(
-                          //   key: Key("password_field"),
-                          //   // controller: _passwordController,
-                          //   decoration: const InputDecoration(
-                          //     icon: Icon(Icons.key_rounded),
-                          //     hintText: 'Min. 8 characters',
-                          //     labelText: 'Password',
-                          //   ),
-                          //   textInputAction: TextInputAction.done,
-                          //   keyboardType: TextInputType.visiblePassword,
-                          //   obscureText: true,
-                          //   validator: (value) {
-                          //     if (value == null || value.isEmpty) {
-                          //       return 'Please input your password';
-                          //     }
-                          //     if (value.length < 8) {
-                          //       return 'Please enter password longer than 8 characters';
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
                         ],
                       )),
                 ),
                 FilledButton(
                   onPressed: () => submitForm(context),
                   child:
-                  Consumer<UserProvider>(builder: (context, value, child) {
+                      Consumer<UserProvider>(builder: (context, value, child) {
                     if (value.updateUserState == ProviderState.loading) {
                       return CircularProgressIndicator(
                         color: theme.scaffoldBackgroundColor,
