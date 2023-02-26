@@ -15,6 +15,12 @@ class Category {
   final DateTime? updatedAt;
   final int? v;
 
+
+  @override
+  String toString() {
+    return 'Category{name: $name, id: $id, image: $image, createdAt: $createdAt, updatedAt: $updatedAt, v: $v}';
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

@@ -13,6 +13,8 @@ import 'package:tocopedia/presentation/providers/user_provider.dart';
 import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/routing.dart';
 
+//TODO https://stackoverflow.com/questions/55879550/how-to-fix-httpexception-connection-closed-before-full-header-was-received
+
 void main() {
   di.init();
   runApp(const MyApp());

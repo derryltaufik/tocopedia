@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
@@ -22,19 +23,24 @@ class SearchProductPage extends StatefulWidget {
 
 class _SearchProductPageState extends State<SearchProductPage> {
   late SearchArguments _searchArguments;
+  Set<Category>? _categorySelection;
   late final _searchProduct =
       Provider.of<ProductProvider>(context, listen: false).searchProduct;
 
   @override
   void initState() {
     super.initState();
-
     _searchArguments = widget.searchArguments;
   }
 
-  Future<void> filter(BuildContext context) async {
-    final searchArguments =
-        await showFilterBottomSheet(context, _searchArguments);
+  Future<void> showFilterOptions(BuildContext context) async {
+    _categorySelection ??= Provider.of<ProductProvider>(context, listen: false)
+        .getSearchedProductCategories();
+
+    print(_searchArguments.toString());
+    final searchArguments = await showFilterBottomSheet(context,
+        searchArguments: _searchArguments,
+        categorySelection: _categorySelection!);
     FocusManager.instance.primaryFocus
         ?.unfocus(); // to fix autofocused on search textfield https://github.com/flutter/flutter/issues/54277
 
@@ -47,7 +53,6 @@ class _SearchProductPageState extends State<SearchProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_searchArguments.toString());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: HomeAppBar(query: widget.searchArguments.searchQuery ?? ""),
@@ -91,7 +96,7 @@ class _SearchProductPageState extends State<SearchProductPage> {
         ),
       ),
       floatingActionButton: FilledButton.icon(
-        onPressed: () => filter(context),
+        onPressed: () => showFilterOptions(context),
         icon: Icon(Icons.filter_alt_outlined),
         label: Text("Sort & Filter"),
       ),

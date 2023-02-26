@@ -7,11 +7,11 @@ import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart
 import 'package:tocopedia/presentation/pages/common_widgets/rupiah_text_field.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
-
 //https://web.archive.org/web/20230225174447/https://appunite.com/blog/how-to-scroll-your-bottom-sheet-differently-with-flutter
 
-Future<SearchArguments?> showFilterBottomSheet(
-    BuildContext context, SearchArguments searchArguments) {
+Future<SearchArguments?> showFilterBottomSheet(BuildContext context,
+    {required SearchArguments searchArguments,
+    required Set<Category> categorySelection}) {
   return showModalBottomSheet<SearchArguments>(
     context: context,
     isScrollControlled: true,
@@ -27,10 +27,10 @@ Future<SearchArguments?> showFilterBottomSheet(
           context: context,
           scrollController: scrollController,
           initialSearchArguments: searchArguments,
+          categorySelection: categorySelection,
         );
       },
     ),
-
   );
 }
 
@@ -40,20 +40,19 @@ class FilterBottomSheet extends StatefulWidget {
     required this.scrollController,
     required this.context,
     required this.initialSearchArguments,
-
+    required this.categorySelection,
   });
 
   final ScrollController scrollController;
   final BuildContext context;
   final SearchArguments initialSearchArguments;
+  final Set<Category> categorySelection;
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  late final Set<Category> categorySelection;
-
   SortSelection? selectedSort;
   Category? selectedCategory;
   final TextEditingController minPriceController = TextEditingController();
@@ -73,8 +72,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       maxPriceController.text = RupiahInputFormatter()
           .format(widget.initialSearchArguments.minimumPrice.toString());
     }
-    categorySelection = Provider.of<ProductProvider>(context, listen: false)
-        .getSearchedProductCategories();
   }
 
   void applyFilter() {
@@ -90,6 +87,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       sortSelection: selectedSort,
     );
     Navigator.of(context).pop(searchArguments);
+  }
+
+  void resetFilter() {
+    setState(() {
+      minPriceController.clear();
+      maxPriceController.clear();
+      selectedCategory = null;
+      selectedSort = null;
+    });
   }
 
   @override
@@ -116,9 +122,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ],
             ),
             const SizedBox(height: 20),
-            Text("Filter",
-                style: theme.textTheme.titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Filter",
+                    style: theme.textTheme.titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                GestureDetector(
+                    onTap: () => resetFilter(), child: Text("Reset"))
+              ],
+            ),
             SizedBox(height: 15),
             Text("Sort By",
                 style: theme.textTheme.titleMedium!
@@ -169,7 +182,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             SizedBox(height: 10),
             Wrap(
               spacing: 10,
-              children: categorySelection.map((Category category) {
+              children: widget.categorySelection.map((Category category) {
                 return FilterChip(
                   label: Text(category.name!),
                   selected: selectedCategory == category,
@@ -212,4 +225,3 @@ extension on TextInputFormatter {
     ).text;
   }
 }
-
