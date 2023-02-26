@@ -51,7 +51,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ListView.separated(
                     separatorBuilder: (context, index) => SizedBox(height: 5),
                     itemCount: orderItems!.length + 1,

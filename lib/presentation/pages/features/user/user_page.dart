@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 import 'package:intl/intl.dart';
@@ -44,7 +45,8 @@ class UserPage extends StatelessWidget {
                   label: Text("Edit Profile"),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed(ViewAllAddressesPage.routeName),
                   icon: Icon(Icons.home_rounded),
                   label: Text("Manage Address"),
                 ),

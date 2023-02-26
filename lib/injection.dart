@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+import 'package:tocopedia/data/data_sources/address_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/cart_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/category_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_item_remote_data_source.dart';
@@ -7,18 +8,25 @@ import 'package:tocopedia/data/data_sources/order_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
+import 'package:tocopedia/data/repositories/address_repository_impl.dart';
 import 'package:tocopedia/data/repositories/cart_repository_impl.dart';
 import 'package:tocopedia/data/repositories/category_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_item_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_repository_impl.dart';
 import 'package:tocopedia/data/repositories/product_repository_impl.dart';
 import 'package:tocopedia/data/repositories/user_repository_impl.dart';
+import 'package:tocopedia/domains/repositories/address_repository.dart';
 import 'package:tocopedia/domains/repositories/cart_repository.dart';
 import 'package:tocopedia/domains/repositories/category_repository.dart';
 import 'package:tocopedia/domains/repositories/order_item_repository.dart';
 import 'package:tocopedia/domains/repositories/order_repository.dart';
 import 'package:tocopedia/domains/repositories/product_repository.dart';
 import 'package:tocopedia/domains/repositories/user_repository.dart';
+import 'package:tocopedia/domains/use_cases/address/add_address.dart';
+import 'package:tocopedia/domains/use_cases/address/delete_address.dart';
+import 'package:tocopedia/domains/use_cases/address/get_address.dart';
+import 'package:tocopedia/domains/use_cases/address/get_user_addresses.dart';
+import 'package:tocopedia/domains/use_cases/address/update_address.dart';
 import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
@@ -51,6 +59,7 @@ import 'package:tocopedia/domains/use_cases/user/login.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
+import 'package:tocopedia/presentation/providers/address_provider.dart';
 import 'package:tocopedia/presentation/providers/category_provider.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
@@ -77,6 +86,8 @@ void init() {
       () => OrderRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<OrderItemRemoteDataSource>(
       () => OrderItemRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<AddressRemoteDataSource>(
+      () => AddressRemoteDataSourceImpl(client: locator()));
 
   locator.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(
@@ -106,6 +117,11 @@ void init() {
   );
   locator.registerLazySingleton<OrderItemRepository>(
     () => OrderItemRepositoryImpl(
+      remoteDataSource: locator(),
+    ),
+  );
+  locator.registerLazySingleton<AddressRepository>(
+    () => AddressRepositoryImpl(
       remoteDataSource: locator(),
     ),
   );
@@ -147,6 +163,12 @@ void init() {
   locator.registerLazySingleton(() => ProcessOrderItem(locator()));
   locator.registerLazySingleton(() => SendOrderItem(locator()));
   locator.registerLazySingleton(() => CompleteOrderItem(locator()));
+
+  locator.registerLazySingleton(() => AddAddress(locator()));
+  locator.registerLazySingleton(() => UpdateAddress(locator()));
+  locator.registerLazySingleton(() => GetUserAddresses(locator()));
+  locator.registerLazySingleton(() => GetAddress(locator()));
+  locator.registerLazySingleton(() => DeleteAddress(locator()));
 
   locator.registerFactory(
     () => UserProvider(
@@ -211,6 +233,17 @@ void init() {
       getSellerOrderItems: locator(),
       processOrderItem: locator(),
       sendOrderItem: locator(),
+      authToken: param1,
+    ),
+  );
+
+  locator.registerFactoryParam(
+    (String? param1, _) => AddressProvider(
+      addAddress: locator(),
+      deleteAddress: locator(),
+      getAddress: locator(),
+      getUserAddresses: locator(),
+      updateAddress: locator(),
       authToken: param1,
     ),
   );

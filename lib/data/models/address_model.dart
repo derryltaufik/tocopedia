@@ -107,7 +107,7 @@ class AddressModel {
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
       id: map['_id'],
-      owner: UserModel.fromMap(map['owner']),
+      owner: map['owner'] == null ? null : UserModel.fromMap(map['owner']),
       label: map['label'],
       completeAddress: map['complete_address'],
       notes: map['notes'],
@@ -144,7 +144,8 @@ class AddressModel {
   factory AddressModel.fromEntity(Address address) {
     return AddressModel(
       id: address.id,
-      owner: address.owner == null ? null : UserModel.fromEntity(address.owner!),
+      owner:
+          address.owner == null ? null : UserModel.fromEntity(address.owner!),
       label: address.label,
       completeAddress: address.completeAddress,
       notes: address.notes,

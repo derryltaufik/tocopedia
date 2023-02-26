@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/buyer_navigation_bar.dart';
+import 'package:tocopedia/presentation/providers/address_provider.dart';
 import 'package:tocopedia/presentation/providers/category_provider.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
@@ -57,6 +58,11 @@ class MyApp extends StatelessWidget {
           update: (_, value, __) =>
               di.locator<OrderItemProvider>(param1: value.user?.token),
         ),
+        ChangeNotifierProxyProvider<UserProvider, AddressProvider>(
+          create: (_) => di.locator<AddressProvider>(),
+          update: (_, value, __) =>
+              di.locator<AddressProvider>(param1: value.user?.token),
+        ),
       ],
       child: Consumer<UserProvider>(builder: (context, userProvider, child) {
         final user = userProvider.user;
@@ -74,7 +80,8 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: Colors.lightGreen,
+            colorScheme: ColorScheme.fromSeed(seedColor:  Colors.lightGreen,),
+            // colorSchemeSeed: Colors.lightGreen,
 
             // colorSchemeSeed: const Color.fromRGBO(17, 164, 94, 1),
           ),

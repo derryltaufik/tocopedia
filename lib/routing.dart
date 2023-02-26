@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
+import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/cart_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/checkout_page.dart';
@@ -34,11 +35,16 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (context) => const EditUserPage(),
       );
+    case ViewAllAddressesPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) => const ViewAllAddressesPage(),
+      );
     case SearchProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) =>
-            SearchProductPage(searchArguments: routeSettings.arguments as SearchArguments),
+        builder: (context) => SearchProductPage(
+            searchArguments: routeSettings.arguments as SearchArguments),
       );
     case ViewProductPage.routeName:
       return MaterialPageRoute(
