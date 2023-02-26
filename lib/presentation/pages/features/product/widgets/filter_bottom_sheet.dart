@@ -101,112 +101,120 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SingleChildScrollView(
-      controller: widget.scrollController,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+
+      children: [
+        SingleChildScrollView(
+          controller: widget.scrollController,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.black12,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black12,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Filter",
-                    style: theme.textTheme.titleLarge!
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Filter",
+                        style: theme.textTheme.titleLarge!
+                            .copyWith(fontWeight: FontWeight.bold)),
+                    GestureDetector(
+                        onTap: () => resetFilter(), child: Text("Reset"))
+                  ],
+                ),
+                SizedBox(height: 15),
+                Text("Sort By",
+                    style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold)),
-                GestureDetector(
-                    onTap: () => resetFilter(), child: Text("Reset"))
+                SizedBox(height: 10),
+                Wrap(
+                  spacing: 10,
+                  children: SortSelection.values.map((SortSelection sort) {
+                    return FilterChip(
+                      label: Text(sort.description),
+                      selected: selectedSort == sort,
+                      onSelected: (bool value) => setState(
+                        () {
+                          if (value) {
+                            selectedSort = sort;
+                          }
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 10),
+                Text("Price",
+                    style: theme.textTheme.titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Flexible(
+                      child: RupiahTextField(
+                        controller: minPriceController,
+                        label: "Lowest",
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Flexible(
+                      child: RupiahTextField(
+                        controller: maxPriceController,
+                        label: "Highest",
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Text("Category",
+                    style: theme.textTheme.titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                Wrap(
+                  spacing: 10,
+                  children: widget.categorySelection.map((Category category) {
+                    return FilterChip(
+                      label: Text(category.name!),
+                      selected: selectedCategory == category,
+                      onSelected: (bool value) => setState(
+                        () {
+                          if (value) selectedCategory = category;
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 10),
+
               ],
             ),
-            SizedBox(height: 15),
-            Text("Sort By",
-                style: theme.textTheme.titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: SortSelection.values.map((SortSelection sort) {
-                return FilterChip(
-                  label: Text(sort.description),
-                  selected: selectedSort == sort,
-                  onSelected: (bool value) => setState(
-                    () {
-                      if (value) {
-                        selectedSort = sort;
-                      }
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 10),
-            Text("Price",
-                style: theme.textTheme.titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold)),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Flexible(
-                  child: RupiahTextField(
-                    controller: minPriceController,
-                    label: "Lowest",
-                  ),
-                ),
-                SizedBox(width: 10),
-                Flexible(
-                  child: RupiahTextField(
-                    controller: maxPriceController,
-                    label: "Highest",
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Text("Category",
-                style: theme.textTheme.titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: widget.categorySelection.map((Category category) {
-                return FilterChip(
-                  label: Text(category.name!),
-                  selected: selectedCategory == category,
-                  onSelected: (bool value) => setState(
-                    () {
-                      if (value) selectedCategory = category;
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FilledButton(
-                  child: Text("Apply Filter"),
-                  onPressed: () => applyFilter(),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
-      ),
+        Align(
+          alignment: AlignmentDirectional.bottomCenter,
+
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: FilledButton(
+              child: Text("Apply Filter"),
+              onPressed: () => applyFilter(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
