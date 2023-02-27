@@ -7,6 +7,9 @@ Future<void> handleFutureFunction(
   required Future function,
   String? loadingMessage,
   String? successMessage,
+  Function()? onSuccess,
+  Function()? onException,
+  Function()? onFinished,
 }) async {
   showLoadingDialog(context, message: loadingMessage);
   try {
@@ -14,7 +17,13 @@ Future<void> handleFutureFunction(
     if (context.mounted) {
       showCustomSnackBar(context, message: successMessage ?? "Success");
     }
+    if (onSuccess != null) await onSuccess();
   } on Exception catch (e) {
     showCustomSnackBar(context, message: e.toString(), color: Colors.red);
+    if (onException != null) await onException();
   }
+  if (context.mounted) {
+    Navigator.of(context).pop();
+  }
+  if (onFinished != null) await onFinished();
 }

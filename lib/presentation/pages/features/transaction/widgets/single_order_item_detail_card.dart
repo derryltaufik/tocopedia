@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/order_item_detail.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
@@ -13,25 +14,13 @@ class SingleOrderItemDetailCard extends StatelessWidget {
       : super(key: key);
 
   Future<void> addToCart(BuildContext context) async {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    try {
-      await Provider.of<CartProvider>(context, listen: false)
-          .addToCart(orderItemDetail.product!.id!);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Item successfully added to your cart"),
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } on Exception catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString()),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ));
-      }
-    }
+    await handleFutureFunction(
+      context,
+      loadingMessage: "adding item to cart...",
+      successMessage: "Item successfully added to your cart",
+      function: Provider.of<CartProvider>(context, listen: false)
+          .addToCart(orderItemDetail.product!.id!),
+    );
   }
 
   @override

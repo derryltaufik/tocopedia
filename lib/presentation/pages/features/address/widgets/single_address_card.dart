@@ -21,11 +21,10 @@ class SingleAddressCard extends StatelessWidget {
       successMessage: "Address has been set as default",
       function: Provider.of<UserProvider>(context, listen: false)
           .updateUser(addressId: address.id),
+      onFinished: () => Navigator.of(context).popUntil(
+        ModalRoute.withName(ViewAllAddressesPage.routeName),
+      ),
     );
-    if (context.mounted) {
-      Navigator.of(context)
-          .popUntil(ModalRoute.withName(ViewAllAddressesPage.routeName));
-    }
   }
 
   Future<void> deleteAddress(BuildContext context) async {
@@ -35,11 +34,10 @@ class SingleAddressCard extends StatelessWidget {
       successMessage: "Address deleted successfully",
       function: Provider.of<AddressProvider>(context, listen: false)
           .deleteAddress(address.id!),
+      onFinished: () => Navigator.of(context).popUntil(
+        ModalRoute.withName(ViewAllAddressesPage.routeName),
+      ),
     );
-    if (context.mounted) {
-      Navigator.of(context)
-          .popUntil(ModalRoute.withName(ViewAllAddressesPage.routeName));
-    }
   }
 
   void showOtherMenu(BuildContext context) {

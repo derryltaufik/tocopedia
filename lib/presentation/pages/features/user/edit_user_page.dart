@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_snack_bar.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 class EditUserPage extends StatefulWidget {
@@ -24,21 +25,11 @@ class _EditUserPageState extends State<EditUserPage> {
       );
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-
       if (userProvider.updateUserState == ProviderState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(userProvider.message),
-          ),
-        );
+        showCustomSnackBar(context,
+            message: userProvider.message, color: Colors.red);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text("Edit Profile Success"),
-          ),
-        );
+        showCustomSnackBar(context, message: "Edit Profile Success");
         Navigator.of(context).pop();
       }
     }

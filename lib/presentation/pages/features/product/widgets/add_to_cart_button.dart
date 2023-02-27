@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_snack_bar.dart';
 import 'package:tocopedia/presentation/pages/features/cart/cart_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
@@ -19,10 +20,7 @@ class AddToCartButton extends StatelessWidget {
 
     if (cartProvider.updateCartState == ProviderState.error) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(cartProvider.message),
-          behavior: SnackBarBehavior.floating,
-        ));
+        showCustomSnackBar(context, message: cartProvider.message);
       }
     } else if (cartProvider.updateCartState == ProviderState.loaded) {
       if (context.mounted) {

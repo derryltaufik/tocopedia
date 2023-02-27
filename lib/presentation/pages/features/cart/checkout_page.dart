@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_snack_bar.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/loading_dialog.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/checkout_item_tile.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
@@ -17,12 +18,7 @@ class CheckoutPage extends StatelessWidget {
   Future<void> checkout(BuildContext context) async {
     final address =
         Provider.of<UserProvider>(context, listen: false).user!.defaultAddress!;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog();
-      },
-    );
+    showLoadingDialog(context);
     try {
       final order = await Provider.of<OrderProvider>(context, listen: false)
           .checkOut(address.id!);
@@ -34,13 +30,7 @@ class CheckoutPage extends StatelessWidget {
             .pushNamed(ViewOrderPage.routeName, arguments: order.id!);
       }
     } on Exception catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          e.toString(),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ));
+      showCustomSnackBar(context, message: e.toString(), color: Colors.red);
     }
   }
 

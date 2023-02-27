@@ -5,7 +5,7 @@ import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/domains/entities/order.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/domains/entities/order_item_detail.dart';
-import 'package:tocopedia/presentation/pages/common_widgets/loading_dialog.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
@@ -32,67 +32,25 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
   }
 
   Future<void> payOrder(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog(
-          message: "Processing payment...",
-        );
-      },
-    );
-    try {
-      await Provider.of<OrderProvider>(context, listen: false)
-          .payOrder(widget.orderId);
-
-      if (context.mounted) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Payment Successfull!"),
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } on Exception catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          e.toString(),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+    await handleFutureFunction(context,
+        loadingMessage: "Processing payment...",
+        successMessage: "Payment Successful!",
+        function: Provider.of<OrderProvider>(context, listen: false)
+            .payOrder(widget.orderId),
+        onSuccess: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false));
   }
 
   Future<void> cancelOrder(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog(
-          message: "Cancelling order...",
-        );
-      },
+    await handleFutureFunction(
+      context,
+      loadingMessage: "Cancelling order...",
+      successMessage: "Order Cancelled",
+      function: Provider.of<OrderProvider>(context, listen: false)
+          .cancelOrder(widget.orderId),
+      onSuccess: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false),
     );
-    try {
-      await Provider.of<OrderProvider>(context, listen: false)
-          .cancelOrder(widget.orderId);
-
-      if (context.mounted) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Order Cancelled"),
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } on Exception catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          e.toString(),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
   }
 
   Widget _buildProductTile(OrderItemDetail product, ThemeData theme) {
