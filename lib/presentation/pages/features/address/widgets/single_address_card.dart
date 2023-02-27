@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/address.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
+import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
+import 'package:tocopedia/presentation/providers/address_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 class SingleAddressCard extends StatelessWidget {
@@ -12,9 +15,96 @@ class SingleAddressCard extends StatelessWidget {
       {Key? key, required this.address, this.isDefault = true})
       : super(key: key);
 
-  void setAsDefault(BuildContext context) {
-    Provider.of<UserProvider>(context, listen: false)
-        .updateUser(addressId: address.id);
+  Future<void> setAsDefault(BuildContext context) async {
+    await handleFutureFunction(
+      context,
+      successMessage: "Address has been set as default",
+      function: Provider.of<UserProvider>(context, listen: false)
+          .updateUser(addressId: address.id),
+    );
+    if (context.mounted) {
+      Navigator.of(context)
+          .popUntil(ModalRoute.withName(ViewAllAddressesPage.routeName));
+    }
+  }
+
+  Future<void> deleteAddress(BuildContext context) async {
+    await handleFutureFunction(
+      context,
+      loadingMessage: "Deleting address",
+      successMessage: "Address deleted successfully",
+      function: Provider.of<AddressProvider>(context, listen: false)
+          .deleteAddress(address.id!),
+    );
+    if (context.mounted) {
+      Navigator.of(context)
+          .popUntil(ModalRoute.withName(ViewAllAddressesPage.routeName));
+    }
+  }
+
+  void showOtherMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(Icons.close, size: 30),
+                  ),
+                  const SizedBox(width: 5),
+                  Text("Other Actions",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(fontWeight: FontWeight.bold))
+                ],
+              ),
+              const SizedBox(height: 15),
+              GestureDetector(
+                onTap: () => setAsDefault(context),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          "Set as Default Address",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(indent: 5, endIndent: 5),
+              GestureDetector(
+                onTap: () => deleteAddress(context),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          "Delete Address",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -41,26 +131,26 @@ class SingleAddressCard extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.horizontal(right: Radius.circular(4)),
+                    borderRadius: const BorderRadius.horizontal(
+                        right: Radius.circular(4)),
                     color: theme.primaryColor,
                   ),
                   width: 5,
                   height: 18,
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   address.label!,
                   style: theme.textTheme.labelLarge!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 if (isDefault)
-                  OrderStatusCard(text: "Default", color: Colors.green),
+                  const OrderStatusCard(text: "Default", color: Colors.green),
               ],
             ),
           ),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 15),
@@ -75,17 +165,18 @@ class SingleAddressCard extends StatelessWidget {
                 Text(address.receiverPhone!),
                 Text(address.completeAddress!),
                 if (address.notes != null) Text("(${address.notes})"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
                         child: OutlinedButton(
-                            onPressed: () {}, child: Text("Change Address"))),
-                    SizedBox(width: 5),
+                            onPressed: () {},
+                            child: const Text("Change Address"))),
+                    const SizedBox(width: 5),
                     if (!isDefault)
                       OutlinedButton(
-                          onPressed: () => setAsDefault(context),
-                          child: Icon(Icons.more_horiz)),
+                          onPressed: () => showOtherMenu(context),
+                          child: const Icon(Icons.more_horiz)),
                   ],
                 )
               ],

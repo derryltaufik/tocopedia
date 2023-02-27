@@ -54,9 +54,21 @@ class AddressProvider with ChangeNotifier {
       return addresses;
     } catch (e) {
       _message = e.toString();
-      _message = e.toString();
       _getUserAddressesState = ProviderState.error;
       notifyListeners();
+      rethrow;
+    }
+  }
+
+  Future<void> deleteAddress(String addressId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      await _deleteAddress.execute(_authToken!, addressId);
+      addressesList?.removeWhere((element) => element.id == addressId);
+      _getUserAddressesState = ProviderState.loaded;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
       rethrow;
     }
   }

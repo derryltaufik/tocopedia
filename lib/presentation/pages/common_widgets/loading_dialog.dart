@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
+void showLoadingDialog(BuildContext context, {String? message}) {
+  showDialog(
+    context: context,
+    builder: (context) =>
+        message == null ? const LoadingDialog() : LoadingDialog(message: message),
+  );
+}
+
 class LoadingDialog extends StatelessWidget {
-  final String message;
+  final String? message;
 
   const LoadingDialog({
     super.key,
@@ -20,7 +28,7 @@ class LoadingDialog extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Text(message),
+            Text(message ?? "Loading..."),
           ],
         ),
       ),
