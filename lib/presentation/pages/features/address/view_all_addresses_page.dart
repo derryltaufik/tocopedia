@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/pages/features/address/add_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/widgets/single_address_card.dart';
 import 'package:tocopedia/presentation/providers/address_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
@@ -28,18 +29,19 @@ class _ViewAllAddressesPageState extends State<ViewAllAddressesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Addresses List"),
+        title: const Text("Addresses List"),
         actions: [
           TextButton(
-            child: Text("Add Address"),
-            onPressed: () {},
+            child: const Text("Add Address"),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AddAddressPage.routeName),
           )
         ],
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
           if (addressProvider.getUserAddressesState == ProviderState.loading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (addressProvider.getUserAddressesState == ProviderState.error) {
             return Center(child: Text(addressProvider.message));
@@ -48,7 +50,7 @@ class _ViewAllAddressesPageState extends State<ViewAllAddressesPage> {
           final addresses = addressProvider.addressesList;
 
           if (addresses == null || addresses.isEmpty) {
-            return Center(child: Text("You don't have any address."));
+            return const Center(child: Text("You don't have any address."));
           }
 
           final defaultAddressId =
@@ -57,19 +59,18 @@ class _ViewAllAddressesPageState extends State<ViewAllAddressesPage> {
                   ?.defaultAddress
                   ?.id;
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(height: 15),
-              itemCount: addresses.length,
-              itemBuilder: (context, index) {
-                final Address address = addresses[index];
-                return SingleAddressCard(
-                  address: address,
-                  isDefault: address.id! == defaultAddressId,
-                );
-              },
-            ),
+          return ListView.separated(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 15),
+            separatorBuilder: (context, index) => const SizedBox(height: 15),
+            itemCount: addresses.length,
+            itemBuilder: (context, index) {
+              final Address address = addresses[index];
+              return SingleAddressCard(
+                address: address,
+                isDefault: address.id! == defaultAddressId,
+              );
+            },
           );
         },
       ),

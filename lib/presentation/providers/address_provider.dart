@@ -60,12 +60,37 @@ class AddressProvider with ChangeNotifier {
     }
   }
 
+  Future<Address> addAddress({
+    String? label,
+    required String completeAddress,
+    String? notes,
+    required String receiverName,
+    required String receiverPhone,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      final address = await _addAddress.execute(
+        _authToken!,
+        receiverPhone: receiverPhone,
+        receiverName: receiverName,
+        completeAddress: completeAddress,
+        label: label,
+        notes: notes,
+      );
+      addressesList?.add(address);
+      notifyListeners();
+      return address;
+    } catch (e) {
+      _message = e.toString();
+      rethrow;
+    }
+  }
+
   Future<void> deleteAddress(String addressId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
       await _deleteAddress.execute(_authToken!, addressId);
       addressesList?.removeWhere((element) => element.id == addressId);
-      _getUserAddressesState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
       _message = e.toString();
