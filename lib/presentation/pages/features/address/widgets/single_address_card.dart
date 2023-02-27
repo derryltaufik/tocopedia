@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
+import 'package:tocopedia/presentation/pages/features/address/edit_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
 import 'package:tocopedia/presentation/providers/address_provider.dart';
@@ -168,7 +169,10 @@ class SingleAddressCard extends StatelessWidget {
                   children: [
                     Expanded(
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () => Navigator.of(context).pushNamed(
+                                EditAddressPage.routeName,
+                                arguments: EditAddressPageArguments(
+                                    address, isDefault)),
                             child: const Text("Change Address"))),
                     const SizedBox(width: 5),
                     if (!isDefault)

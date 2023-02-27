@@ -86,6 +86,37 @@ class AddressProvider with ChangeNotifier {
     }
   }
 
+  Future<Address> updateAddress(
+    String addressId, {
+    String? label,
+    required String completeAddress,
+    String? notes,
+    required String receiverName,
+    required String receiverPhone,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+      final address = await _updateAddress.execute(
+        _authToken!,
+        addressId,
+        receiverPhone: receiverPhone,
+        receiverName: receiverName,
+        completeAddress: completeAddress,
+        label: label,
+        notes: notes,
+      );
+      final index =
+          addressesList?.indexWhere((element) => element.id! == addressId);
+      if (index != null && index != -1) addressesList?[index] = address;
+
+      notifyListeners();
+      return address;
+    } catch (e) {
+      _message = e.toString();
+      rethrow;
+    }
+  }
+
   Future<void> deleteAddress(String addressId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
