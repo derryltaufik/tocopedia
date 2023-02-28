@@ -6,6 +6,7 @@ import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/string_extension.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
+import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_item_action_button.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/single_order_item_detail_card.dart';
 
@@ -86,40 +87,13 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
               ),
             );
           }),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(1),
-                  spreadRadius: 2,
-                  blurRadius: 2,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.titleMedium),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: Text("Review Product"),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
+          OrderItemActionButton(),
         ],
       ),
     );
   }
 }
+
 
 class PaymentDetailsSection extends StatelessWidget {
   const PaymentDetailsSection({

@@ -48,70 +48,62 @@ class _ViewProductPageState extends State<ViewProductPage> {
           return Center(child: Text(productProvider.message));
         }
         final Product product = productProvider.product!;
-        return Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            SizedBox(
-              height: double.infinity,
-              child: SingleChildScrollView(
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ProductImageCarousel(images: product.images!),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProductImageCarousel(images: product.images!),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                rupiahFormatter.format(product.price),
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              WishlistButton(productId: product.id!),
-                            ],
-                          ),
-                          Text(
-                            product.name!,
-                            style: theme.textTheme.bodyLarge,
-                          ),
-                          if (product.totalSold! > 0)
-                            Text(
-                              "Sold ${NumberFormat.decimalPattern("id_ID").format(product.totalSold)}",
-                              style: theme.textTheme.bodyMedium!
-                                  .copyWith(color: Colors.black54),
-                            ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          rupiahFormatter.format(product.price),
+                          style: theme.textTheme.titleMedium!.copyWith(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        WishlistButton(productId: product.id!),
+                      ],
                     ),
-                    Divider(),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Product Description",
-                              style: theme.textTheme.titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 5),
-                          Text(product.description!),
-                        ],
-                      ),
+                    Text(
+                      product.name!,
+                      style: theme.textTheme.bodyLarge,
                     ),
-                    SizedBox(height: 60),
+                    if (product.totalSold! > 0)
+                      Text(
+                        "Sold ${NumberFormat.decimalPattern("id_ID").format(product.totalSold)}",
+                        style: theme.textTheme.bodyMedium!
+                            .copyWith(color: Colors.black54),
+                      ),
                   ],
                 ),
               ),
-            ),
-            AddToCartButton(productId: product.id!),
-          ],
+              Divider(),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Product Description",
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 5),
+                    Text(product.description!),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
         );
       }),
+      bottomNavigationBar: AddToCartButton(productId: widget.productId),
     );
   }
 }
