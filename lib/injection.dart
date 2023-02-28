@@ -59,6 +59,7 @@ import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
 import 'package:tocopedia/domains/use_cases/user/get_user.dart';
 import 'package:tocopedia/domains/use_cases/user/login.dart';
+import 'package:tocopedia/domains/use_cases/user/logout.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
@@ -142,6 +143,7 @@ void init() {
 
   locator.registerLazySingleton(() => SignUp(locator()));
   locator.registerLazySingleton(() => Login(locator()));
+  locator.registerLazySingleton(() => Logout(locator()));
   locator.registerLazySingleton(() => SaveUser(locator()));
   locator.registerLazySingleton(() => GetUser(locator()));
   locator.registerLazySingleton(() => AutoLogin(locator()));
@@ -192,6 +194,7 @@ void init() {
     () => UserProvider(
       signUp: locator(),
       login: locator(),
+      logout: locator(),
       saveUser: locator(),
       autoLogin: locator(),
       getUser: locator(),

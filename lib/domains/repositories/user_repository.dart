@@ -5,6 +5,8 @@ abstract class UserRepository {
 
   Future<User> login(String email, String password);
 
+  Future<void> logout();
+
   Future<void> saveUser(User user);
 
   Future<User> autoLogin();

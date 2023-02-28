@@ -75,4 +75,13 @@ class UserRepositoryImpl implements UserRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await localDataSource.deleteToken();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

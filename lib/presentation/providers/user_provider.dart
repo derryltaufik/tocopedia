@@ -5,6 +5,7 @@ import 'package:tocopedia/domains/entities/user.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
 import 'package:tocopedia/domains/use_cases/user/get_user.dart';
 import 'package:tocopedia/domains/use_cases/user/login.dart';
+import 'package:tocopedia/domains/use_cases/user/logout.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
 import 'package:tocopedia/domains/use_cases/user/sign_up.dart';
 import 'package:tocopedia/domains/use_cases/user/update_user.dart';
@@ -13,6 +14,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class UserProvider with ChangeNotifier {
   final SignUp _signUp;
   final Login _login;
+  final Logout _logout;
   final SaveUser _saveUser;
   final AutoLogin _autoLogin;
   final GetUser _getUser;
@@ -28,12 +30,14 @@ class UserProvider with ChangeNotifier {
   UserProvider({
     required SignUp signUp,
     required Login login,
+    required Logout logout,
     required SaveUser saveUser,
     required AutoLogin autoLogin,
     required GetUser getUser,
     required UpdateUser updateUser,
   })  : _signUp = signUp,
         _login = login,
+        _logout = logout,
         _saveUser = saveUser,
         _autoLogin = autoLogin,
         _getUser = getUser,
@@ -68,7 +72,9 @@ class UserProvider with ChangeNotifier {
   Future<void> saveUser() async {
     try {
       await _saveUser.execute(_user!);
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> signUp(
@@ -105,6 +111,18 @@ class UserProvider with ChangeNotifier {
       _message = e.toString();
       _authState = ProviderState.error;
       notifyListeners();
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await _logout.execute();
+      _user = null;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
+      notifyListeners();
+      rethrow;
     }
   }
 
