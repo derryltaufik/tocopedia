@@ -12,6 +12,7 @@ import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 import 'package:tocopedia/injection.dart' as di;
+import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
 //TODO https://stackoverflow.com/questions/55879550/how-to-fix-httpexception-connection-closed-before-full-header-was-received
@@ -55,6 +56,11 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<OrderProvider>(),
           update: (_, value, __) =>
               di.locator<OrderProvider>(param1: value.user?.token),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, WishlistProvider>(
+          create: (_) => di.locator<WishlistProvider>(),
+          update: (_, value, __) =>
+              di.locator<WishlistProvider>(param1: value.user?.token),
         ),
         ChangeNotifierProxyProvider<UserProvider, OrderItemProvider>(
           create: (_) => di.locator<OrderItemProvider>(),

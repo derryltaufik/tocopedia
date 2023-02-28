@@ -46,31 +46,40 @@ class SingleProductCard extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.w700, fontSize: 17),
                   ),
                   SizedBox(height: 3),
-                  Row(
-                    children: [
-                      if (product.averageRating != null) ...[
-                        Icon(
-                          Icons.star_rounded,
-                          color: theme.primaryColor,
-                        ),
-                        Text(
-                          product.averageRating!.toStringAsFixed(1),
-                          style: theme.textTheme.bodyMedium!
-                              .copyWith(color: Colors.black54),
-                        ),
-                        VerticalDivider(
-                          indent: 6,
-                          endIndent: 6,
-                        ),
-                      ],
-                      if (product.totalSold != null && product.totalSold! > 0)
-                        Text(
-                          "Sold ${NumberFormat.compact().format(product.totalSold)}",
-                          style: theme.textTheme.bodyMedium!
-                              .copyWith(color: Colors.black54),
-                        ),
-                    ],
-                  )
+                  if (product.averageRating != null ||
+                      (product.totalSold != null && product.totalSold! > 0))
+                    SizedBox(
+                      height: 20,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (product.averageRating != null) ...[
+                            Icon(
+                              Icons.star_rounded,
+                              color: theme.primaryColor,
+                              size: 20,
+                            ),
+                            Text(
+                              product.averageRating!.toStringAsFixed(1),
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black54),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1,
+                              indent: 2,
+                              endIndent: 2,
+                            ),
+                          ],
+                          if (product.totalSold != null &&
+                              product.totalSold! > 0)
+                            Text(
+                              "Sold ${NumberFormat.compact().format(product.totalSold)}",
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black54),
+                            ),
+                        ],
+                      ),
+                    )
                 ],
               ),
             ),
