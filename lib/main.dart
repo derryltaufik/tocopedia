@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/seller_navigation_bar.dart';
 
 import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/buyer_navigation_bar.dart';
@@ -10,6 +11,7 @@ import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
+import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 
 import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<CategoryProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LocalSettingsProvider(),
         ),
         ChangeNotifierProxyProvider<UserProvider, ProductProvider>(
           create: (_) => di.locator<ProductProvider>(),
@@ -74,14 +79,19 @@ class MyApp extends StatelessWidget {
                 ..addressesList = previousAddressProvider?.addressesList,
         ),
       ],
-      child: Consumer<UserProvider>(builder: (context, userProvider, child) {
+      child: Consumer2<UserProvider, LocalSettingsProvider>(
+          builder: (context, userProvider, localSettingsProvider, child) {
         final user = userProvider.user;
-        print(user?.token);
+        print(localSettingsProvider.appMode);
 
         Widget currentWidget;
 
         if (user != null && user.token!.isNotEmpty) {
-          currentWidget = BuyerNavBar();
+          if (localSettingsProvider.appMode == AppMode.buyer) {
+            currentWidget = BuyerNavBar();
+          } else {
+            currentWidget = SellerNavBar();
+          }
         } else {
           currentWidget = AuthPage();
         }
