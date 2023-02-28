@@ -48,7 +48,10 @@ class _WishListPageState extends State<WishListPage> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final Product product = products[index];
-              return SingleProductCard(product: product);
+              return SingleProductCard(
+                product: product,
+                isWishlist: true,
+              );
             },
           );
         },

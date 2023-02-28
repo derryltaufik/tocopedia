@@ -6,6 +6,7 @@ import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/add_to_cart_button.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/product_image_carousel.dart';
+import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_button.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
@@ -71,9 +72,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                                 style: theme.textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold, fontSize: 20),
                               ),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.favorite_outline_rounded)),
+                              WishlistButton(productId: product.id!),
                             ],
                           ),
                           Text(

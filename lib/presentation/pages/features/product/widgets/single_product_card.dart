@@ -4,11 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_action_buttons.dart';
 
 class SingleProductCard extends StatelessWidget {
-  const SingleProductCard({Key? key, required this.product}) : super(key: key);
+  const SingleProductCard(
+      {Key? key, required this.product, this.isWishlist = false})
+      : super(key: key);
 
   final Product product;
+  final bool isWishlist;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +83,8 @@ class SingleProductCard extends StatelessWidget {
                             ),
                         ],
                       ),
-                    )
+                    ),
+                  if (isWishlist) WishlistActionButtons(productId: product.id!)
                 ],
               ),
             ),
