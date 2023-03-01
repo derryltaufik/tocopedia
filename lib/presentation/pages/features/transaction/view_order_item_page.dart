@@ -39,27 +39,24 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
       appBar: AppBar(
         title: Text("Order Detail"),
       ),
-      body: Column(
-        children: [
-          Consumer<OrderItemProvider>(
-              builder: (context, orderItemProvider, child) {
-            if (orderItemProvider.getOrderItemState == ProviderState.loading) {
-              return Expanded(
-                  child: Center(child: CircularProgressIndicator()));
-            }
-            if (orderItemProvider.getOrderItemState == ProviderState.error) {
-              return Expanded(
-                  child: Center(child: Text(orderItemProvider.message)));
-            }
+      body: Consumer<OrderItemProvider>(
+          builder: (context, orderItemProvider, child) {
+        if (orderItemProvider.getOrderItemState == ProviderState.loading) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (orderItemProvider.getOrderItemState == ProviderState.error) {
+          return Center(child: Text(orderItemProvider.message));
+        }
 
-            final orderItem = orderItemProvider.orderItem;
+        final orderItem = orderItemProvider.orderItem;
 
-            if (orderItem == null) {
-              return Expanded(
-                  child: Center(child: Text("You don't have any order yet.")));
-            }
+        if (orderItem == null) {
+          return Center(child: Text("Order not found"));
+        }
 
-            return Flexible(
+        return Column(
+          children: [
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -86,11 +83,11 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
                   ],
                 ),
               ),
-            );
-          }),
-          OrderItemActionButton(),
-        ],
-      ),
+            ),
+            OrderItemActionButton(orderItem: orderItem),
+          ],
+        );
+      }),
     );
   }
 }

@@ -34,6 +34,7 @@ class _AddressSelectionBottomSheetState
 
   @override
   void initState() {
+    super.initState();
     final addressProvider =
         Provider.of<AddressProvider>(context, listen: false);
 

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/domains/use_cases/order_item/cancel_order_item.dart';
@@ -118,6 +116,50 @@ class OrderItemProvider with ChangeNotifier {
       _message = e.toString();
       _getOrderItemState = ProviderState.error;
       notifyListeners();
+    }
+  }
+
+  Future<void> cancelOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _cancelOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> processOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _processOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> sendOrderItem(String orderItemId, String airwaybill) async {
+    try {
+      final orderItem = await _sendOrderItem.execute(_authToken!, orderItemId,
+          airwaybill: airwaybill);
+      _orderItem = orderItem;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> completeOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _completeOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
     }
   }
 

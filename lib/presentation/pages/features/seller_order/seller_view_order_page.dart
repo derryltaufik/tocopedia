@@ -22,7 +22,6 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
       Status.sent,
       Status.arrivedAtDestination,
       Status.completed,
-      Status.cancelled,
       Status.refunded,
     ],
     "New Orders": [Status.waitingConfirmation],
@@ -43,10 +42,6 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
       Provider.of<OrderItemProvider>(context, listen: false)
           .getSellerOrderItems();
     });
-  }
-
-  void filterOrderItems(List<OrderItem> orderItems) {
-    Status targetStatus;
   }
 
   @override
