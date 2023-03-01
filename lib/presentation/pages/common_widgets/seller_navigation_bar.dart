@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tocopedia/presentation/pages/features/seller_order/seller_view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 
 class SellerNavBar extends StatefulWidget {
@@ -13,7 +14,7 @@ class _SellerNavBarState extends State<SellerNavBar> {
 
   static final List<Widget> _pages = [
     Scaffold(appBar: AppBar(title: const Text("Products"))),
-    Scaffold(appBar: AppBar(title: const Text("Orders"))),
+    const SellerViewOrderPage(),
     const UserPage(),
   ];
 

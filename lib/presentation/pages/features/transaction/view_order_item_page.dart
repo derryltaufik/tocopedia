@@ -7,6 +7,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/string_extension.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_item_action_button.dart';
+import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/single_order_item_detail_card.dart';
 
@@ -93,7 +94,6 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
     );
   }
 }
-
 
 class PaymentDetailsSection extends StatelessWidget {
   const PaymentDetailsSection({
@@ -277,6 +277,9 @@ class OrderItemInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isBuyerMode =
+        Provider.of<LocalSettingsProvider>(context, listen: false).appMode ==
+            AppMode.buyer;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,16 +294,17 @@ class OrderItemInfoSection extends StatelessWidget {
               style:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
-            GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(
-                  ViewOrderPage.routeName,
-                  arguments: orderItem.order!.id!),
-              child: Text(
-                "View Order",
-                style: theme.textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.bold, color: theme.primaryColor),
-              ),
-            )
+            if (isBuyerMode)
+              GestureDetector(
+                onTap: () => Navigator.of(context).pushNamed(
+                    ViewOrderPage.routeName,
+                    arguments: orderItem.order!.id!),
+                child: Text(
+                  "View Order",
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold, color: theme.primaryColor),
+                ),
+              )
           ],
         ),
         SizedBox(height: 5),

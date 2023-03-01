@@ -17,6 +17,7 @@ class SingleOrderItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final statusEnum = Status.fromString(orderItem.status!);
+
     return GestureDetector(
       onTap: () => Navigator.of(context)
           .pushNamed(ViewOrderItemPage.routeName, arguments: orderItem.id),

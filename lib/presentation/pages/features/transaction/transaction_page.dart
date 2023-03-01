@@ -35,16 +35,16 @@ class _TransactionPageState extends State<TransactionPage> {
           Expanded(
             child: Consumer<OrderItemProvider>(
               builder: (context, orderItemProvider, child) {
-                if (orderItemProvider.getUserOrderItemsState ==
+                if (orderItemProvider.getBuyerOrderItemsState ==
                     ProviderState.loading) {
                   return Center(child: CircularProgressIndicator());
                 }
-                if (orderItemProvider.getUserOrderItemsState ==
+                if (orderItemProvider.getBuyerOrderItemsState ==
                     ProviderState.error) {
                   return Center(child: Text(orderItemProvider.message));
                 }
 
-                final orderItems = orderItemProvider.orderItemList;
+                final orderItems = orderItemProvider.buyerOrderItemList;
 
                 if (orderItems?.isEmpty ?? true) {
                   return Center(child: Text("You don't have any order yet."));
