@@ -48,7 +48,7 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order"),
+        title: Text("Orders  💰"),
         bottom: TabBar(
           onTap: (value) => setState(() {}),
           isScrollable: true,

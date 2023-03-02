@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -13,8 +14,7 @@ abstract class UserRemoteDataSource {
 
   Future<UserModel> getUser(String token);
 
-  Future<UserModel> updateUser(String token,
-      {String? name, String? addressId});
+  Future<UserModel> updateUser(String token, {String? name, String? addressId});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -46,48 +46,63 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> login(String email, String password) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/auth/login');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/auth/login');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader,
-      body: json.encode({
-        "email": email,
-        "password": password,
-      }),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader,
+            body: json.encode({
+              "email": email,
+              "password": password,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return UserModel.fromMap(responseBody["data"]["user"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return UserModel.fromMap(responseBody["data"]["user"]);
+      }
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<UserModel> getUser(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/users');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/users');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return UserModel.fromMap(responseBody["data"]["user"])
-          .copyWith(token: token);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return UserModel.fromMap(responseBody["data"]["user"])
+            .copyWith(token: token);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<UserModel> updateUser(String token,
-      {String? name,String? addressId}) async {
+      {String? name, String? addressId}) async {
     final url = Uri.parse(BASE_URL).replace(path: '/users');
     final response = await client.patch(
       url,

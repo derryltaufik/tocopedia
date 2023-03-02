@@ -17,6 +17,8 @@ import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
+//TODO implement timeout on every http request
+// TODO use dartz Either for exception handling if necessary
 //TODO https://stackoverflow.com/questions/55879550/how-to-fix-httpexception-connection-closed-before-full-header-was-received
 
 void main() {
