@@ -90,4 +90,15 @@ class ProductRepositoryImpl implements ProductRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<List<Product>> getUserProducts(String token) async {
+    try {
+      final results = await remoteDataSource.getUserProducts(token);
+
+      return List<Product>.from(results.map((e) => e.toEntity()));
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

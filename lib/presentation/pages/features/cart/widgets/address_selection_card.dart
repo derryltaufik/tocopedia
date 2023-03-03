@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/address.dart';
-import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 
 class AddressSelectionCard extends StatelessWidget {
   const AddressSelectionCard({
@@ -60,7 +60,7 @@ class AddressSelectionCard extends StatelessWidget {
                     ),
                   ),
                   if (isDefault)
-                    const OrderStatusCard(text: "Default", color: Colors.green),
+                    const StatusCard(text: "Default", color: Colors.green),
                   const SizedBox(width: 10),
                 ],
               ),

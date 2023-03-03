@@ -46,14 +46,18 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
               stock: stock,
               price: price,
               sku: sku);
-      print("test");
       final product = await handleFutureFunction(
         context,
         loadingMessage: "Uploading product...",
         successMessage: "Product successfully uploaded",
         function: addProductFunction,
       );
-      if (product != null && context.mounted) Navigator.of(context).pop();
+
+      if (product != null && context.mounted) {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .getUserProducts();
+        if (context.mounted) Navigator.of(context).pop();
+      }
     }
   }
 

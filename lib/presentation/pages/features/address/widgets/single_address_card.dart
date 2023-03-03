@@ -4,7 +4,7 @@ import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/features/address/edit_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
-import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 import 'package:tocopedia/presentation/providers/address_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
@@ -145,7 +145,7 @@ class SingleAddressCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 if (isDefault)
-                  const OrderStatusCard(text: "Default", color: Colors.green),
+                  const StatusCard(text: "Default", color: Colors.green),
               ],
             ),
           ),

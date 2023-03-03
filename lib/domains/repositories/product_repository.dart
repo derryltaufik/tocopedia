@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
+
 abstract class ProductRepository {
   // Future<Product> createProduct();
   //
@@ -31,4 +32,6 @@ abstract class ProductRepository {
   });
 
   Future<List<Product>> getPopularProducts();
+
+  Future<List<Product>> getUserProducts(String token);
 }

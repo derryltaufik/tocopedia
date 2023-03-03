@@ -5,7 +5,7 @@ import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/order_item_status_enum.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
-import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_status_card.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 
 class SingleOrderItemCard extends StatelessWidget {
   final OrderItem orderItem;
@@ -42,7 +42,7 @@ class SingleOrderItemCard extends StatelessWidget {
                       )
                     ],
                   ),
-                  OrderStatusCard(
+                  StatusCard(
                       text: orderItem.status!, color: statusEnum.color),
                 ],
               ),

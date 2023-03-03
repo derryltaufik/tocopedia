@@ -20,6 +20,8 @@ abstract class ProductRemoteDataSource {
 
   Future<List<ProductModel>> getPopularProducts();
 
+  Future<List<ProductModel>> getUserProducts(String token);
+
   Future<ProductModel> addProduct(
     String token, {
     required String name,
@@ -135,6 +137,26 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
     if (response.statusCode ~/ 100 == 2) {
       return ProductModel.fromMap(responseBody["data"]["product"]);
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<List<ProductModel>> getUserProducts(String token) async {
+    final url = Uri.parse(BASE_URL).replace(path: '/products/seller');
+
+    final response = await client.get(
+      url,
+      headers: defaultHeader
+        ..addEntries({"Authorization": "Bearer $token"}.entries),
+    );
+
+    final responseBody = json.decode(response.body);
+
+    if (response.statusCode ~/ 100 == 2) {
+      return List<ProductModel>.from(
+          responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
     }
 
     throw ServerException(responseBody["error"].toString());

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/helper_variables/string_extension.dart';
 
-class OrderStatusCard extends StatelessWidget {
+class StatusCard extends StatelessWidget {
   final String text;
   final Color color;
 
-  const OrderStatusCard({Key? key, required this.text, required this.color})
+  const StatusCard({Key? key, required this.text, required this.color})
       : super(key: key);
 
   @override

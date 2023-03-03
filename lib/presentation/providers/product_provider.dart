@@ -7,6 +7,7 @@ import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/domains/use_cases/product/add_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
+import 'package:tocopedia/domains/use_cases/product/get_user_products.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
@@ -15,6 +16,7 @@ class ProductProvider with ChangeNotifier {
   final AddProduct _addProduct;
   final GetProduct _getProduct;
   final SearchProduct _searchProduct;
+  final GetUserProducts _getUserProducts;
   final GetPopularProducts _getPopularProducts;
   final String? _authToken;
 
@@ -25,10 +27,13 @@ class ProductProvider with ChangeNotifier {
   List<Product>? _searchedProduct;
 
   List<Product>? _popularProducts;
+  List<Product>? _userProducts;
 
   List<Product>? get popularProducts => [...?_popularProducts];
 
   List<Product>? get searchedProduct => [...?_searchedProduct];
+
+  List<Product>? get userProducts => [...?_userProducts];
 
   String _message = "";
 
@@ -38,11 +43,13 @@ class ProductProvider with ChangeNotifier {
       {required AddProduct addProduct,
       required GetProduct getProduct,
       required SearchProduct searchProduct,
+      required GetUserProducts getUserProducts,
       required GetPopularProducts getPopularProducts,
       required String? authToken})
       : _addProduct = addProduct,
         _searchProduct = searchProduct,
         _getPopularProducts = getPopularProducts,
+        _getUserProducts = getUserProducts,
         _getProduct = getProduct,
         _authToken = authToken;
 
@@ -53,6 +60,10 @@ class ProductProvider with ChangeNotifier {
   ProviderState _getPopularProductsState = ProviderState.empty;
 
   ProviderState get getPopularProductsState => _getPopularProductsState;
+
+  ProviderState _getUserProductsState = ProviderState.empty;
+
+  ProviderState get getUserProductsState => _getUserProductsState;
 
   ProviderState _getProductState = ProviderState.empty;
 
@@ -102,6 +113,24 @@ class ProductProvider with ChangeNotifier {
     } catch (e) {
       _message = e.toString();
       _getPopularProductsState = ProviderState.error;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getUserProducts() async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      _getUserProductsState = ProviderState.loading;
+      notifyListeners();
+
+      final products = await _getUserProducts.execute(_authToken!);
+      _userProducts = products;
+      _getUserProductsState = ProviderState.loaded;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
+      _getUserProductsState = ProviderState.error;
       notifyListeners();
     }
   }
