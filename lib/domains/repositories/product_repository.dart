@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
-
 abstract class ProductRepository {
   // Future<Product> createProduct();
   //
@@ -17,6 +18,17 @@ abstract class ProductRepository {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder});
+
+  Future<Product> addProduct(
+    String token, {
+    required String name,
+    required List<File> images,
+    required int price,
+    required int stock,
+    String? sku,
+    required String description,
+    required String categoryId,
+  });
 
   Future<List<Product>> getPopularProducts();
 }

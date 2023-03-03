@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/domains/use_cases/product/add_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
@@ -10,6 +12,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 
 class ProductProvider with ChangeNotifier {
+  final AddProduct _addProduct;
   final GetProduct _getProduct;
   final SearchProduct _searchProduct;
   final GetPopularProducts _getPopularProducts;
@@ -32,11 +35,13 @@ class ProductProvider with ChangeNotifier {
   String get message => _message;
 
   ProductProvider(
-      {required GetProduct getProduct,
+      {required AddProduct addProduct,
+      required GetProduct getProduct,
       required SearchProduct searchProduct,
       required GetPopularProducts getPopularProducts,
       required String? authToken})
-      : _searchProduct = searchProduct,
+      : _addProduct = addProduct,
+        _searchProduct = searchProduct,
         _getPopularProducts = getPopularProducts,
         _getProduct = getProduct,
         _authToken = authToken;
@@ -53,9 +58,7 @@ class ProductProvider with ChangeNotifier {
 
   ProviderState get getProductState => _getProductState;
 
-
   Future<List<Product>?> searchProduct(SearchArguments searchArguments) async {
-
     try {
       // _searchProductState = ProviderState.loading;
       // notifyListeners();
@@ -116,6 +119,33 @@ class ProductProvider with ChangeNotifier {
       _message = e.toString();
       _getProductState = ProviderState.error;
       notifyListeners();
+    }
+  }
+
+  Future<Product> addProduct({
+    required String name,
+    required List<File> images,
+    required int price,
+    required int stock,
+    String? sku,
+    required String description,
+    required String categoryId,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      final product = await _addProduct.execute(
+        _authToken!,
+        stock: stock,
+        categoryId: categoryId,
+        description: description,
+        images: images,
+        price: price,
+        name: name,
+      );
+      return product;
+    } catch (e) {
+      rethrow;
     }
   }
 

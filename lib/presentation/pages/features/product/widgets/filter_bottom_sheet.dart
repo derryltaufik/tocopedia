@@ -3,32 +3,33 @@ import 'package:flutter/services.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart';
-import 'package:tocopedia/presentation/pages/common_widgets/rupiah_text_field.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 
 //https://web.archive.org/web/20230225174447/https://appunite.com/blog/how-to-scroll-your-bottom-sheet-differently-with-flutter
 
 Future<SearchArguments?> showFilterBottomSheet(BuildContext context,
     {required SearchArguments searchArguments,
-    required Set<Category> categorySelection}) {
+      required Set<Category> categorySelection}) {
   return showModalBottomSheet<SearchArguments>(
     context: context,
     isScrollControlled: true,
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      maxChildSize: 0.9,
-      minChildSize: 0.5,
-      snap: true,
-      snapSizes: const [0.5, 0.9],
-      expand: false,
-      builder: (context, scrollController) {
-        return FilterBottomSheet(
-          context: context,
-          scrollController: scrollController,
-          initialSearchArguments: searchArguments,
-          categorySelection: categorySelection,
-        );
-      },
-    ),
+    builder: (context) =>
+        DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          maxChildSize: 0.9,
+          minChildSize: 0.5,
+          snap: true,
+          snapSizes: const [0.5, 0.9],
+          expand: false,
+          builder: (context, scrollController) {
+            return FilterBottomSheet(
+              context: context,
+              scrollController: scrollController,
+              initialSearchArguments: searchArguments,
+              categorySelection: categorySelection,
+            );
+          },
+        ),
   );
 }
 
@@ -73,10 +74,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   void applyFilter() {
-    final minPrice =
-        int.tryParse(minPriceController.text.replaceAll(RegExp(r"\D"), ""));
-    final maxPrice =
-        int.tryParse(maxPriceController.text.replaceAll(RegExp(r"\D"), ""));
+    final minPrice = minPriceController.getInt();
+    final maxPrice = maxPriceController.getInt();
 
     final searchArguments = SearchArguments(
       maximumPrice: maxPrice,
@@ -149,13 +148,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     return FilterChip(
                       label: Text(sort.description),
                       selected: selectedSort == sort,
-                      onSelected: (bool value) => setState(
-                        () {
-                          if (value) {
-                            selectedSort = sort;
-                          }
-                        },
-                      ),
+                      onSelected: (bool value) =>
+                          setState(
+                                () {
+                              if (value) {
+                                selectedSort = sort;
+                              }
+                            },
+                          ),
                     );
                   }).toList(),
                 ),
@@ -192,11 +192,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     return FilterChip(
                       label: Text(category.name!),
                       selected: selectedCategory == category,
-                      onSelected: (bool value) => setState(
-                        () {
-                          if (value) selectedCategory = category;
-                        },
-                      ),
+                      onSelected: (bool value) =>
+                          setState(
+                                () {
+                              if (value) selectedCategory = category;
+                            },
+                          ),
                     );
                   }).toList(),
                 ),
@@ -217,20 +218,5 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         ),
       ],
     );
-  }
-}
-
-extension on TextInputFormatter {
-  String format(String text) {
-    return formatEditUpdate(
-      const TextEditingValue(),
-      TextEditingValue(
-        text: text,
-        selection: TextSelection(
-          baseOffset: text.length,
-          extentOffset: text.length,
-        ),
-      ),
-    ).text;
   }
 }

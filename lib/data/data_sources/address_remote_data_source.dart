@@ -53,8 +53,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       "notes": notes,
       "receiver_name": receiverName,
       "receiver_phone": receiverPhone,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty))
-        .map((key, value) => MapEntry(key, value.toString()));
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
 
     final url = Uri.parse(BASE_URL).replace(path: '/addresses');
 
@@ -87,8 +86,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       "notes": notes,
       "receiver_name": receiverName,
       "receiver_phone": receiverPhone,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty))
-        .map((key, value) => MapEntry(key, value.toString()));
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
 
     final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
 

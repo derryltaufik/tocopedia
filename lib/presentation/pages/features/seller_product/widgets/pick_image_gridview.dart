@@ -12,7 +12,6 @@ class PickImageGridView extends StatelessWidget {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1, mainAxisSpacing: 10),
-      padding: EdgeInsets.all(10),
       scrollDirection: Axis.horizontal,
       shrinkWrap: true,
       itemCount: PickImageProvider.size,

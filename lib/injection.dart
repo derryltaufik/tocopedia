@@ -6,6 +6,7 @@ import 'package:tocopedia/data/data_sources/category_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_item_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
+import 'package:tocopedia/data/data_sources/remote_storage_service.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/wishlist_remote_data_source.dart';
@@ -53,6 +54,7 @@ import 'package:tocopedia/domains/use_cases/order_item/get_order_item.dart';
 import 'package:tocopedia/domains/use_cases/order_item/get_seller_order_items.dart';
 import 'package:tocopedia/domains/use_cases/order_item/process_order_item.dart';
 import 'package:tocopedia/domains/use_cases/order_item/send_order_item.dart';
+import 'package:tocopedia/domains/use_cases/product/add_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
@@ -98,6 +100,8 @@ void init() {
       () => AddressRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<WishlistRemoteDataSource>(
       () => WishlistRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<RemoteStorageService>(
+      () => RemoteStorageServiceImpl());
 
   locator.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(
@@ -113,6 +117,7 @@ void init() {
   locator.registerLazySingleton<ProductRepository>(
     () => ProductRepositoryImpl(
       remoteDataSource: locator(),
+      remoteStorageService: locator(),
     ),
   );
   locator.registerLazySingleton<CartRepository>(
@@ -152,6 +157,7 @@ void init() {
   locator.registerLazySingleton(() => GetCategory(locator()));
   locator.registerLazySingleton(() => GetAllCategories(locator()));
 
+  locator.registerLazySingleton(() => AddProduct(locator()));
   locator.registerLazySingleton(() => GetProduct(locator()));
   locator.registerLazySingleton(() => SearchProduct(locator()));
   locator.registerLazySingleton(() => GetPopularProducts(locator()));
@@ -214,6 +220,7 @@ void init() {
       getProduct: locator(),
       searchProduct: locator(),
       getPopularProducts: locator(),
+      addProduct: locator(),
       authToken: param1,
     ),
   );

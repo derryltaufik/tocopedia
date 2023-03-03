@@ -19,6 +19,17 @@ abstract class ProductRemoteDataSource {
       String? sortOrder});
 
   Future<List<ProductModel>> getPopularProducts();
+
+  Future<ProductModel> addProduct(
+    String token, {
+    required String name,
+    required List<String> images,
+    required int price,
+    required int stock,
+    String? sku,
+    required String description,
+    required String categoryId,
+  });
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -48,7 +59,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder}) async {
-
     final queryParams = ({
       "q": query,
       "category": category?.id,
@@ -88,6 +98,43 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     if (response.statusCode ~/ 100 == 2) {
       return List<ProductModel>.from(
           responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<ProductModel> addProduct(String token,
+      {required String name,
+      required List<String> images,
+      required int price,
+      required int stock,
+      String? sku,
+      required String description,
+      required String categoryId}) async {
+    final body = ({
+      "name": name,
+      "category": categoryId,
+      "images": images,
+      "price": price,
+      "stock": stock,
+      "SKU": sku,
+      "description": description
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+
+    final url = Uri.parse(BASE_URL).replace(path: '/products');
+
+    final response = await client.post(
+      url,
+      headers: defaultHeader
+        ..addEntries({"Authorization": "Bearer $token"}.entries),
+      body: json.encode(body),
+    );
+
+    final responseBody = json.decode(response.body);
+
+    if (response.statusCode ~/ 100 == 2) {
+      return ProductModel.fromMap(responseBody["data"]["product"]);
     }
 
     throw ServerException(responseBody["error"].toString());
