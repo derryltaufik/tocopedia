@@ -84,8 +84,6 @@ class MyApp extends StatelessWidget {
       child: Consumer2<UserProvider, LocalSettingsProvider>(
           builder: (context, userProvider, localSettingsProvider, child) {
         final user = userProvider.user;
-        print(localSettingsProvider.appMode);
-
         Widget currentWidget;
 
         if (user != null && user.token!.isNotEmpty) {

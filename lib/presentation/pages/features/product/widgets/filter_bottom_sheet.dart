@@ -9,27 +9,26 @@ import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.da
 
 Future<SearchArguments?> showFilterBottomSheet(BuildContext context,
     {required SearchArguments searchArguments,
-      required Set<Category> categorySelection}) {
+    required Set<Category> categorySelection}) {
   return showModalBottomSheet<SearchArguments>(
     context: context,
     isScrollControlled: true,
-    builder: (context) =>
-        DraggableScrollableSheet(
-          initialChildSize: 0.5,
-          maxChildSize: 0.9,
-          minChildSize: 0.5,
-          snap: true,
-          snapSizes: const [0.5, 0.9],
-          expand: false,
-          builder: (context, scrollController) {
-            return FilterBottomSheet(
-              context: context,
-              scrollController: scrollController,
-              initialSearchArguments: searchArguments,
-              categorySelection: categorySelection,
-            );
-          },
-        ),
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.5,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      snap: true,
+      snapSizes: const [0.5, 0.9],
+      expand: false,
+      builder: (context, scrollController) {
+        return FilterBottomSheet(
+          context: context,
+          scrollController: scrollController,
+          initialSearchArguments: searchArguments,
+          categorySelection: categorySelection,
+        );
+      },
+    ),
   );
 }
 
@@ -69,7 +68,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     }
     if (widget.initialSearchArguments.maximumPrice != null) {
       maxPriceController.text = RupiahInputFormatter()
-          .format(widget.initialSearchArguments.minimumPrice.toString());
+          .format(widget.initialSearchArguments.maximumPrice.toString());
     }
   }
 
@@ -148,14 +147,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     return FilterChip(
                       label: Text(sort.description),
                       selected: selectedSort == sort,
-                      onSelected: (bool value) =>
-                          setState(
-                                () {
-                              if (value) {
-                                selectedSort = sort;
-                              }
-                            },
-                          ),
+                      onSelected: (bool value) => setState(
+                        () {
+                          if (value) {
+                            selectedSort = sort;
+                          }
+                        },
+                      ),
                     );
                   }).toList(),
                 ),
@@ -192,12 +190,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     return FilterChip(
                       label: Text(category.name!),
                       selected: selectedCategory == category,
-                      onSelected: (bool value) =>
-                          setState(
-                                () {
-                              if (value) selectedCategory = category;
-                            },
-                          ),
+                      onSelected: (bool value) => setState(
+                        () {
+                          if (value) selectedCategory = category;
+                        },
+                      ),
                     );
                   }).toList(),
                 ),

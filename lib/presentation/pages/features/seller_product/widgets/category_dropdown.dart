@@ -5,8 +5,10 @@ import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/providers/category_provider.dart';
 
 class CategoryDropdown extends StatefulWidget {
-  CategoryDropdown({Key? key, this.onChanged}) : super(key: key);
+  CategoryDropdown({Key? key, this.onChanged, this.initialCategory})
+      : super(key: key);
   final Function(Category? value)? onChanged;
+  final Category? initialCategory;
 
   @override
   State<CategoryDropdown> createState() => _CategoryDropdownState();
@@ -31,6 +33,10 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
   @override
   Widget build(BuildContext context) {
     final categoryList = Provider.of<CategoryProvider>(context).allCategories;
+    if (widget.initialCategory != null) {
+      dropdownValue = categoryList
+          ?.firstWhere((element) => element.id == widget.initialCategory!.id);
+    }
     return DropdownButtonFormField<Category>(
       value: dropdownValue,
       validator: (value) {

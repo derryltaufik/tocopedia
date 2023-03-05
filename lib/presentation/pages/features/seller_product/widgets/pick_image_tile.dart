@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +33,19 @@ class PickImageTile extends StatelessWidget {
 
     return Consumer<PickImageProvider>(builder: (context, value, child) {
       final pickedImage = value.getImage(index);
+      Widget? imageWidget;
+      if (pickedImage == null) {
+        imageWidget = const Icon(
+          Icons.add_photo_alternate_outlined,
+          color: Colors.black54,
+          size: 50,
+        );
+      } else if (pickedImage is File) {
+        imageWidget = Image.file(pickedImage, fit: BoxFit.cover);
+      } else if (pickedImage is String) {
+        imageWidget =
+            CachedNetworkImage(imageUrl: pickedImage, fit: BoxFit.cover);
+      }
       return Stack(
         children: [
           GestureDetector(
@@ -42,13 +58,7 @@ class PickImageTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.black12,
               ),
-              child: pickedImage == null
-                  ? const Icon(
-                      Icons.add_photo_alternate_outlined,
-                      color: Colors.black54,
-                      size: 50,
-                    )
-                  : Image.file(pickedImage, fit: BoxFit.cover),
+              child: imageWidget,
             ),
           ),
           if (pickedImage != null)

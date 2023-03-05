@@ -139,9 +139,7 @@ class CartProvider with ChangeNotifier {
       final tempCart = await _selectSeller.execute(_authToken!, sellerId);
       cart = tempCart;
       notifyListeners();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   Future<void> unselectSeller(String sellerId) async {

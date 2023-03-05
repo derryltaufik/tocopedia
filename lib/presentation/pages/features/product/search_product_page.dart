@@ -37,7 +37,6 @@ class _SearchProductPageState extends State<SearchProductPage> {
     _categorySelection ??= Provider.of<ProductProvider>(context, listen: false)
         .getSearchedProductCategories();
 
-    print(_searchArguments.toString());
     final searchArguments = await showFilterBottomSheet(context,
         searchArguments: _searchArguments,
         categorySelection: _categorySelection!);

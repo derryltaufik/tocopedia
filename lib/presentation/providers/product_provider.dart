@@ -9,11 +9,13 @@ import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_user_products.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
+import 'package:tocopedia/domains/use_cases/product/update_product.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 
 class ProductProvider with ChangeNotifier {
   final AddProduct _addProduct;
+  final UpdateProduct _updateProduct;
   final GetProduct _getProduct;
   final SearchProduct _searchProduct;
   final GetUserProducts _getUserProducts;
@@ -25,7 +27,6 @@ class ProductProvider with ChangeNotifier {
   Product? get product => _product;
 
   List<Product>? _searchedProduct;
-
   List<Product>? _popularProducts;
   List<Product>? _userProducts;
 
@@ -41,12 +42,14 @@ class ProductProvider with ChangeNotifier {
 
   ProductProvider(
       {required AddProduct addProduct,
+      required UpdateProduct updateProduct,
       required GetProduct getProduct,
       required SearchProduct searchProduct,
       required GetUserProducts getUserProducts,
       required GetPopularProducts getPopularProducts,
       required String? authToken})
       : _addProduct = addProduct,
+        _updateProduct = updateProduct,
         _searchProduct = searchProduct,
         _getPopularProducts = getPopularProducts,
         _getUserProducts = getUserProducts,
@@ -135,7 +138,7 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getProduct(String id) async {
+  Future<Product?> getProduct(String id) async {
     try {
       _getProductState = ProviderState.loading;
       notifyListeners();
@@ -144,6 +147,7 @@ class ProductProvider with ChangeNotifier {
       _product = product;
       _getProductState = ProviderState.loaded;
       notifyListeners();
+      return product;
     } catch (e) {
       _message = e.toString();
       _getProductState = ProviderState.error;
@@ -168,10 +172,47 @@ class ProductProvider with ChangeNotifier {
         stock: stock,
         categoryId: categoryId,
         description: description,
+        sku: sku,
         images: images,
         price: price,
         name: name,
       );
+      await getUserProducts();
+      notifyListeners();
+      return product;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Product> updateProduct(
+    String productId, {
+    String? name,
+    List<String>? oldImages,
+    List<File>? newImages,
+    int? price,
+    int? stock,
+    String? sku,
+    String? description,
+    String? categoryId,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      final product = await _updateProduct.execute(
+        _authToken!,
+        productId,
+        stock: stock,
+        sku: sku,
+        categoryId: categoryId,
+        description: description,
+        oldImages: oldImages,
+        newImages: newImages,
+        price: price,
+        name: name,
+      );
+      await getUserProducts();
+      notifyListeners();
       return product;
     } catch (e) {
       rethrow;

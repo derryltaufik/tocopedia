@@ -31,6 +31,16 @@ abstract class ProductRepository {
     required String categoryId,
   });
 
+  Future<Product> updateProduct(String token, String productId,
+      {String? name,
+      List<File>? newImages,
+      List<String>? oldImages,
+      int? price,
+      int? stock,
+      String? sku,
+      String? description,
+      String? categoryId});
+
   Future<List<Product>> getPopularProducts();
 
   Future<List<Product>> getUserProducts(String token);

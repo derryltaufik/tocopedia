@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/category.dart';
+import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/pages/features/seller_product/providers/pick_image_provider.dart';
@@ -8,16 +9,18 @@ import 'package:tocopedia/presentation/pages/features/seller_product/widgets/pic
 import 'package:tocopedia/presentation/pages/features/seller_product/widgets/category_dropdown.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
-class SellerAddProductPage extends StatefulWidget {
-  static const String routeName = "seller/products/add";
+class SellerEditProductPage extends StatefulWidget {
+  static const String routeName = "seller/products/edit";
+  final Product product;
 
-  const SellerAddProductPage({Key? key}) : super(key: key);
+  const SellerEditProductPage({Key? key, required this.product})
+      : super(key: key);
 
   @override
-  State<SellerAddProductPage> createState() => _SellerAddProductPageState();
+  State<SellerEditProductPage> createState() => _SellerEditProductPageState();
 }
 
-class _SellerAddProductPageState extends State<SellerAddProductPage> {
+class _SellerEditProductPageState extends State<SellerEditProductPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -28,8 +31,10 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
 
   Future<void> submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      final images =
+      final newImages =
           Provider.of<PickImageProvider>(context, listen: false).newImages;
+      final oldImages =
+          Provider.of<PickImageProvider>(context, listen: false).oldImages;
       final name = _nameController.text;
       final price = _priceController.getInt()!;
       final stock = _stockController.getInt()!;
@@ -37,10 +42,12 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
       final description = _descriptionController.text;
       final categoryId = _selectedCategory!.id!;
 
-      final addProductFunction =
-          Provider.of<ProductProvider>(context, listen: false).addProduct(
+      final updateProductFunction =
+          Provider.of<ProductProvider>(context, listen: false).updateProduct(
+              widget.product.id!,
               name: name,
-              images: images,
+              newImages: newImages,
+              oldImages: oldImages,
               description: description,
               categoryId: categoryId,
               stock: stock,
@@ -48,15 +55,33 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
               sku: sku);
       final product = await handleFutureFunction(
         context,
-        loadingMessage: "Uploading product...",
-        successMessage: "Product successfully uploaded",
-        function: addProductFunction,
+        loadingMessage: "Updating product...",
+        successMessage: "Product successfully updated",
+        function: updateProductFunction,
       );
 
       if (product != null && context.mounted) {
         Navigator.of(context).pop();
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.product.name ?? "";
+    _stockController.text = widget.product.stock?.toString() ?? "";
+    _skuController.text = widget.product.sku ?? "";
+    _priceController.text =
+        RupiahInputFormatter().format(widget.product.price.toString());
+    _selectedCategory = widget.product.category;
+
+    Future.microtask(() {
+      Provider.of<ProductProvider>(context, listen: false)
+          .getProduct(widget.product.id!)
+          .then((value) => setState(
+              () => _descriptionController.text = value?.description ?? ""));
+    });
   }
 
   @override
@@ -72,12 +97,14 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Product"),
+        title: Text("Edit Product"),
       ),
       body: ChangeNotifierProvider<PickImageProvider>(
-        create: (_) => PickImageProvider(),
+        create: (_) =>
+            PickImageProvider(oldImages: widget.product.images ?? []),
         builder: (context, child) => SingleChildScrollView(
           padding: EdgeInsets.all(15),
           child: Form(
@@ -105,6 +132,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                 Text("Category *", style: theme.textTheme.titleMedium),
                 SizedBox(height: 10),
                 CategoryDropdown(
+                    initialCategory: widget.product.category,
                     onChanged: (value) => _selectedCategory = value),
                 SizedBox(height: 10),
                 Text("Price *", style: theme.textTheme.titleMedium),

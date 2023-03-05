@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/features/address/add_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/edit_address_page.dart';
@@ -15,6 +16,7 @@ import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
 import 'package:tocopedia/presentation/pages/features/seller_product/seller_add_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/seller_product/seller_edit_product_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -70,6 +72,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) => SellerAddProductPage(),
+      );
+    case SellerEditProductPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) => SellerEditProductPage(product: routeSettings.arguments as Product),
       );
     case ViewProductPage.routeName:
       return MaterialPageRoute(

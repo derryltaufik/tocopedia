@@ -82,6 +82,7 @@ class ProductRepositoryImpl implements ProductRepository {
           images: imageUrls,
           price: price,
           stock: stock,
+          sku: sku,
           description: description,
           categoryId: categoryId);
 
@@ -97,6 +98,42 @@ class ProductRepositoryImpl implements ProductRepository {
       final results = await remoteDataSource.getUserProducts(token);
 
       return List<Product>.from(results.map((e) => e.toEntity()));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Product> updateProduct(String token, String productId,
+      {String? name,
+      List<File>? newImages,
+      List<String>? oldImages,
+      int? price,
+      int? stock,
+      String? sku,
+      String? description,
+      String? categoryId}) async {
+    try {
+      List<String> imageUrls = [...?oldImages];
+
+      if (newImages != null && newImages.isNotEmpty) {
+        for (int i = 0; i < newImages.length; i++) {
+          final imageUrl = await remoteStorageService.uploadImage(newImages[i]);
+
+          imageUrls.add(imageUrl);
+        }
+      }
+
+      final result = await remoteDataSource.updateProduct(token, productId,
+          name: name,
+          images: imageUrls,
+          price: price,
+          stock: stock,
+          sku: sku,
+          description: description,
+          categoryId: categoryId);
+
+      return result.toEntity();
     } catch (e) {
       rethrow;
     }

@@ -86,4 +86,21 @@ Herbal
       }
     });
   });
+
+  group("Update product", () {
+    test('update product', () async {
+      try {
+        final result = await dataSource.updateProduct(
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2Y4NWVhY2FmOWI1YzdiMTEwZGNkNzEiLCJpYXQiOjE2Nzc2MDI2NzV9.mpgkDUFd0aGx_onTCM_J6C7HW1wUrpfyW5dIuImQ9lk",
+          "64021b9ca532828b9264f93d",
+          name: "Tolak Angin Updated",
+        );
+        print(result.toString());
+      } on SocketException catch (e) {
+        print(e);
+      } on Exception catch (e) {
+        print(e);
+      }
+    });
+  });
 }

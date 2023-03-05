@@ -32,6 +32,18 @@ abstract class ProductRemoteDataSource {
     required String description,
     required String categoryId,
   });
+
+  Future<ProductModel> updateProduct(
+    String token,
+    String productId, {
+    String? name,
+    List<String>? images,
+    int? price,
+    int? stock,
+    String? sku,
+    String? description,
+    String? categoryId,
+  });
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -157,6 +169,43 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     if (response.statusCode ~/ 100 == 2) {
       return List<ProductModel>.from(
           responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<ProductModel> updateProduct(String token, String productId,
+      {String? name,
+      List<String>? images,
+      int? price,
+      int? stock,
+      String? sku,
+      String? description,
+      String? categoryId}) async {
+    final body = ({
+      "name": name,
+      "category": categoryId,
+      "images": images,
+      "price": price,
+      "stock": stock,
+      "SKU": sku,
+      "description": description
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+
+    final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
+
+    final response = await client.patch(
+      url,
+      headers: defaultHeader
+        ..addEntries({"Authorization": "Bearer $token"}.entries),
+      body: json.encode(body),
+    );
+
+    final responseBody = json.decode(response.body);
+
+    if (response.statusCode ~/ 100 == 2) {
+      return ProductModel.fromMap(responseBody["data"]["product"]);
     }
 
     throw ServerException(responseBody["error"].toString());

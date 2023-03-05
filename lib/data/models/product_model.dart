@@ -160,7 +160,7 @@ class ProductModel {
       'images': images,
       'price': price,
       'stock': stock,
-      'sku': sku,
+      'SKU': sku,
       'description': description,
       'status': status,
       'category': category,
@@ -183,7 +183,7 @@ class ProductModel {
           : List<String>.from(map['images'].map((x) => x)),
       price: map['price'],
       stock: map['stock'],
-      sku: map['sku'],
+      sku: map['SKU'],
       description: map['description'],
       status: map['status'],
       category: map['category'] == null

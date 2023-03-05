@@ -64,7 +64,6 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
       ),
       body: Consumer<OrderItemProvider>(
         builder: (context, orderItemProvider, child) {
-          print("build");
           if (orderItemProvider.getSellerOrderItemsState ==
               ProviderState.loading) {
             return Center(child: CircularProgressIndicator());
