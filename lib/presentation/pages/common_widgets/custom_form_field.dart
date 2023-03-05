@@ -137,6 +137,124 @@ class RupiahTextField extends StatelessWidget {
   }
 }
 
+class QuantityField extends StatelessWidget {
+  final TextEditingController controller;
+  final int minimum;
+  final int maximum;
+
+  final void Function()? onDecrease;
+  final void Function()? onIncrease;
+  final FocusNode? focusNode;
+  final bool autoFocus;
+  final double width;
+
+  const QuantityField({
+    Key? key,
+    required this.controller,
+    this.minimum = 1,
+    this.maximum = 999999,
+    this.onDecrease,
+    this.onIncrease,
+    this.focusNode,
+    this.autoFocus = false,
+    this.width = 25,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black54, width: 0.5),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: Row(
+        children: [
+          AbsorbPointer(
+            absorbing: int.parse(controller.text) > minimum ? false : true,
+            child: GestureDetector(
+              onTap: onDecrease,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2)
+                    .copyWith(right: 0),
+                child: Icon(Icons.remove,
+                    color: int.parse(controller.text) > minimum
+                        ? theme.primaryColor
+                        : Colors.black12),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: width,
+            child: TextField(
+              focusNode: focusNode,
+              textAlign: TextAlign.center,
+              decoration: null,
+              style: theme.textTheme.bodySmall,
+              keyboardType: TextInputType.number,
+              controller: controller,
+              onEditingComplete: () {
+                FocusScope.of(context).unfocus();
+              },
+              autofocus: autoFocus,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                NumericalRangeFormatter(min: minimum, max: maximum),
+              ],
+            ),
+          ),
+          // Text("${widget.cartItem.quantity}"),
+          AbsorbPointer(
+            absorbing: int.parse(controller.text) < maximum ? false : true,
+            child: GestureDetector(
+              onTap: onIncrease,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2)
+                    .copyWith(left: 0),
+                child: Icon(Icons.add,
+                    color: int.parse(controller.text) < maximum
+                        ? theme.primaryColor
+                        : Colors.black12),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NumericalRangeFormatter extends TextInputFormatter {
+  final int min;
+  final int max;
+
+  NumericalRangeFormatter({required this.min, required this.max});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text == '' || int.parse(newValue.text) < min) {
+      // String newText = min.toStringAsFixed(0);
+      // return const TextEditingValue().copyWith(
+      //     text: newText,
+      //     selection:
+      //         TextSelection.fromPosition(TextPosition(offset: newText.length)));
+      // //if > product stock, set to product stock
+    } else {
+      String newText = max.toStringAsFixed(0);
+
+      return int.parse(newValue.text) > max
+          ? const TextEditingValue().copyWith(
+              text: newText,
+              selection: TextSelection.fromPosition(
+                  TextPosition(offset: newText.length)))
+          : newValue;
+    }
+    return newValue;
+  }
+}
+
 String? minLengthValidator(String? value, int minLength) {
   if (value == null || value.isEmpty) {
     return 'Must be filled';

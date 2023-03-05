@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/cart_item_detail.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
 class CartItemDetailTile extends StatefulWidget {
@@ -210,104 +211,17 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
               ),
               iconSize: 20,
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black54, width: 0.5),
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: Row(
-                children: [
-                  AbsorbPointer(
-                    absorbing:
-                        int.parse(_quantityController.text) > 1 ? false : true,
-                    child: GestureDetector(
-                      onTap: () => removeFromCart(context),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2)
-                            .copyWith(right: 0),
-                        child: Icon(Icons.remove,
-                            color: int.parse(_quantityController.text) > 1
-                                ? theme.primaryColor
-                                : Colors.black12),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      focusNode: _quantityFocus,
-                      textAlign: TextAlign.center,
-                      decoration: null,
-                      style: theme.textTheme.bodySmall,
-                      keyboardType: TextInputType.number,
-                      controller: _quantityController,
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        NumericalRangeFormatter(min: 1, max: product.stock!)
-                      ],
-                    ),
-                  ),
-                  // Text("${widget.cartItem.quantity}"),
-                  AbsorbPointer(
-                    absorbing:
-                        int.parse(_quantityController.text) < product.stock!
-                            ? false
-                            : true,
-                    child: GestureDetector(
-                      onTap: () => addToCart(context),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2)
-                            .copyWith(left: 0),
-                        child: Icon(Icons.add,
-                            color: int.parse(_quantityController.text) <
-                                    product.stock!
-                                ? theme.primaryColor
-                                : Colors.black12),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            QuantityField(
+              controller: _quantityController,
+              focusNode: _quantityFocus,
+              maximum: product.stock!,
+              minimum: 1,
+              onDecrease: () => removeFromCart(context),
+              onIncrease: () => addToCart(context),
             ),
           ]),
         )
       ],
     );
-  }
-}
-
-class NumericalRangeFormatter extends TextInputFormatter {
-  final int min;
-  final int max;
-
-  NumericalRangeFormatter({required this.min, required this.max});
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    if (newValue.text == '' || int.parse(newValue.text) < min) {
-      // String newText = min.toStringAsFixed(0);
-      // return const TextEditingValue().copyWith(
-      //     text: newText,
-      //     selection:
-      //         TextSelection.fromPosition(TextPosition(offset: newText.length)));
-      // //if > product stock, set to product stock
-    } else {
-      String newText = max.toStringAsFixed(0);
-
-      return int.parse(newValue.text) > max
-          ? const TextEditingValue().copyWith(
-              text: newText,
-              selection: TextSelection.fromPosition(
-                  TextPosition(offset: newText.length)))
-          : newValue;
-    }
-    return newValue;
   }
 }

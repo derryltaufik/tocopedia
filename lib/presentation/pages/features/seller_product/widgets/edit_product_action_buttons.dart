@@ -30,14 +30,12 @@ class EditProductActionButtons extends StatelessWidget {
       ),
     );
 
-    if (deleteProduct != null && deleteProduct == true) {
-      if (context.mounted) {
-        handleFutureFunction(context,
-            loadingMessage: "Deleting product...",
-            successMessage: "Product deleted",
-            function: Provider.of<ProductProvider>(context, listen: false)
-                .deleteProduct(product.id!));
-      }
+    if (deleteProduct != null && deleteProduct == true && context.mounted) {
+      handleFutureFunction(context,
+          loadingMessage: "Deleting product...",
+          successMessage: "Product deleted",
+          function: Provider.of<ProductProvider>(context, listen: false)
+              .deleteProduct(product.id!));
     }
   }
 
@@ -49,14 +47,35 @@ class EditProductActionButtons extends StatelessWidget {
           ChangePriceBottomSheet(initialPrice: product.price!),
     );
 
-    if (price != null) {
-      if (context.mounted) {
-        handleFutureFunction(context,
-            loadingMessage: "Updating price...",
-            successMessage: "Price updated",
-            function: Provider.of<ProductProvider>(context, listen: false)
-                .updateProduct(product.id!, price: price));
-      }
+    if (price != null && context.mounted) {
+      handleFutureFunction(context,
+          loadingMessage: "Updating price...",
+          successMessage: "Price updated",
+          function: Provider.of<ProductProvider>(context, listen: false)
+              .updateProduct(product.id!, price: price));
+    }
+  }
+
+  Future<void> changeStock(BuildContext context) async {
+    final temp = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => ChangeStockBottomSheet(
+          initialActive: product.status == "active",
+          initialStock: product.stock ?? 1),
+    );
+    //use deconstruct if possible
+    final stock = temp?["stock"];
+    final active = temp?["active"];
+
+    if ((stock != null && stock is int) &&
+        (active != null && active is bool) &&
+        context.mounted) {
+      handleFutureFunction(context,
+          loadingMessage: "Updating stock...",
+          successMessage: "Stock updated",
+          function: Provider.of<ProductProvider>(context, listen: false)
+              .updateProduct(product.id!, stock: stock, active: active));
     }
   }
 
@@ -77,7 +96,7 @@ class EditProductActionButtons extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     minimumSize: Size.zero),
-                onPressed: () {},
+                onPressed: () => changeStock(context),
                 child: Text("Change Stock"))),
         IconButton(
             onPressed: () => delete(context),
@@ -142,6 +161,117 @@ class _ChangePriceBottomSheetState extends State<ChangePriceBottomSheet> {
                 child: FilledButton(
                   onPressed: () =>
                       Navigator.of(context).pop(_priceController.getInt()),
+                  child: Text("Save"),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChangeStockBottomSheet extends StatefulWidget {
+  final bool initialActive;
+  final int initialStock;
+
+  const ChangeStockBottomSheet(
+      {Key? key, required this.initialActive, required this.initialStock})
+      : super(key: key);
+
+  @override
+  State<ChangeStockBottomSheet> createState() => _ChangeStockBottomSheetState();
+}
+
+class _ChangeStockBottomSheetState extends State<ChangeStockBottomSheet> {
+  late bool active;
+
+  final _stockController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    active = widget.initialActive;
+    _stockController.text = widget.initialStock.toString();
+  }
+
+  @override
+  void dispose() {
+    _stockController.dispose();
+    super.dispose();
+  }
+
+  void increase() {
+    updateStock(_stockController.getInt()! + 1);
+  }
+
+  void decrease() {
+    updateStock(_stockController.getInt()! - 1);
+  }
+
+  void updateStock(int stock) {
+    setState(() {
+      _stockController.text = stock.toString();
+      _stockController.selection =
+          TextSelection.collapsed(offset: _stockController.text.length);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0)
+          .copyWith(bottom: MediaQuery.of(context).viewInsets.bottom + 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  padding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(Icons.close_rounded)),
+              Text("Modify Stock", style: theme.textTheme.titleMedium),
+            ],
+          ),
+          SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Active Product", style: theme.textTheme.titleSmall),
+              Switch(
+                value: active,
+                onChanged: (value) => setState(() => active = value),
+              )
+            ],
+          ),
+          SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Stock", style: theme.textTheme.titleSmall),
+              Spacer(),
+              QuantityField(
+                controller: _stockController,
+                minimum: 0,
+                maximum: 999999,
+                onIncrease: () => increase(),
+                onDecrease: () => decrease(),
+                autoFocus: true,
+                width: 50,
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(
+                      {"stock": _stockController.getInt()!, "active": active}),
                   child: Text("Save"),
                 ),
               ),

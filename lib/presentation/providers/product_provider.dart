@@ -198,6 +198,7 @@ class ProductProvider with ChangeNotifier {
     String? sku,
     String? description,
     String? categoryId,
+    bool? active,
   }) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
@@ -213,6 +214,7 @@ class ProductProvider with ChangeNotifier {
         newImages: newImages,
         price: price,
         name: name,
+        active: active,
       );
       getUserProducts();
       return product;
@@ -227,6 +229,7 @@ class ProductProvider with ChangeNotifier {
 
       final product = await _deleteProduct.execute(_authToken!, productId);
       getUserProducts();
+      return product;
     } catch (e) {
       rethrow;
     }
