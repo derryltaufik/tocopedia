@@ -125,6 +125,8 @@ class OrderItemProvider with ChangeNotifier {
           await _cancelOrderItem.execute(_authToken!, orderItemId);
       _orderItem = orderItem;
       notifyListeners();
+      getSellerOrderItems();
+      getBuyerOrderItems();
     } catch (e) {
       rethrow;
     }
@@ -136,6 +138,7 @@ class OrderItemProvider with ChangeNotifier {
           await _processOrderItem.execute(_authToken!, orderItemId);
       _orderItem = orderItem;
       notifyListeners();
+      getSellerOrderItems();
     } catch (e) {
       rethrow;
     }
@@ -147,6 +150,7 @@ class OrderItemProvider with ChangeNotifier {
           airwaybill: airwaybill);
       _orderItem = orderItem;
       notifyListeners();
+      getSellerOrderItems();
     } catch (e) {
       rethrow;
     }
@@ -158,6 +162,7 @@ class OrderItemProvider with ChangeNotifier {
           await _completeOrderItem.execute(_authToken!, orderItemId);
       _orderItem = orderItem;
       notifyListeners();
+      getBuyerOrderItems();
     } catch (e) {
       rethrow;
     }

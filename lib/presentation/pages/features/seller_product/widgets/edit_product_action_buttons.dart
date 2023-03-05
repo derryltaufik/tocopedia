@@ -4,6 +4,7 @@ import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
+import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 
 class EditProductActionButtons extends StatelessWidget {
   final Product product;
@@ -17,15 +18,15 @@ class EditProductActionButtons extends StatelessWidget {
     final bool? deleteProduct = await showDialog<bool?>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Delete this product?"),
-        content: Text("CAUTION! Deleted product can not be recovered."),
+        title: const Text("Delete this product?"),
+        content: const Text("CAUTION! Deleted product can not be recovered."),
         actions: [
           OutlinedButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text("NO")),
+              child: const Text("NO")),
           FilledButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text("YES")),
+              child: const Text("YES")),
         ],
       ),
     );
@@ -79,6 +80,17 @@ class EditProductActionButtons extends StatelessWidget {
     }
   }
 
+  void showMoreOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ShowMoreOptionsBottomSheet(
+        onView: () => Navigator.of(context)
+            .popAndPushNamed(ViewProductPage.routeName, arguments: product.id!),
+        onDelete: () => delete(context),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -86,21 +98,22 @@ class EditProductActionButtons extends StatelessWidget {
         Expanded(
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     minimumSize: Size.zero),
                 onPressed: () => changePrice(context),
-                child: Text("Change Price"))),
-        SizedBox(width: 10),
+                child: const Text("Change Price"))),
+        const SizedBox(width: 10),
         Expanded(
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     minimumSize: Size.zero),
                 onPressed: () => changeStock(context),
-                child: Text("Change Stock"))),
+                child: const Text("Change Stock"))),
         IconButton(
-            onPressed: () => delete(context),
-            icon: Icon(Icons.delete_outline_rounded)),
+          onPressed: () => showMoreOptions(context),
+          icon: const Icon(Icons.more_vert_rounded),
+        ),
       ],
     );
   }
@@ -145,23 +158,23 @@ class _ChangePriceBottomSheetState extends State<ChangePriceBottomSheet> {
             children: [
               IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(Icons.close_rounded)),
+                  icon: const Icon(Icons.close_rounded)),
               Text("Modify Price", style: theme.textTheme.titleMedium),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomTextField.rupiah(
             controller: _priceController,
             autoFocus: true,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
                 child: FilledButton(
                   onPressed: () =>
                       Navigator.of(context).pop(_priceController.getInt()),
-                  child: Text("Save"),
+                  child: const Text("Save"),
                 ),
               ),
             ],
@@ -233,11 +246,11 @@ class _ChangeStockBottomSheetState extends State<ChangeStockBottomSheet> {
                   onPressed: () => Navigator.of(context).pop(),
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
-                  icon: Icon(Icons.close_rounded)),
+                  icon: const Icon(Icons.close_rounded)),
               Text("Modify Stock", style: theme.textTheme.titleMedium),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -248,12 +261,12 @@ class _ChangeStockBottomSheetState extends State<ChangeStockBottomSheet> {
               )
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("Stock", style: theme.textTheme.titleSmall),
-              Spacer(),
+              const Spacer(),
               QuantityField(
                 controller: _stockController,
                 minimum: 0,
@@ -265,17 +278,86 @@ class _ChangeStockBottomSheetState extends State<ChangeStockBottomSheet> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               Expanded(
                 child: FilledButton(
                   onPressed: () => Navigator.of(context).pop(
                       {"stock": _stockController.getInt()!, "active": active}),
-                  child: Text("Save"),
+                  child: const Text("Save"),
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ShowMoreOptionsBottomSheet extends StatelessWidget {
+  final void Function()? onView;
+  final void Function()? onDelete;
+
+  const ShowMoreOptionsBottomSheet({Key? key, this.onView, this.onDelete})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: const Icon(Icons.close, size: 30),
+              ),
+              const SizedBox(width: 5),
+              Text("Manage",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold))
+            ],
+          ),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: onView,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                children: [
+                  const SizedBox(width: 5),
+                  const Icon(Icons.visibility_outlined),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text("View Product",
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onDelete,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Row(
+                children: [
+                  const SizedBox(width: 5),
+                  const Icon(Icons.delete_outline_rounded),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text("Delete Product",
+                        style: Theme.of(context).textTheme.titleSmall),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
