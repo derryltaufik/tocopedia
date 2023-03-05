@@ -4,12 +4,6 @@ import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 
 abstract class ProductRepository {
-  // Future<Product> createProduct();
-  //
-  // Future<Product> updateProduct();
-  //
-  // Future<Product> deleteProduct(String productId);
-
   Future<Product> getProduct(String id);
 
   Future<List<Product>> searchProduct(
@@ -44,4 +38,6 @@ abstract class ProductRepository {
   Future<List<Product>> getPopularProducts();
 
   Future<List<Product>> getUserProducts(String token);
+
+  Future<Product> deleteProduct(String token, String productId);
 }

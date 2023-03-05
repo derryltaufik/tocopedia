@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/domains/use_cases/product/add_product.dart';
+import 'package:tocopedia/domains/use_cases/product/delete_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_popular_products.dart';
 import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_user_products.dart';
@@ -16,6 +17,7 @@ import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 class ProductProvider with ChangeNotifier {
   final AddProduct _addProduct;
   final UpdateProduct _updateProduct;
+  final DeleteProduct _deleteProduct;
   final GetProduct _getProduct;
   final SearchProduct _searchProduct;
   final GetUserProducts _getUserProducts;
@@ -43,6 +45,7 @@ class ProductProvider with ChangeNotifier {
   ProductProvider(
       {required AddProduct addProduct,
       required UpdateProduct updateProduct,
+      required DeleteProduct deleteProduct,
       required GetProduct getProduct,
       required SearchProduct searchProduct,
       required GetUserProducts getUserProducts,
@@ -50,6 +53,7 @@ class ProductProvider with ChangeNotifier {
       required String? authToken})
       : _addProduct = addProduct,
         _updateProduct = updateProduct,
+        _deleteProduct = deleteProduct,
         _searchProduct = searchProduct,
         _getPopularProducts = getPopularProducts,
         _getUserProducts = getUserProducts,
@@ -177,8 +181,7 @@ class ProductProvider with ChangeNotifier {
         price: price,
         name: name,
       );
-      await getUserProducts();
-      notifyListeners();
+      getUserProducts();
       return product;
     } catch (e) {
       rethrow;
@@ -211,9 +214,19 @@ class ProductProvider with ChangeNotifier {
         price: price,
         name: name,
       );
-      await getUserProducts();
-      notifyListeners();
+      getUserProducts();
       return product;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Product?> deleteProduct(String productId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      final product = await _deleteProduct.execute(_authToken!, productId);
+      getUserProducts();
     } catch (e) {
       rethrow;
     }

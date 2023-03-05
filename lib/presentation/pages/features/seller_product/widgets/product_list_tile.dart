@@ -4,6 +4,7 @@ import 'package:tocopedia/common/constants.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 import 'package:tocopedia/presentation/pages/features/seller_product/seller_edit_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/seller_product/widgets/edit_product_action_buttons.dart';
 
 class ProductListTile extends StatelessWidget {
   final Product product;
@@ -69,27 +70,7 @@ class ProductListTile extends StatelessWidget {
                 )
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            minimumSize: Size.zero),
-                        onPressed: () {},
-                        child: Text("Change Price"))),
-                SizedBox(width: 10),
-                Expanded(
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            minimumSize: Size.zero),
-                        onPressed: () {},
-                        child: Text("Change Stock"))),
-                IconButton(
-                    onPressed: () {}, icon: Icon(Icons.more_vert_rounded)),
-              ],
-            )
+            EditProductActionButtons(product: product),
           ],
         ),
       ),

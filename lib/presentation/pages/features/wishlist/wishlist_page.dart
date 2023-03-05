@@ -39,7 +39,7 @@ class _WishListPageState extends State<WishListPage> {
           final products = wishlistProvider.wishlist?.wishlistProducts;
 
           if (products == null || products.isEmpty) {
-            return Center(child: Text("Product not found... "));
+            return Center(child: Text("You don't have wishlist"));
           }
 
           return MasonryGridView.count(

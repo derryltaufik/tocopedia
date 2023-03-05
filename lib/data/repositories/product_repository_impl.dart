@@ -138,4 +138,15 @@ class ProductRepositoryImpl implements ProductRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<Product> deleteProduct(String token, String productId) async {
+    try {
+      final result = await remoteDataSource.deleteProduct(token, productId);
+
+      return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
