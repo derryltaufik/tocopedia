@@ -25,15 +25,19 @@ abstract class ProductRepository {
     required String categoryId,
   });
 
-  Future<Product> updateProduct(String token, String productId,
-      {String? name,
-      List<File>? newImages,
-      List<String>? oldImages,
-      int? price,
-      int? stock,
-      String? sku,
-      String? description,
-      String? categoryId});
+  Future<Product> updateProduct(
+    String token,
+    String productId, {
+    String? name,
+    List<File>? newImages,
+    List<String>? oldImages,
+    int? price,
+    int? stock,
+    String? sku,
+    String? description,
+    String? categoryId,
+    bool? active,
+  });
 
   Future<List<Product>> getPopularProducts();
 

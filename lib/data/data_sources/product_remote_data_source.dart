@@ -43,6 +43,7 @@ abstract class ProductRemoteDataSource {
     String? sku,
     String? description,
     String? categoryId,
+    bool? active,
   });
 
   Future<ProductModel> deleteProduct(String token, String productId);
@@ -177,14 +178,24 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<ProductModel> updateProduct(String token, String productId,
-      {String? name,
-      List<String>? images,
-      int? price,
-      int? stock,
-      String? sku,
-      String? description,
-      String? categoryId}) async {
+  Future<ProductModel> updateProduct(
+    String token,
+    String productId, {
+    String? name,
+    List<String>? images,
+    int? price,
+    int? stock,
+    String? sku,
+    String? description,
+    String? categoryId,
+    bool? active,
+  }) async {
+    final String? status = active == null
+        ? null
+        : active == true
+            ? "active"
+            : "inactive";
+
     final body = ({
       "name": name,
       "category": categoryId,
@@ -192,7 +203,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       "price": price,
       "stock": stock,
       "SKU": sku,
-      "description": description
+      "description": description,
+      "status": status,
     }..removeWhere((key, value) => value == null || value.toString().isEmpty));
 
     final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');

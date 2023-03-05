@@ -104,34 +104,43 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Product> updateProduct(String token, String productId,
-      {String? name,
-      List<File>? newImages,
-      List<String>? oldImages,
-      int? price,
-      int? stock,
-      String? sku,
-      String? description,
-      String? categoryId}) async {
+  Future<Product> updateProduct(
+    String token,
+    String productId, {
+    String? name,
+    List<File>? newImages,
+    List<String>? oldImages,
+    int? price,
+    int? stock,
+    String? sku,
+    String? description,
+    String? categoryId,
+    bool? active,
+  }) async {
     try {
-      List<String> imageUrls = [...?oldImages];
+      List<String>? imageUrls = oldImages == null ? null : [...oldImages];
 
       if (newImages != null && newImages.isNotEmpty) {
         for (int i = 0; i < newImages.length; i++) {
           final imageUrl = await remoteStorageService.uploadImage(newImages[i]);
 
-          imageUrls.add(imageUrl);
+          imageUrls?.add(imageUrl);
         }
       }
+      print(imageUrls);
 
-      final result = await remoteDataSource.updateProduct(token, productId,
-          name: name,
-          images: imageUrls,
-          price: price,
-          stock: stock,
-          sku: sku,
-          description: description,
-          categoryId: categoryId);
+      final result = await remoteDataSource.updateProduct(
+        token,
+        productId,
+        name: name,
+        images: imageUrls,
+        price: price,
+        stock: stock,
+        sku: sku,
+        description: description,
+        categoryId: categoryId,
+        active: active,
+      );
 
       return result.toEntity();
     } catch (e) {

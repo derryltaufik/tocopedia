@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
 class EditProductActionButtons extends StatelessWidget {
@@ -40,6 +41,25 @@ class EditProductActionButtons extends StatelessWidget {
     }
   }
 
+  Future<void> changePrice(BuildContext context) async {
+    final price = await showModalBottomSheet<int>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) =>
+          ChangePriceBottomSheet(initialPrice: product.price!),
+    );
+
+    if (price != null) {
+      if (context.mounted) {
+        handleFutureFunction(context,
+            loadingMessage: "Updating price...",
+            successMessage: "Price updated",
+            function: Provider.of<ProductProvider>(context, listen: false)
+                .updateProduct(product.id!, price: price));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -49,7 +69,7 @@ class EditProductActionButtons extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     minimumSize: Size.zero),
-                onPressed: () {},
+                onPressed: () => changePrice(context),
                 child: Text("Change Price"))),
         SizedBox(width: 10),
         Expanded(
@@ -63,6 +83,72 @@ class EditProductActionButtons extends StatelessWidget {
             onPressed: () => delete(context),
             icon: Icon(Icons.delete_outline_rounded)),
       ],
+    );
+  }
+}
+
+class ChangePriceBottomSheet extends StatefulWidget {
+  final int initialPrice;
+
+  const ChangePriceBottomSheet({Key? key, required this.initialPrice})
+      : super(key: key);
+
+  @override
+  State<ChangePriceBottomSheet> createState() => _ChangePriceBottomSheetState();
+}
+
+class _ChangePriceBottomSheetState extends State<ChangePriceBottomSheet> {
+  final _priceController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _priceController.text =
+        RupiahInputFormatter().format(widget.initialPrice.toString());
+  }
+
+  @override
+  void dispose() {
+    _priceController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0)
+          .copyWith(bottom: MediaQuery.of(context).viewInsets.bottom + 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Icon(Icons.close_rounded)),
+              Text("Modify Price", style: theme.textTheme.titleMedium),
+            ],
+          ),
+          SizedBox(height: 10),
+          CustomTextField.rupiah(
+            controller: _priceController,
+            autoFocus: true,
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: () =>
+                      Navigator.of(context).pop(_priceController.getInt()),
+                  child: Text("Save"),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

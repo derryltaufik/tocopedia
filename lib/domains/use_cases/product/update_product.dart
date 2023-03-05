@@ -7,6 +7,7 @@ class UpdateProduct {
   final ProductRepository repository;
 
   UpdateProduct(this.repository);
+
   Future<Product> execute(
     String token,
     String productId, {
@@ -18,6 +19,7 @@ class UpdateProduct {
     String? sku,
     String? description,
     String? categoryId,
+    bool? active,
   }) {
     return repository.updateProduct(
       token,
@@ -30,6 +32,7 @@ class UpdateProduct {
       categoryId: categoryId,
       stock: stock,
       sku: sku,
+      active: active,
     );
   }
 }

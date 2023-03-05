@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final int? minLength;
   final int? maxLength;
   final int? maxLines;
+  final bool autoFocus;
   final List<TextInputFormatter> inputFormatters;
 
   const CustomTextField({
@@ -23,16 +24,19 @@ class CustomTextField extends StatelessWidget {
     this.prefixText = "",
     this.hintText = "",
     this.helperText = "",
+    this.autoFocus = false,
     this.maxLines = 1,
     this.inputFormatters = const [],
     this.keyboardInputType = TextInputType.text,
   });
 
-  factory CustomTextField.rupiah(
-      {required TextEditingController controller,
-      String labelText = "",
-      String hintText = "",
-      String helperText = ""}) {
+  factory CustomTextField.rupiah({
+    required TextEditingController controller,
+    String labelText = "",
+    String hintText = "",
+    String helperText = "",
+    bool autoFocus = false,
+  }) {
     return CustomTextField(
       controller: controller,
       prefixText: "Rp",
@@ -41,6 +45,7 @@ class CustomTextField extends StatelessWidget {
       helperText: helperText,
       hintText: hintText,
       minLength: 1,
+      autoFocus: autoFocus,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(10),
@@ -53,6 +58,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isMultiline = maxLines != 1;
     return TextFormField(
+      autofocus: autoFocus,
       controller: controller,
       keyboardType: keyboardInputType,
       inputFormatters: inputFormatters,
