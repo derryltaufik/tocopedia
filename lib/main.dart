@@ -10,6 +10,7 @@ import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
+import 'package:tocopedia/presentation/providers/review_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 
@@ -79,6 +80,11 @@ class MyApp extends StatelessWidget {
           update: (_, value, previousAddressProvider) =>
               di.locator<AddressProvider>(param1: value.user?.token)
                 ..addressesList = previousAddressProvider?.addressesList,
+        ),
+        ChangeNotifierProxyProvider<UserProvider, ReviewProvider>(
+          create: (_) => di.locator<ReviewProvider>(),
+          update: (_, value, previousAddressProvider) =>
+              di.locator<ReviewProvider>(param1: value.user?.token),
         ),
       ],
       child: Consumer2<UserProvider, LocalSettingsProvider>(

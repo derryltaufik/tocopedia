@@ -86,7 +86,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
       children: [
         Text(orderItem.seller!.name!, style: theme.textTheme.titleMedium),
         SizedBox(height: 10),
-        ...orderItem.products!
+        ...orderItem.orderItemDetails!
             .map((product) => _buildProductTile(product, theme))
             .toList(),
         SizedBox(height: 15),

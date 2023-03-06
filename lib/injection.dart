@@ -7,6 +7,7 @@ import 'package:tocopedia/data/data_sources/order_item_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/order_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/remote_storage_service.dart';
+import 'package:tocopedia/data/data_sources/review_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/wishlist_remote_data_source.dart';
@@ -16,6 +17,7 @@ import 'package:tocopedia/data/repositories/category_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_item_repository_impl.dart';
 import 'package:tocopedia/data/repositories/order_repository_impl.dart';
 import 'package:tocopedia/data/repositories/product_repository_impl.dart';
+import 'package:tocopedia/data/repositories/review_repository_impl.dart';
 import 'package:tocopedia/data/repositories/user_repository_impl.dart';
 import 'package:tocopedia/data/repositories/wishlist_repository_impl.dart';
 import 'package:tocopedia/domains/repositories/address_repository.dart';
@@ -24,6 +26,7 @@ import 'package:tocopedia/domains/repositories/category_repository.dart';
 import 'package:tocopedia/domains/repositories/order_item_repository.dart';
 import 'package:tocopedia/domains/repositories/order_repository.dart';
 import 'package:tocopedia/domains/repositories/product_repository.dart';
+import 'package:tocopedia/domains/repositories/review_repository.dart';
 import 'package:tocopedia/domains/repositories/user_repository.dart';
 import 'package:tocopedia/domains/repositories/wishlist_repository.dart';
 import 'package:tocopedia/domains/use_cases/address/add_address.dart';
@@ -61,6 +64,9 @@ import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_user_products.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/domains/use_cases/product/update_product.dart';
+import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
+import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
+import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
 import 'package:tocopedia/domains/use_cases/user/get_user.dart';
 import 'package:tocopedia/domains/use_cases/user/login.dart';
@@ -77,6 +83,7 @@ import 'package:tocopedia/presentation/providers/cart_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
+import 'package:tocopedia/presentation/providers/review_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 
@@ -105,6 +112,8 @@ void init() {
       () => WishlistRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<RemoteStorageService>(
       () => RemoteStorageServiceImpl());
+  locator.registerLazySingleton<ReviewRemoteDataSource>(
+      () => ReviewRemoteDataSourceImpl(client: locator()));
 
   locator.registerLazySingleton<UserRepository>(
     () => UserRepositoryImpl(
@@ -145,6 +154,11 @@ void init() {
   );
   locator.registerLazySingleton<WishlistRepository>(
     () => WishlistRepositoryImpl(
+      remoteDataSource: locator(),
+    ),
+  );
+  locator.registerLazySingleton<ReviewRepository>(
+    () => ReviewRepositoryImpl(
       remoteDataSource: locator(),
     ),
   );
@@ -202,6 +216,10 @@ void init() {
   locator.registerLazySingleton(() => GetWishlist(locator()));
   locator.registerLazySingleton(() => AddWishlist(locator()));
   locator.registerLazySingleton(() => DeleteWishlist(locator()));
+
+  locator.registerLazySingleton(() => GetBuyerReviews(locator()));
+  locator.registerLazySingleton(() => GetSellerReviews(locator()));
+  locator.registerLazySingleton(() => GetProductReviews(locator()));
 
   locator.registerFactory(
     () => UserProvider(
@@ -291,6 +309,15 @@ void init() {
       addWishlist: locator(),
       deleteWishlist: locator(),
       getWishlist: locator(),
+      authToken: param1,
+    ),
+  );
+
+  locator.registerFactoryParam(
+    (String? param1, _) => ReviewProvider(
+      getBuyerReviews: locator(),
+      getProductReviews: locator(),
+      getSellerReviews: locator(),
       authToken: param1,
     ),
   );

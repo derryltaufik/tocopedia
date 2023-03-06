@@ -3,6 +3,7 @@ import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/transaction_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 import 'package:tocopedia/presentation/pages/features/wishlist/wishlist_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/buyer_reviews_page.dart';
 
 class BuyerNavBar extends StatefulWidget {
   const BuyerNavBar({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _BuyerNavBarState extends State<BuyerNavBar> {
     HomePage(),
     WishListPage(),
     TransactionPage(),
+    BuyerReviewsPage(),
     UserPage(),
   ];
 
@@ -49,6 +51,11 @@ class _BuyerNavBarState extends State<BuyerNavBar> {
             icon: Icon(Icons.receipt_long_rounded),
             selectedIcon: Icon(Icons.receipt_rounded),
             label: 'Transactions',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.star_border_rounded),
+            selectedIcon: Icon(Icons.star_rounded),
+            label: 'Reviews',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline_rounded),

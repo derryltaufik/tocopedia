@@ -53,7 +53,7 @@ class SingleOrderItemCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                        imageUrl: orderItem.products![0].productImage!,
+                        imageUrl: orderItem.orderItemDetails![0].productImage!,
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover),
@@ -64,13 +64,13 @@ class SingleOrderItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          orderItem.products![0].productName!,
+                          orderItem.orderItemDetails![0].productName!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleMedium,
                         ),
                         Text(
-                          "${orderItem.products![0].quantity!} item(s)",
+                          "${orderItem.orderItemDetails![0].quantity!} item(s)",
                           style: theme.textTheme.bodyMedium!
                               .copyWith(color: Colors.black54),
                         ),
@@ -80,8 +80,8 @@ class SingleOrderItemCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              if (orderItem.products!.length > 1) ...[
-                Text("+ ${orderItem.products!.length - 1} other product(s)"),
+              if (orderItem.orderItemDetails!.length > 1) ...[
+                Text("+ ${orderItem.orderItemDetails!.length - 1} other product(s)"),
                 SizedBox(height: 10),
               ],
               Column(

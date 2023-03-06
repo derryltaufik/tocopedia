@@ -252,9 +252,9 @@ class ProductDetailsSection extends StatelessWidget {
           separatorBuilder: (context, index) => SizedBox(height: 5),
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: orderItem.products!.length,
+          itemCount: orderItem.orderItemDetails!.length,
           itemBuilder: (context, index) {
-            final orderItemDetail = orderItem.products![index];
+            final orderItemDetail = orderItem.orderItemDetails![index];
             return SingleOrderItemDetailCard(orderItemDetail: orderItemDetail);
           },
         )

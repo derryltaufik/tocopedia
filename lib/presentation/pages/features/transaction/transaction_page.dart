@@ -30,43 +30,37 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CartButtonAppBar(title: "Transactions 🧾"),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<OrderItemProvider>(
-              builder: (context, orderItemProvider, child) {
-                if (orderItemProvider.getBuyerOrderItemsState ==
-                    ProviderState.loading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (orderItemProvider.getBuyerOrderItemsState ==
-                    ProviderState.error) {
-                  return Center(child: Text(orderItemProvider.message));
-                }
+      body: Consumer<OrderItemProvider>(
+        builder: (context, orderItemProvider, child) {
+          if (orderItemProvider.getBuyerOrderItemsState ==
+              ProviderState.loading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (orderItemProvider.getBuyerOrderItemsState ==
+              ProviderState.error) {
+            return Center(child: Text(orderItemProvider.message));
+          }
 
-                final orderItems = orderItemProvider.buyerOrderItemList;
+          final orderItems = orderItemProvider.buyerOrderItemList;
 
-                if (orderItems?.isEmpty ?? true) {
-                  return Center(child: Text("You don't have any order yet."));
-                }
+          if (orderItems?.isEmpty ?? true) {
+            return Center(child: Text("You don't have any order yet."));
+          }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => SizedBox(height: 5),
-                    itemCount: orderItems!.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) return WaitingPaymentCard();
-                      index--;
-                      final OrderItem orderItem = orderItems[index];
-                      return SingleOrderItemCard(orderItem: orderItem);
-                    },
-                  ),
-                );
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(height: 5),
+              itemCount: orderItems!.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) return WaitingPaymentCard();
+                index--;
+                final OrderItem orderItem = orderItems[index];
+                return SingleOrderItemCard(orderItem: orderItem);
               },
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
