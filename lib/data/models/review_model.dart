@@ -20,6 +20,7 @@ class ReviewModel {
     this.updatedAt,
     this.productName,
     this.productImage,
+    this.review,
     this.v,
     this.rating,
   });
@@ -37,6 +38,7 @@ class ReviewModel {
   final DateTime? updatedAt;
   final String? productName;
   final String? productImage;
+  final String? review;
   final int? v;
   final int? rating;
 
@@ -53,6 +55,7 @@ class ReviewModel {
       rating: rating,
       seller: seller?.toEntity(),
       totalUpdate: totalUpdate,
+      review: review,
       images: images,
       createdAt: createdAt,
       updatedAt: updatedAt,
@@ -74,6 +77,7 @@ class ReviewModel {
     DateTime? updatedAt,
     String? productName,
     String? productImage,
+    String? review,
     int? v,
     int? rating,
   }) =>
@@ -84,6 +88,7 @@ class ReviewModel {
         buyer: buyer ?? this.buyer,
         product: product ?? this.product,
         images: images ?? this.images,
+        review: review ?? this.review,
         anonymous: anonymous ?? this.anonymous,
         completed: completed ?? this.completed,
         totalUpdate: totalUpdate ?? this.totalUpdate,
@@ -123,6 +128,7 @@ class ReviewModel {
         updatedAt: json["updatedAt"] == null
             ? null
             : DateTime.parse(json["updatedAt"]),
+        review: json["review"],
         productName: json["product_name"],
         productImage: json["product_image"],
         v: json["__v"],
@@ -142,6 +148,7 @@ class ReviewModel {
         "total_update": totalUpdate,
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
+        "review": review,
         "product_name": productName,
         "product_image": productImage,
         "__v": v,
@@ -150,6 +157,6 @@ class ReviewModel {
 
   @override
   String toString() {
-    return 'Review{id: $id, orderItemDetail: $orderItemDetail, seller: $seller, buyer: $buyer, product: $product, images: $images, anonymous: $anonymous, completed: $completed, totalUpdate: $totalUpdate, createdAt: $createdAt, updatedAt: $updatedAt, productName: $productName, productImage: $productImage, v: $v, rating: $rating}';
+    return 'Review{id: $id, orderItemDetail: $orderItemDetail, seller: $seller, buyer: $buyer, product: $product, images: $images, anonymous: $anonymous, completed: $completed, totalUpdate: $totalUpdate, createdAt: $createdAt, updatedAt: $updatedAt, productName: $productName, productImage: $productImage, v: $v, rating: $rating, review: $review}';
   }
 }

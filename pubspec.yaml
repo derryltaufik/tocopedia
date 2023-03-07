@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^0.8.6+4
   image_cropper: ^3.0.1
   cloudinary_public: ^0.20.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

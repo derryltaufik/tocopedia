@@ -20,7 +20,9 @@ import 'package:tocopedia/routing.dart';
 
 //TODO implement timeout on every http request
 // TODO use dartz Either for exception handling if necessary
-//TODO https://stackoverflow.com/questions/55879550/how-to-fix-httpexception-connection-closed-before-full-header-was-received
+// TODO implement shimmer loading for better UX
+// TODO implement lazy loading (front end) & pagination (backend)
+// TODO https://stackoverflow.com/questions/55879550/how-to-fix-httpexception-connection-closed-before-full-header-was-received
 
 void main() {
   di.init();

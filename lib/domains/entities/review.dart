@@ -17,6 +17,7 @@ class Review {
     this.updatedAt,
     this.productName,
     this.productImage,
+    this.review,
     this.v,
     this.rating,
   });
@@ -34,6 +35,7 @@ class Review {
   final DateTime? updatedAt;
   final String? productName;
   final String? productImage;
+  final String? review;
   final int? v;
   final int? rating;
 }
