@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:tocopedia/presentation/helper_variables/constants.dart';
 import 'package:tocopedia/domains/entities/review.dart';
-
 import 'package:tocopedia/presentation/helper_variables/check_overflow_text.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/photos_horizontal_listview.dart';
 
 class ProductReviewTile extends StatefulWidget {
   final Review review;
@@ -17,7 +16,6 @@ class ProductReviewTile extends StatefulWidget {
 }
 
 class _ProductReviewTileState extends State<ProductReviewTile> {
-
   bool isExpanded = false;
 
   @override
@@ -40,7 +38,8 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
               ),
             ),
             SizedBox(width: 5),
-            Text("${widget.review.buyer?.name}", style: theme.textTheme.titleSmall),
+            Text("${widget.review.buyer?.name}",
+                style: theme.textTheme.titleSmall),
           ],
         ),
         Row(
@@ -89,8 +88,9 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
         ),
         // show "see more" button if text overflow
         LayoutBuilder(builder: (_, BoxConstraints constraints) {
-          if (widget.review.review != null && isTextOverflow(widget.review.review!, theme.textTheme.bodyLarge!,
-              maxLines: 3, maxWidth: constraints.maxWidth)) {
+          if (widget.review.review != null &&
+              isTextOverflow(widget.review.review!, theme.textTheme.bodyLarge!,
+                  maxLines: 3, maxWidth: constraints.maxWidth)) {
             return GestureDetector(
               onTap: () => setState(() => isExpanded = !isExpanded),
               child: Text(
@@ -104,30 +104,7 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
         }),
 
         if (widget.review.images != null && widget.review.images!.isNotEmpty)
-          SizedBox(
-            height: 100,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.review.images!.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 75,
-                  height: 75,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.black12,
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.review.images![index],
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            ),
-          )
+          PhotosHorizontalListView(images: widget.review.images!)
       ],
     );
   }

@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:tocopedia/presentation/helper_variables/constants.dart';
 import 'package:tocopedia/domains/entities/review.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/photos_horizontal_listview.dart';
 
 class HistoryReviewTile extends StatelessWidget {
   final Review review;
@@ -54,30 +54,7 @@ class HistoryReviewTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
           if (review.images != null && review.images!.isNotEmpty)
-            SizedBox(
-              height: 100,
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                scrollDirection: Axis.horizontal,
-                itemCount: review.images!.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 75,
-                    height: 75,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12,
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: review.images![index],
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
-              ),
-            )
+            PhotosHorizontalListView(images: review.images!)
         ],
       ),
     );
