@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/cart_item.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/checkout_item_detail_tile.dart';
 

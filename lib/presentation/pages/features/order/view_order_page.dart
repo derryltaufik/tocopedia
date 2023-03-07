@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/domains/entities/order.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';

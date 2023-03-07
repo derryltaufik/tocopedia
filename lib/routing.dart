@@ -12,6 +12,7 @@ import 'package:tocopedia/presentation/pages/features/order/view_all_orders_page
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/product_reviews_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
@@ -76,13 +77,20 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case SellerEditProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => SellerEditProductPage(product: routeSettings.arguments as Product),
+        builder: (context) =>
+            SellerEditProductPage(product: routeSettings.arguments as Product),
       );
     case ViewProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (context) =>
             ViewProductPage(productId: routeSettings.arguments as String),
+      );
+    case ProductReviewsPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            ProductReviewsPage(product: routeSettings.arguments as Product),
       );
     case CartPage.routeName:
       return MaterialPageRoute(
@@ -112,6 +120,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (context) =>
             ViewOrderItemPage(orderItemId: routeSettings.arguments as String),
       );
+
     default:
       return MaterialPageRoute(
         builder: (context) => const Scaffold(

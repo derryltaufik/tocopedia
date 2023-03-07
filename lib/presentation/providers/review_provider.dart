@@ -71,6 +71,25 @@ class ReviewProvider with ChangeNotifier {
     }
   }
 
+  Future<void> getProductReviews(String productId) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      _getProductReviewsState = ProviderState.loading;
+      notifyListeners();
+
+      final reviews = await _getProductReviews.execute(productId);
+
+      _productReviews = reviews;
+      _getProductReviewsState = ProviderState.loaded;
+      notifyListeners();
+    } catch (e) {
+      _message = e.toString();
+      _getProductReviewsState = ProviderState.error;
+      notifyListeners();
+    }
+  }
+
   bool _verifyToken() {
     return (_authToken != null && _authToken!.isNotEmpty);
   }
