@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import 'images_gallery_page.dart';
+
 class PhotosHorizontalListView extends StatelessWidget {
   const PhotosHorizontalListView({
     super.key,
@@ -49,19 +51,26 @@ class PhotosHorizontalListView extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           return Center(
-            child: Container(
-              width: size,
-              height: size,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black12,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                ImagesGalleryPage.routeName,
+                arguments: ImagesGalleryPageArguments(
+                    images: images, startingIndex: index),
               ),
-              child: CachedNetworkImage(
-                imageUrl: images[index],
-                fit: BoxFit.cover,
-                height: size,
+              child: Container(
                 width: size,
+                height: size,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black12,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: images[index],
+                  fit: BoxFit.cover,
+                  height: size,
+                  width: size,
+                ),
               ),
             ),
           );

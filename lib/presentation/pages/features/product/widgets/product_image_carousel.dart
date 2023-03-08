@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/images_gallery_page.dart';
 
 class ProductImageCarousel extends StatefulWidget {
   final List<String> images;
@@ -23,12 +24,18 @@ class _ProductImagePreviewState extends State<ProductImageCarousel> {
         CarouselSlider.builder(
           itemCount: widget.images.length,
           itemBuilder: (context, index, realIndex) {
-            return CachedNetworkImage(
-              imageUrl: widget.images[index],
-              progressIndicatorBuilder: (_, __, downloadProgress) => Center(
-                  child: CircularProgressIndicator(
-                      value: downloadProgress.progress)),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+            return GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                  ImagesGalleryPage.routeName,
+                  arguments: ImagesGalleryPageArguments(
+                      images: widget.images, startingIndex: index)),
+              child: CachedNetworkImage(
+                imageUrl: widget.images[index],
+                progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
             );
           },
           options: CarouselOptions(

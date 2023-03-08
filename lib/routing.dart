@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/images_gallery_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/add_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/edit_address_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
@@ -120,7 +121,17 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (context) =>
             ViewOrderItemPage(orderItemId: routeSettings.arguments as String),
       );
-
+    case ImagesGalleryPage.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (context) {
+            final ImagesGalleryPageArguments args =
+                routeSettings.arguments as ImagesGalleryPageArguments;
+            return ImagesGalleryPage(
+              images: args.images,
+              startingIndex: args.startingIndex ?? 0,
+            );
+          });
     default:
       return MaterialPageRoute(
         builder: (context) => const Scaffold(

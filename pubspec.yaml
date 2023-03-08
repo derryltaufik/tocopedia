@@ -47,6 +47,7 @@ dependencies:
   image_cropper: ^3.0.1
   cloudinary_public: ^0.20.0
   flutter_rating_bar: ^4.0.1
+  photo_view: ^0.14.0
 #  relative_time: ^3.0.0
 
 dev_dependencies:
