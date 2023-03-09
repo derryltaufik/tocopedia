@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/review.dart';
+import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ReviewProvider with ChangeNotifier {
-  // final AddReview _addReview;
+  final AddReview _addReview;
+
   // final UpdateReview _updateReview;
   final GetBuyerReviews _getBuyerReviews;
   final GetSellerReviews _getSellerReviews;
@@ -34,10 +37,12 @@ class ReviewProvider with ChangeNotifier {
     required GetProductReviews getProductReviews,
     required GetSellerReviews getSellerReviews,
     required GetBuyerReviews getBuyerReviews,
+    required AddReview addReview,
     required String? authToken,
   })  : _getProductReviews = getProductReviews,
         _getSellerReviews = getSellerReviews,
         _getBuyerReviews = getBuyerReviews,
+        _addReview = addReview,
         _authToken = authToken;
 
   ProviderState _getBuyerReviewsState = ProviderState.empty;
@@ -87,6 +92,32 @@ class ReviewProvider with ChangeNotifier {
       _message = e.toString();
       _getProductReviewsState = ProviderState.error;
       notifyListeners();
+    }
+  }
+
+  Future<Review> addReview(
+    String orderItemDetailId, {
+    required int rating,
+    List<File>? images,
+    String? review,
+    bool? anonymous,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      final newReview = await _addReview.execute(
+        _authToken!,
+        orderItemDetailId,
+        rating: rating,
+        review: review,
+        images: images,
+        anonymous: anonymous,
+      );
+
+      getBuyerReviews();
+      return newReview;
+    } catch (e) {
+      rethrow;
     }
   }
 

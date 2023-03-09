@@ -4,10 +4,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/review.dart';
 import 'package:tocopedia/presentation/helper_variables/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/helper_variables/rating_decoration_enum.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/images/pick_image_gridview.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/images/pick_image_provider.dart';
+import 'package:tocopedia/presentation/providers/review_provider.dart';
 
 class AddReviewPageArguments {
   final int initialRating;
@@ -50,18 +52,27 @@ class _AddReviewPageState extends State<AddReviewPage> {
     super.dispose();
   }
 
-  void submit(BuildContext context) {
+  Future<void> submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final images =
           Provider.of<PickImageProvider>(context, listen: false).newImages;
-      print(images);
-      print(_anonymous);
-      print(_rating);
-      print(_reviewController.text);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
+      final addImageFunction =
+          Provider.of<ReviewProvider>(context, listen: false).addReview(
+              widget.review.orderItemDetail!.id!,
+              rating: _rating,
+              anonymous: _anonymous,
+              images: images,
+              review: _reviewController.text);
+      final review = await handleFutureFunction(
+        context,
+        loadingMessage: "Uploading review...",
+        successMessage: "Review added successfully",
+        function: addImageFunction,
       );
+      if (review != null && context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 

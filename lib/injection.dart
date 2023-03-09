@@ -64,6 +64,7 @@ import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/domains/use_cases/product/get_user_products.dart';
 import 'package:tocopedia/domains/use_cases/product/search_product.dart';
 import 'package:tocopedia/domains/use_cases/product/update_product.dart';
+import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
@@ -160,6 +161,7 @@ void init() {
   locator.registerLazySingleton<ReviewRepository>(
     () => ReviewRepositoryImpl(
       remoteDataSource: locator(),
+      remoteStorageService: locator(),
     ),
   );
 
@@ -220,6 +222,7 @@ void init() {
   locator.registerLazySingleton(() => GetBuyerReviews(locator()));
   locator.registerLazySingleton(() => GetSellerReviews(locator()));
   locator.registerLazySingleton(() => GetProductReviews(locator()));
+  locator.registerLazySingleton(() => AddReview(locator()));
 
   locator.registerFactory(
     () => UserProvider(
@@ -318,6 +321,7 @@ void init() {
       getBuyerReviews: locator(),
       getProductReviews: locator(),
       getSellerReviews: locator(),
+      addReview: locator(),
       authToken: param1,
     ),
   );

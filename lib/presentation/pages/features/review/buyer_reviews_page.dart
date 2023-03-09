@@ -63,9 +63,15 @@ class _BuyerReviewsPageState extends State<BuyerReviewsPage>
           if (_tabController.index == 0) {
             filteredReviews
                 .removeWhere((element) => element.completed! == true);
+            if (filteredReviews.isEmpty) {
+              return Center(child: Text("You don't have pending review"));
+            }
           } else {
             filteredReviews
                 .removeWhere((element) => element.completed! == false);
+            if (filteredReviews.isEmpty) {
+              return Center(child: Text("You haven't reviewed any product"));
+            }
           }
 
           return _tabController.index == 0
@@ -74,14 +80,14 @@ class _BuyerReviewsPageState extends State<BuyerReviewsPage>
                   separatorBuilder: (context, index) => SizedBox(height: 5),
                   itemCount: filteredReviews.length,
                   itemBuilder: (context, index) {
-                    final review = filteredReviews[0];
+                    final review = filteredReviews[index];
                     return PendingReviewTile(review: review);
                   },
                 )
               : ListView.builder(
                   itemCount: filteredReviews.length,
                   itemBuilder: (context, index) {
-                    final review = filteredReviews[0];
+                    final review = filteredReviews[index];
                     return Column(
                       children: [
                         Padding(

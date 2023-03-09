@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:tocopedia/domains/entities/review.dart';
 
 abstract class ReviewRepository {
   Future<Review> addReview(
     String token,
-    String orderItemId, {
+    String orderItemDetailId, {
     required int rating,
-    List<String>? images,
+    List<File>? images,
     String? review,
     bool? anonymous,
   });
