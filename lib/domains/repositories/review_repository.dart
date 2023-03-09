@@ -27,4 +27,6 @@ abstract class ReviewRepository {
   Future<List<Review>> getSellerReviews(String sellerId);
 
   Future<List<Review>> getBuyerReviews(String token);
+
+  Future<Review> getReview(String reviewId);
 }

@@ -37,6 +37,16 @@ class _EditReviewPageState extends State<EditReviewPage> {
     _rating = widget.review.rating!;
     _anonymous = widget.review.anonymous ?? false;
     _reviewController.text = widget.review.review ?? "";
+
+    Future.microtask(() {
+      Provider.of<ReviewProvider>(context, listen: false)
+          .getReview(widget.review.id!)
+          .then(
+            (value) => value == null
+                ? null
+                : setState(() => _reviewController.text = value.review ?? ""),
+          );
+    });
   }
 
   @override

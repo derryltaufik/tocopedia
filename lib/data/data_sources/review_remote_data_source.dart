@@ -31,6 +31,10 @@ abstract class ReviewRemoteDataSource {
     String? review,
     bool? anonymous,
   });
+
+  Future<ReviewModel> getReview(
+    String reviewId,
+  );
 }
 
 class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
@@ -155,6 +159,25 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
     if (response.statusCode ~/ 100 == 2) {
       return List<ReviewModel>.from(
           responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+    }
+
+    throw ServerException(responseBody["error"].toString());
+  }
+
+  @override
+  Future<ReviewModel> getReview(String reviewId) async {
+    final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+
+    final response = await client.get(
+      url,
+      headers: defaultHeader,
+    );
+
+    final responseBody = json.decode(response.body);
+
+    if (response.statusCode ~/ 100 == 2) {
+      return ReviewModel.fromMap(responseBody["data"]["review"]);
+
     }
 
     throw ServerException(responseBody["error"].toString());

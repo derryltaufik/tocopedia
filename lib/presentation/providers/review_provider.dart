@@ -6,6 +6,7 @@ import 'package:tocopedia/domains/entities/review.dart';
 import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
+import 'package:tocopedia/domains/use_cases/review/get_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/update_review.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
@@ -16,8 +17,13 @@ class ReviewProvider with ChangeNotifier {
   final GetBuyerReviews _getBuyerReviews;
   final GetSellerReviews _getSellerReviews;
   final GetProductReviews _getProductReviews;
+  final GetReview _getReview;
 
   final String? _authToken;
+
+  Review? _review;
+
+  Review? get review => _review;
 
   List<Review>? _buyerReviews;
   List<Review>? _sellerReviews;
@@ -39,12 +45,14 @@ class ReviewProvider with ChangeNotifier {
     required GetBuyerReviews getBuyerReviews,
     required AddReview addReview,
     required UpdateReview updateReview,
+    required GetReview getReview,
     required String? authToken,
   })  : _getProductReviews = getProductReviews,
         _getSellerReviews = getSellerReviews,
         _getBuyerReviews = getBuyerReviews,
         _addReview = addReview,
         _updateReview = updateReview,
+        _getReview = getReview,
         _authToken = authToken;
 
   ProviderState _getBuyerReviewsState = ProviderState.empty;
@@ -58,6 +66,10 @@ class ReviewProvider with ChangeNotifier {
   ProviderState _getProductReviewsState = ProviderState.empty;
 
   ProviderState get getProductReviewsState => _getProductReviewsState;
+
+  ProviderState _getReviewState = ProviderState.empty;
+
+  ProviderState get getReviewState => _getReviewState;
 
   Future<void> getBuyerReviews() async {
     try {
@@ -148,6 +160,24 @@ class ReviewProvider with ChangeNotifier {
       return updatedReview;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<Review?> getReview(String id) async {
+    try {
+      _getReviewState = ProviderState.loading;
+      notifyListeners();
+
+      final review = await _getReview.execute(id);
+      _review = review;
+      _getReviewState = ProviderState.loaded;
+      notifyListeners();
+      return review;
+    } catch (e) {
+      _message = e.toString();
+      _getReviewState = ProviderState.error;
+      notifyListeners();
+      return null;
     }
   }
 

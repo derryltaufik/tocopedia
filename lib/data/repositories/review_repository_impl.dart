@@ -102,4 +102,15 @@ class ReviewRepositoryImpl implements ReviewRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<Review> getReview(String reviewId) async {
+    try {
+      final result = await remoteDataSource.getReview(reviewId);
+
+      return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
