@@ -13,6 +13,7 @@ import 'package:tocopedia/presentation/pages/features/order/view_all_orders_page
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/add_review_page.dart';
 import 'package:tocopedia/presentation/pages/features/review/product_reviews_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
@@ -54,16 +55,17 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       );
     case EditAddressPage.routeName:
       return MaterialPageRoute(
-          settings: routeSettings,
-          builder: (context) {
-            EditAddressPageArguments arguments =
-                routeSettings.arguments as EditAddressPageArguments;
+        settings: routeSettings,
+        builder: (context) {
+          EditAddressPageArguments arguments =
+              routeSettings.arguments as EditAddressPageArguments;
 
-            return EditAddressPage(
-              address: arguments.address,
-              isDefault: arguments.isDefault,
-            );
-          });
+          return EditAddressPage(
+            address: arguments.address,
+            isDefault: arguments.isDefault,
+          );
+        },
+      );
     case SearchProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
@@ -73,7 +75,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case SellerAddProductPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => SellerAddProductPage(),
+        builder: (context) => const SellerAddProductPage(),
       );
     case SellerEditProductPage.routeName:
       return MaterialPageRoute(
@@ -93,15 +95,28 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (context) =>
             ProductReviewsPage(product: routeSettings.arguments as Product),
       );
+    case AddReviewPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) {
+          AddReviewPageArguments arguments =
+              routeSettings.arguments as AddReviewPageArguments;
+
+          return AddReviewPage(
+            review: arguments.review,
+            initialRating: arguments.initialRating,
+          );
+        },
+      );
     case CartPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => CartPage(),
+        builder: (context) => const CartPage(),
       );
     case CheckoutPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => CheckoutPage(),
+        builder: (context) => const CheckoutPage(),
       );
     case ViewOrderPage.routeName:
       return MaterialPageRoute(
@@ -112,7 +127,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case ViewAllOrdersPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => ViewAllOrdersPage(),
+        builder: (context) => const ViewAllOrdersPage(),
       );
 
     case ViewOrderItemPage.routeName:

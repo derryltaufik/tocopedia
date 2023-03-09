@@ -90,11 +90,43 @@ class CustomTextField extends StatelessWidget {
               ),
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         labelText: labelText,
-        hintText: hintText,
+        hintText: (hintText),
         helperText: helperText,
       ),
     );
   }
+}
+
+class CheckboxFormField extends FormField<bool> {
+  CheckboxFormField(
+      {super.key,
+      required Widget title,
+      required FormFieldSetter<bool> onSaved,
+      FormFieldValidator<bool>? validator,
+      bool initialValue = false,
+      bool autoValidate = false})
+      : super(
+          onSaved: onSaved,
+          validator: validator,
+          initialValue: initialValue,
+          builder: (FormFieldState<bool> state) {
+            return Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  child: Checkbox(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3)),
+                    value: state.value,
+                    onChanged: state.didChange,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                title,
+              ],
+            );
+          },
+        );
 }
 
 class RupiahTextField extends StatelessWidget {

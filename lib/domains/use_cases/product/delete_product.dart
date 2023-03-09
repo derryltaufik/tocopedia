@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/domains/repositories/product_repository.dart';
 

@@ -12,6 +12,7 @@ class ServerException implements Exception {
 }
 
 class ServerTimeoutException implements TimeoutException {
+  @override
   final Duration? duration;
 
   ServerTimeoutException(this.duration);

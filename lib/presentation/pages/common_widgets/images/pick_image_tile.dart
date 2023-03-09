@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/device/utils/image_helper.dart';
-import 'package:tocopedia/presentation/pages/features/seller_product/providers/pick_image_provider.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/pick_image_provider.dart';
 
 class PickImageTile extends StatelessWidget {
+  final double size;
   final int index;
-  final String label;
+  final String? label;
 
-  const PickImageTile({Key? key, required this.label, required this.index})
+  const PickImageTile(
+      {Key? key, this.label, required this.index, required this.size})
       : super(key: key);
 
   void pickImage(BuildContext context) async {
@@ -35,10 +37,10 @@ class PickImageTile extends StatelessWidget {
       final pickedImage = value.getImage(index);
       Widget? imageWidget;
       if (pickedImage == null) {
-        imageWidget = const Icon(
+        imageWidget = Icon(
           Icons.add_photo_alternate_outlined,
           color: Colors.black54,
-          size: 50,
+          size: size / 3,
         );
       } else if (pickedImage is File) {
         imageWidget = Image.file(pickedImage, fit: BoxFit.cover);
@@ -51,8 +53,8 @@ class PickImageTile extends StatelessWidget {
           GestureDetector(
             onTap: () => pickImage(context),
             child: Container(
-              width: 200,
-              height: 200,
+              width: size,
+              height: size,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -61,7 +63,7 @@ class PickImageTile extends StatelessWidget {
               child: imageWidget,
             ),
           ),
-          if (pickedImage != null)
+          if (pickedImage != null && label != null)
             Align(
               alignment: AlignmentDirectional.bottomStart,
               child: Container(
@@ -73,7 +75,7 @@ class PickImageTile extends StatelessWidget {
                       border: Border.all(color: Colors.white, width: 2),
                       borderRadius: BorderRadius.circular(15)),
                   child: Text(
-                    label,
+                    label!,
                     style: theme.textTheme.bodyMedium!
                         .copyWith(color: Colors.white),
                   )),

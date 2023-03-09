@@ -4,8 +4,8 @@ import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
-import 'package:tocopedia/presentation/pages/features/seller_product/providers/pick_image_provider.dart';
-import 'package:tocopedia/presentation/pages/features/seller_product/widgets/pick_image_gridview.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/pick_image_provider.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/images/pick_image_gridview.dart';
 import 'package:tocopedia/presentation/pages/features/seller_product/widgets/category_dropdown.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 

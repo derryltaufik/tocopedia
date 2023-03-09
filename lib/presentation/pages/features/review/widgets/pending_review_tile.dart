@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:tocopedia/presentation/helper_variables/constants.dart';
 import 'package:tocopedia/domains/entities/review.dart';
+import 'package:tocopedia/presentation/pages/features/review/add_review_page.dart';
 
 class PendingReviewTile extends StatelessWidget {
   final Review review;
@@ -49,7 +50,14 @@ class PendingReviewTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   RatingBar.builder(
-                    onRatingUpdate: (double value) {},
+                    onRatingUpdate: (double value) =>
+                        Navigator.of(context).pushNamed(
+                      AddReviewPage.routeName,
+                      arguments: AddReviewPageArguments(
+                        review: review,
+                        initialRating: value.toInt(),
+                      ),
+                    ),
                     glow: false,
                     itemBuilder: (_, __) => const Icon(Icons.star_rounded,
                         color: CustomColors.starColor),
