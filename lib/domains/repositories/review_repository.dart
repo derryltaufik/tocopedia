@@ -16,7 +16,8 @@ abstract class ReviewRepository {
     String token,
     String reviewId, {
     int? rating,
-    List<String>? images,
+    List<File>? newImages,
+    List<String>? oldImages,
     String? review,
     bool? anonymous,
   });

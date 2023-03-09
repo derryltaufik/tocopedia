@@ -72,9 +72,33 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
 
   @override
   Future<ReviewModel> updateReview(String token, String reviewId,
-      {int? rating, List<String>? images, String? review, bool? anonymous}) {
-    // TODO: implement updateReview
-    throw UnimplementedError();
+      {int? rating,
+      List<String>? images,
+      String? review,
+      bool? anonymous}) async {
+    final body = ({
+      "rating": rating,
+      "images": images ?? [],
+      "review": review,
+      "anonymous": anonymous,
+    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+
+    final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+
+    final response = await client.patch(
+      url,
+      headers: defaultHeader
+        ..addEntries({"Authorization": "Bearer $token"}.entries),
+      body: json.encode(body),
+    );
+
+    final responseBody = json.decode(response.body);
+
+    if (response.statusCode ~/ 100 == 2) {
+      return ReviewModel.fromMap(responseBody["data"]["review"]);
+    }
+
+    throw ServerException(responseBody["error"].toString());
   }
 
   @override

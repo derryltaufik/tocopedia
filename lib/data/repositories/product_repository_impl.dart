@@ -127,7 +127,6 @@ class ProductRepositoryImpl implements ProductRepository {
           imageUrls?.add(imageUrl);
         }
       }
-      print(imageUrls);
 
       final result = await remoteDataSource.updateProduct(
         token,

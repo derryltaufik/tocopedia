@@ -68,6 +68,7 @@ import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
+import 'package:tocopedia/domains/use_cases/review/update_review.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
 import 'package:tocopedia/domains/use_cases/user/get_user.dart';
 import 'package:tocopedia/domains/use_cases/user/login.dart';
@@ -223,6 +224,7 @@ void init() {
   locator.registerLazySingleton(() => GetSellerReviews(locator()));
   locator.registerLazySingleton(() => GetProductReviews(locator()));
   locator.registerLazySingleton(() => AddReview(locator()));
+  locator.registerLazySingleton(() => UpdateReview(locator()));
 
   locator.registerFactory(
     () => UserProvider(
@@ -322,6 +324,7 @@ void init() {
       getProductReviews: locator(),
       getSellerReviews: locator(),
       addReview: locator(),
+      updateReview: locator(),
       authToken: param1,
     ),
   );

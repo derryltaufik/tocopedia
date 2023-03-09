@@ -39,9 +39,35 @@ class ReviewRepositoryImpl implements ReviewRepository {
 
   @override
   Future<Review> updateReview(String token, String reviewId,
-      {int? rating, List<String>? images, String? review, bool? anonymous}) {
-    // TODO: implement updateReview
-    throw UnimplementedError();
+      {int? rating,
+      List<File>? newImages,
+      List<String>? oldImages,
+      String? review,
+      bool? anonymous}) async {
+    try {
+      List<String>? imageUrls = oldImages == null ? null : [...oldImages];
+
+      if (newImages != null && newImages.isNotEmpty) {
+        for (int i = 0; i < newImages.length; i++) {
+          final imageUrl = await remoteStorageService.uploadImage(newImages[i]);
+
+          imageUrls?.add(imageUrl);
+        }
+      }
+
+      final result = await remoteDataSource.updateReview(
+        token,
+        reviewId,
+        images: imageUrls,
+        review: review,
+        anonymous: anonymous,
+        rating: rating,
+      );
+
+      return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

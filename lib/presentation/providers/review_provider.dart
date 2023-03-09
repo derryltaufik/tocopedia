@@ -7,12 +7,12 @@ import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
+import 'package:tocopedia/domains/use_cases/review/update_review.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class ReviewProvider with ChangeNotifier {
   final AddReview _addReview;
-
-  // final UpdateReview _updateReview;
+  final UpdateReview _updateReview;
   final GetBuyerReviews _getBuyerReviews;
   final GetSellerReviews _getSellerReviews;
   final GetProductReviews _getProductReviews;
@@ -38,11 +38,13 @@ class ReviewProvider with ChangeNotifier {
     required GetSellerReviews getSellerReviews,
     required GetBuyerReviews getBuyerReviews,
     required AddReview addReview,
+    required UpdateReview updateReview,
     required String? authToken,
   })  : _getProductReviews = getProductReviews,
         _getSellerReviews = getSellerReviews,
         _getBuyerReviews = getBuyerReviews,
         _addReview = addReview,
+        _updateReview = updateReview,
         _authToken = authToken;
 
   ProviderState _getBuyerReviewsState = ProviderState.empty;
@@ -116,6 +118,34 @@ class ReviewProvider with ChangeNotifier {
 
       getBuyerReviews();
       return newReview;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Review> updateReview(
+    String reviewId, {
+    int? rating,
+    List<File>? newImages,
+    List<String>? oldImages,
+    String? review,
+    bool? anonymous,
+  }) async {
+    try {
+      if (!_verifyToken()) throw Exception("You need to login");
+
+      final updatedReview = await _updateReview.execute(
+        _authToken!,
+        reviewId,
+        rating: rating,
+        review: review,
+        oldImages: oldImages,
+        newImages: newImages,
+        anonymous: anonymous,
+      );
+
+      getBuyerReviews();
+      return updatedReview;
     } catch (e) {
       rethrow;
     }

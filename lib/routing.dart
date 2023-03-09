@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/domains/entities/review.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/images/images_gallery_page.dart';
 import 'package:tocopedia/presentation/pages/features/address/add_address_page.dart';
@@ -14,6 +15,7 @@ import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart
 import 'package:tocopedia/presentation/pages/features/product/search_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/pages/features/review/add_review_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/edit_review_page.dart';
 import 'package:tocopedia/presentation/pages/features/review/product_reviews_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
@@ -107,6 +109,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
             initialRating: arguments.initialRating,
           );
         },
+      );
+    case EditReviewPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            EditReviewPage(review: routeSettings.arguments as Review),
       );
     case CartPage.routeName:
       return MaterialPageRoute(
