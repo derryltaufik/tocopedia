@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/single_order_item_card.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/order_item_status_enum.dart';
@@ -39,9 +40,17 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
     super.initState();
     _tabController = TabController(length: 6, vsync: this);
     Future.microtask(() {
-      Provider.of<OrderItemProvider>(context, listen: false)
-          .getSellerOrderItems();
+      if (Provider.of<OrderItemProvider>(context, listen: false)
+              .getSellerOrderItemsState !=
+          ProviderState.loaded) {
+        _fetchData(context);
+      }
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<OrderItemProvider>(context, listen: false)
+        .getSellerOrderItems();
   }
 
   @override
@@ -62,47 +71,54 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
               .toList(),
         ),
       ),
-      body: Consumer<OrderItemProvider>(
-        builder: (context, orderItemProvider, child) {
-          if (orderItemProvider.getSellerOrderItemsState ==
-              ProviderState.loading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (orderItemProvider.getSellerOrderItemsState ==
-              ProviderState.error) {
-            return Center(child: Text(orderItemProvider.message));
-          }
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child: Consumer<OrderItemProvider>(
+          builder: (context, orderItemProvider, child) {
+            if (orderItemProvider.getSellerOrderItemsState ==
+                ProviderState.loading) {
+              return const SingleChildFullPageScrollView.loading();
+            }
+            if (orderItemProvider.getSellerOrderItemsState ==
+                ProviderState.error) {
+              return SingleChildFullPageScrollView(
+                  child: Text(orderItemProvider.message));
+            }
 
-          final orderItems = orderItemProvider.sellerOrderItemList;
+            final orderItems = orderItemProvider.sellerOrderItemList;
 
-          if (orderItems == null || orderItems.isEmpty) {
-            return Center(child: Text("You don't have any order yet."));
-          }
+            if (orderItems == null || orderItems.isEmpty) {
+              return const SingleChildFullPageScrollView(
+                  child: Text("You don't have any order yet."));
+            }
 
-          final filteredOrderItems = List.from(orderItems)
-            ..removeWhere((orderItem) {
-              final List<Status> acceptedStatus =
-                  tabStatus[statusList[_tabController.index]]!;
-              return !acceptedStatus
-                  .any((element) => element.description == orderItem.status);
-            });
+            final filteredOrderItems = List.from(orderItems)
+              ..removeWhere((orderItem) {
+                final List<Status> acceptedStatus =
+                    tabStatus[statusList[_tabController.index]]!;
+                return !acceptedStatus
+                    .any((element) => element.description == orderItem.status);
+              });
 
-          if (filteredOrderItems.isEmpty) {
-            return Center(
-                child: Text(
-                    "No order with \"${statusList[_tabController.index]}\" status"));
-          }
+            if (filteredOrderItems.isEmpty) {
+              return SingleChildFullPageScrollView(
+                  child: Text(
+                      "No order with \"${statusList[_tabController.index]}\" status"));
+            }
 
-          return ListView.separated(
-            separatorBuilder: (context, index) => SizedBox(height: 5),
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-            itemCount: filteredOrderItems.length,
-            itemBuilder: (context, index) {
-              final OrderItem orderItem = filteredOrderItems[index];
-              return SingleOrderItemCard(orderItem: orderItem);
-            },
-          );
-        },
+            return ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => SizedBox(height: 5),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+              itemCount: filteredOrderItems.length,
+              itemBuilder: (context, index) {
+                final OrderItem orderItem = filteredOrderItems[index];
+                return SingleOrderItemCard(orderItem: orderItem);
+              },
+            );
+          },
+        ),
       ),
     );
   }

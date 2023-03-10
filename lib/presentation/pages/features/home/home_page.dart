@@ -23,11 +23,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<ProductProvider>(context, listen: false).getPopularProducts();
+      if (Provider.of<ProductProvider>(context, listen: false)
+                  .getPopularProductsState !=
+              ProviderState.loaded ||
+          Provider.of<CategoryProvider>(context, listen: false)
+                  .getAllCategoriesState !=
+              ProviderState.loaded) {
+        _fetchData(context);
+      }
     });
-    Future.microtask(() {
-      Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
-    });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<ProductProvider>(context, listen: false).getPopularProducts();
+    Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
   }
 
   @override
@@ -35,98 +44,103 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: HomeAppBar(),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.all(10),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "Browse By Category",
-                style: theme.textTheme.titleMedium,
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.all(10),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  "Browse By Category",
+                  style: theme.textTheme.titleMedium,
+                ),
               ),
             ),
-          ),
-          SliverToBoxAdapter(child: SizedBox(height: 10)),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 140.0,
-              child: Consumer<CategoryProvider>(
-                  builder: (context, categoryProvider, child) {
-                if (categoryProvider.getAllCategoriesState ==
+            SliverToBoxAdapter(child: SizedBox(height: 10)),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 140.0,
+                child: Consumer<CategoryProvider>(
+                    builder: (context, categoryProvider, child) {
+                  if (categoryProvider.getAllCategoriesState ==
+                      ProviderState.loading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (categoryProvider.getAllCategoriesState ==
+                      ProviderState.error) {
+                    return Center(child: Text(categoryProvider.message));
+                  }
+
+                  final categories = categoryProvider.allCategories;
+
+                  if (categories == null || categories.isEmpty) {
+                    return Center(child: Text("Categories not found..."));
+                  }
+
+                  return GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: categories.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.25,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                    ),
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return CategoryButton(category: category);
+                    },
+                  );
+                }),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.all(10),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  "Popular Products",
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              sliver: Consumer<ProductProvider>(
+                  builder: (context, productProvider, child) {
+                if (productProvider.getPopularProductsState ==
                     ProviderState.loading) {
-                  return Center(child: CircularProgressIndicator());
+                  return SliverFillRemaining(
+                      child: Center(child: CircularProgressIndicator()));
                 }
-                if (categoryProvider.getAllCategoriesState ==
+                if (productProvider.getPopularProductsState ==
                     ProviderState.error) {
-                  return Center(child: Text(categoryProvider.message));
+                  return SliverFillRemaining(
+                      child: Center(child: Text(productProvider.message)));
                 }
 
-                final categories = categoryProvider.allCategories;
+                final products = productProvider.popularProducts;
 
-                if (categories == null || categories.isEmpty) {
-                  return Center(child: Text("Categories not found..."));
+                if (products == null || products.isEmpty) {
+                  return SliverFillRemaining(
+                      child: Center(child: Text("Product not found... ")));
                 }
 
-                return GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.25,
-                    mainAxisSpacing: 5,
-                    crossAxisSpacing: 5,
-                  ),
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    return CategoryButton(category: category);
-                  },
+                return SliverMasonryGrid(
+                  delegate: SliverChildBuilderDelegate(
+                      childCount: products.length, (context, index) {
+                    final Product product = products[index];
+                    return SingleProductCard(product: product);
+                  }),
+                  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
                 );
               }),
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.all(10),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "Popular Products",
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            sliver: Consumer<ProductProvider>(
-                builder: (context, productProvider, child) {
-              if (productProvider.getPopularProductsState ==
-                  ProviderState.loading) {
-                return SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()));
-              }
-              if (productProvider.getPopularProductsState ==
-                  ProviderState.error) {
-                return SliverFillRemaining(
-                    child: Center(child: Text(productProvider.message)));
-              }
-
-              final products = productProvider.popularProducts;
-
-              if (products == null || products.isEmpty) {
-                return SliverFillRemaining(
-                    child: Center(child: Text("Product not found... ")));
-              }
-
-              return SliverMasonryGrid(
-                delegate: SliverChildBuilderDelegate(
-                    childCount: products.length, (context, index) {
-                  final Product product = products[index];
-                  return SingleProductCard(product: product);
-                }),
-                gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-              );
-            }),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -39,10 +39,9 @@ class AddressProvider with ChangeNotifier {
         _deleteAddress = deleteAddress,
         _authToken = authToken;
 
-  Future<List<Address>> getUserAddresses() async {
+  Future<List<Address>?> getUserAddresses() async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-
       _getUserAddressesState = ProviderState.loading;
       notifyListeners();
 
@@ -56,7 +55,7 @@ class AddressProvider with ChangeNotifier {
       _message = e.toString();
       _getUserAddressesState = ProviderState.error;
       notifyListeners();
-      rethrow;
+      return null;
     }
   }
 

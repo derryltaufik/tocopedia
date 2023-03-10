@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/add_to_cart_button.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/product_image_carousel.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_button.dart';
@@ -28,9 +29,13 @@ class _ViewProductPageState extends State<ViewProductPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<ProductProvider>(context, listen: false)
-          .getProduct(widget.productId);
+      _fetchData(context);
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<ProductProvider>(context, listen: false)
+        .getProduct(widget.productId);
   }
 
   @override
@@ -42,88 +47,96 @@ class _ViewProductPageState extends State<ViewProductPage> {
         .copyWith(fontWeight: FontWeight.bold, fontSize: 20);
     return Scaffold(
       appBar: const HomeAppBar(),
-      body: Consumer<ProductProvider>(
-        builder: (context, productProvider, child) {
-          if (productProvider.getProductState == ProviderState.loading ||
-              productProvider.getProductState == ProviderState.empty) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (productProvider.getProductState == ProviderState.error) {
-            return Center(child: Text(productProvider.message));
-          }
-          final Product product = productProvider.product!;
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProductImageCarousel(images: product.images!),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            rupiahFormatter.format(product.price),
-                            style: priceStyle,
-                          ),
-                          WishlistButton(productId: product.id!),
-                        ],
-                      ),
-                      Text(
-                        product.name!,
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                      if (product.totalSold != null &&
-                          product.totalSold! > 0) ...[
-                        const SizedBox(height: 8),
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child: Consumer<ProductProvider>(
+          builder: (context, productProvider, child) {
+            if (productProvider.getProductState == ProviderState.loading) {
+              return const SingleChildFullPageScrollView.loading();
+            }
+            if (productProvider.getProductState == ProviderState.error) {
+              return SingleChildFullPageScrollView(
+                  child: Text(productProvider.message));
+            }
+            final product = productProvider.product;
+
+            if (product == null) {
+              return const SingleChildFullPageScrollView(
+                  child: Text("Product not found"));
+            }
+
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProductImageCarousel(images: product.images!),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Sold ${NumberFormat.decimalPattern("id_ID").format(product.totalSold)}",
+                              rupiahFormatter.format(product.price),
+                              style: priceStyle,
                             ),
-                            const SizedBox(width: 8),
-                            if (product.totalRating != null &&
-                                product.totalRating! > 0)
-                              RatingButton(product: product),
+                            WishlistButton(productId: product.id!),
                           ],
                         ),
-                      ]
-                    ],
+                        Text(
+                          product.name!,
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                        if (product.totalSold != null &&
+                            product.totalSold! > 0) ...[
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                "Sold ${NumberFormat.decimalPattern("id_ID").format(product.totalSold)}",
+                              ),
+                              const SizedBox(width: 8),
+                              if (product.totalRating != null &&
+                                  product.totalRating! > 0)
+                                RatingButton(product: product),
+                            ],
+                          ),
+                        ]
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Product Description", style: subHeadingStyle),
-                      const SizedBox(height: 5),
-                      Text(product.description!,
-                          style: theme.textTheme.bodyLarge),
-                    ],
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Product Description", style: subHeadingStyle),
+                        const SizedBox(height: 5),
+                        Text(product.description!,
+                            style: theme.textTheme.bodyLarge),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text("${product.owner?.name} Store",
-                      style: subHeadingStyle),
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          );
-        },
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text("${product.owner?.name} Store",
+                        style: subHeadingStyle),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          },
+        ),
       ),
       bottomNavigationBar: AddToCartButton(productId: widget.productId),
     );

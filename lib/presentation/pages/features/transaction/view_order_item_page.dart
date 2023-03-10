@@ -5,6 +5,7 @@ import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/string_extension.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_item_action_button.dart';
 import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
@@ -28,9 +29,13 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<OrderItemProvider>(context, listen: false)
-          .getOrderItem(widget.orderItemId);
+      _fetchData(context);
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<OrderItemProvider>(context, listen: false)
+        .getOrderItem(widget.orderItemId);
   }
 
   @override
@@ -39,55 +44,61 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
       appBar: AppBar(
         title: Text("Order Detail"),
       ),
-      body: Consumer<OrderItemProvider>(
-          builder: (context, orderItemProvider, child) {
-        if (orderItemProvider.getOrderItemState == ProviderState.loading) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (orderItemProvider.getOrderItemState == ProviderState.error) {
-          return Center(child: Text(orderItemProvider.message));
-        }
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child: Consumer<OrderItemProvider>(
+            builder: (context, orderItemProvider, child) {
+          if (orderItemProvider.getOrderItemState == ProviderState.loading) {
+            return const SingleChildFullPageScrollView.loading();
+          }
+          if (orderItemProvider.getOrderItemState == ProviderState.error) {
+            return SingleChildFullPageScrollView(
+                child: Text(orderItemProvider.message));
+          }
 
-        final orderItem = orderItemProvider.orderItem;
+          final orderItem = orderItemProvider.orderItem;
 
-        if (orderItem == null) {
-          return Center(child: Text("Order not found"));
-        }
+          if (orderItem == null) {
+            return const SingleChildFullPageScrollView(
+                child: Text("Order not found"));
+          }
 
-        return Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: OrderItemInfoSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ProductDetailsSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ShippingInfoSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: PaymentDetailsSection(orderItem: orderItem),
-                    ),
-                    Container(height: 0, color: Colors.black12),
-                  ],
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: OrderItemInfoSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ProductDetailsSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ShippingInfoSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: PaymentDetailsSection(orderItem: orderItem),
+                      ),
+                      Container(height: 0, color: Colors.black12),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            OrderItemActionButton(orderItem: orderItem),
-          ],
-        );
-      }),
+              OrderItemActionButton(orderItem: orderItem),
+            ],
+          );
+        }),
+      ),
     );
   }
 }

@@ -77,10 +77,9 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
 
       final orderList = await _getUserOrders.execute(_authToken!);
-      orderList
-        .removeWhere((element) =>
-            element.status != "unpaid" &&
-                DateTime.now().difference(element.createdAt!).inHours > 24);
+      orderList.removeWhere((element) =>
+          element.status != "unpaid" &&
+          DateTime.now().difference(element.createdAt!).inHours > 24);
       _orderList = orderList;
       _getUserOrdersState = ProviderState.loaded;
       notifyListeners();
@@ -95,8 +94,9 @@ class OrderProvider with ChangeNotifier {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
       final order = await _checkout.execute(_authToken!, addressId);
+      getUserOrders();
       return order;
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }
@@ -104,11 +104,11 @@ class OrderProvider with ChangeNotifier {
   Future<Order> payOrder(String orderId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      await Future.delayed(const Duration(seconds: 3));
-
       final order = await _payOrder.execute(_authToken!, orderId);
+      await Future.delayed(const Duration(seconds: 2));
+      getUserOrders();
       return order;
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }
@@ -116,11 +116,14 @@ class OrderProvider with ChangeNotifier {
   Future<Order> cancelOrder(String orderId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
-      await Future.delayed(const Duration(seconds: 3));
 
       final order = await _cancelOrder.execute(_authToken!, orderId);
+      await Future.delayed(const Duration(seconds: 2));
+
+      getUserOrders();
+
       return order;
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }

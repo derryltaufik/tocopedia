@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/cart/checkout_page.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/cart_item_tile.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
@@ -20,8 +21,15 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<CartProvider>(context, listen: false).getCart();
+      if (Provider.of<CartProvider>(context, listen: false).getCartState !=
+          ProviderState.loaded) {
+        _fetchData(context);
+      }
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<CartProvider>(context, listen: false).getCart();
   }
 
 //https://hesam-kamalan.medium.com/how-to-prevent-the-keyboard-pushes-a-widget-up-on-flutter-873569449927
@@ -36,28 +44,38 @@ class _CartPageState extends State<CartPage> {
             appBar: AppBar(title: Text("Cart")),
             body: SizedBox(
               height: double.infinity,
-              child: Consumer<CartProvider>(
-                builder: (context, cartProvider, child) {
-                  if (cartProvider.getCartState == ProviderState.empty ||
-                      cartProvider.getCartState == ProviderState.loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (cartProvider.getCartState == ProviderState.error) {
-                    return Center(child: Text(cartProvider.message));
-                  }
-                  final cartItems = cartProvider.cart!.cartItems;
-                  if (cartItems.isEmpty) {
-                    return Center(child: Text("Your cart is empty!"));
-                  }
-                  return ListView.separated(
-                    padding: EdgeInsets.only(bottom: 100),
-                    separatorBuilder: (context, index) => Divider(thickness: 5),
-                    itemCount: cartItems.length,
-                    itemBuilder: (context, index) {
-                      final cartItem = cartItems[index];
-                      return CartItemTile(cartItem: cartItem);
-                    },
-                  );
-                },
+              child: RefreshIndicator(
+                onRefresh: () => _fetchData(context),
+                child: Consumer<CartProvider>(
+                  builder: (context, cartProvider, child) {
+                    if (cartProvider.getCartState == ProviderState.loading) {
+                      return const SingleChildFullPageScrollView.loading();
+                    }
+                    if (cartProvider.getCartState == ProviderState.error) {
+                      return SingleChildFullPageScrollView(
+                          child: Text(cartProvider.message));
+                    }
+
+                    final cartItems = cartProvider.cart?.cartItems;
+
+                    if (cartItems == null || cartItems.isEmpty) {
+                      return const SingleChildFullPageScrollView(
+                          child: Text("Your cart is empty!"));
+                    }
+
+                    return ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(bottom: 100),
+                      separatorBuilder: (context, index) =>
+                          Divider(thickness: 5),
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        final cartItem = cartItems[index];
+                        return CartItemTile(cartItem: cartItem);
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ),

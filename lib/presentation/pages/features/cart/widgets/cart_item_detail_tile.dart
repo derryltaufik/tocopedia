@@ -1,12 +1,11 @@
 import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/cart_item_detail.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
+import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
 class CartItemDetailTile extends StatefulWidget {
@@ -150,47 +149,54 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
               onChanged: (value) => toggleCartItem(context, value!),
             ),
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 75,
-                    height: 75,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(
-                        imageUrl: product.images![0],
-                        fit: BoxFit.cover,
-                        progressIndicatorBuilder: (_, __, downloadProgress) =>
-                            Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress)),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pushNamed(
+                  ViewProductPage.routeName,
+                  arguments: product.id!,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 75,
+                      height: 75,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                          imageUrl: product.images![0],
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (_, __, downloadProgress) =>
+                              Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress)),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name!,
-                          style: theme.textTheme.bodyLarge,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          rupiahFormatter.format(product.price),
-                          style: theme.textTheme.titleMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name!,
+                            style: theme.textTheme.bodyLarge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 3),
+                          Text(
+                            rupiahFormatter.format(product.price),
+                            style: theme.textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],

@@ -23,6 +23,13 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   late Address selectedAddress;
 
+  @override
+  void initState() {
+    super.initState();
+    selectedAddress =
+        Provider.of<UserProvider>(context, listen: false).user!.defaultAddress!;
+  }
+
   Future<void> checkout(BuildContext context) async {
     final order = await handleFutureFunction(
       context,
@@ -36,13 +43,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       Navigator.of(context)
           .pushNamed(ViewOrderPage.routeName, arguments: order.id!);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    selectedAddress =
-        Provider.of<UserProvider>(context, listen: false).user!.defaultAddress!;
   }
 
   Future<void> showAddressSelection(BuildContext context) async {

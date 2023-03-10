@@ -4,6 +4,7 @@ import 'package:tocopedia/presentation/helper_variables/constants.dart';
 
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/review/widgets/product_review_tile.dart';
 import 'package:tocopedia/presentation/providers/review_provider.dart';
 
@@ -23,9 +24,13 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<ReviewProvider>(context, listen: false)
-          .getProductReviews(widget.product.id!);
+      _fetchData(context);
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<ReviewProvider>(context, listen: false)
+        .getProductReviews(widget.product.id!);
   }
 
   @override
@@ -42,39 +47,45 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
         ),
         Divider(height: 0),
         Expanded(
-          child: Consumer<ReviewProvider>(
-            builder: (context, reviewProvider, child) {
-              if (reviewProvider.getProductReviewsState ==
-                  ProviderState.loading) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (reviewProvider.getProductReviewsState ==
-                  ProviderState.error) {
-                return Center(child: Text(reviewProvider.message));
-              }
+          child: RefreshIndicator(
+            onRefresh: () => _fetchData(context),
+            child: Consumer<ReviewProvider>(
+              builder: (context, reviewProvider, child) {
+                if (reviewProvider.getProductReviewsState ==
+                    ProviderState.loading) {
+                  return const SingleChildFullPageScrollView.loading();
+                }
+                if (reviewProvider.getProductReviewsState ==
+                    ProviderState.error) {
+                  return SingleChildFullPageScrollView(
+                      child: Text(reviewProvider.message));
+                }
 
-              final reviews = reviewProvider.productReviews;
+                final reviews = reviewProvider.productReviews;
 
-              if (reviews == null || reviews.isEmpty) {
-                return Center(child: Text("Product doesn't have review"));
-              }
+                if (reviews == null || reviews.isEmpty) {
+                  return const SingleChildFullPageScrollView(
+                      child: Text("Product doesn't have review"));
+                }
 
-              return ListView.builder(
-                itemCount: reviews.length,
-                itemBuilder: (context, index) {
-                  final review = reviews[index];
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: ProductReviewTile(review: review),
-                      ),
-                      Container(height: 5, color: Colors.black12),
-                    ],
-                  );
-                },
-              );
-            },
+                return ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: reviews.length,
+                  itemBuilder: (context, index) {
+                    final review = reviews[index];
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: ProductReviewTile(review: review),
+                        ),
+                        Container(height: 5, color: Colors.black12),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
         )
       ]),
