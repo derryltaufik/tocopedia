@@ -4,8 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tocopedia/presentation/helper_variables/constants.dart';
 import 'package:tocopedia/domains/entities/review.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/images/photos_horizontal_listview.dart';
-
-import 'package:tocopedia/presentation/pages/features/review/edit_review_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/view_review_page.dart';
 
 class HistoryReviewTile extends StatelessWidget {
   final Review review;
@@ -18,7 +17,7 @@ class HistoryReviewTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () => Navigator.of(context)
-          .pushNamed(EditReviewPage.routeName, arguments: review),
+          .pushNamed(ViewReviewPage.routeName, arguments: review.id!),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

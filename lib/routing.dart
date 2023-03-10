@@ -17,6 +17,7 @@ import 'package:tocopedia/presentation/pages/features/product/view_product_page.
 import 'package:tocopedia/presentation/pages/features/review/add_review_page.dart';
 import 'package:tocopedia/presentation/pages/features/review/edit_review_page.dart';
 import 'package:tocopedia/presentation/pages/features/review/product_reviews_page.dart';
+import 'package:tocopedia/presentation/pages/features/review/view_review_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/view_order_item_page.dart';
@@ -115,6 +116,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (context) =>
             EditReviewPage(review: routeSettings.arguments as Review),
+      );
+
+    case ViewReviewPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (context) =>
+            ViewReviewPage(reviewId: routeSettings.arguments as String),
       );
     case CartPage.routeName:
       return MaterialPageRoute(
