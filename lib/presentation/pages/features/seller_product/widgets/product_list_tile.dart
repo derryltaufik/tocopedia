@@ -42,17 +42,17 @@ class ProductListTile extends StatelessWidget {
                         Center(
                             child: CircularProgressIndicator(
                                 value: downloadProgress.progress)),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(product.name!, style: theme.textTheme.titleMedium),
                       Text(rupiahFormatter.format(product.price!)),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Row(
                         children: [
                           Text(
@@ -63,7 +63,7 @@ class ProductListTile extends StatelessWidget {
                           Text("${product.stock}"),
                         ],
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       statusWidget,
                     ],
                   ),

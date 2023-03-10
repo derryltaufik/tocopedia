@@ -16,9 +16,7 @@ class AddToCartButton extends StatelessWidget {
   void addToCart(BuildContext context) async {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final theme = Theme.of(context);
-    try {
-      await cartProvider.addToCart(productId);
-    } on Exception catch (e) {}
+    cartProvider.addToCart(productId);
 
     if (cartProvider.updateCartState == ProviderState.error) {
       if (context.mounted) {
@@ -47,7 +45,7 @@ class AddToCartButton extends StatelessWidget {
                           child: const Text('Ok'),
                           onPressed: () => Navigator.pop(context),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         FilledButton(
                           child: const Text('See Cart'),
                           onPressed: () {
@@ -80,15 +78,15 @@ class AddToCartButton extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 2,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
         child: FilledButton.icon(
-          icon: Icon(Icons.add_shopping_cart_rounded),
-          label: Text(
+          icon: const Icon(Icons.add_shopping_cart_rounded),
+          label: const Text(
             "Add To Cart",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),

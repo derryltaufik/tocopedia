@@ -102,8 +102,8 @@ class _SearchProductPageState extends State<SearchProductPage> {
       ),
       floatingActionButton: FilledButton.icon(
         onPressed: () => showFilterOptions(context),
-        icon: Icon(Icons.filter_alt_outlined),
-        label: Text("Sort & Filter"),
+        icon: const Icon(Icons.filter_alt_outlined),
+        label: const Text("Sort & Filter"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

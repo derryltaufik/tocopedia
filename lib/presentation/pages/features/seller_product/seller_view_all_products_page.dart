@@ -66,7 +66,7 @@ class _SellerViewAllProductsPageState extends State<SellerViewAllProductsPage> {
             return ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               separatorBuilder: (context, index) =>
-                  Divider(height: 0, thickness: 6),
+                  const Divider(height: 0, thickness: 6),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];

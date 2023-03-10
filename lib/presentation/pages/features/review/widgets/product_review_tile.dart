@@ -29,15 +29,15 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
-              child: FittedBox(
+              child: const FittedBox(
                 fit: BoxFit.cover,
                 child: Icon(Icons.account_circle),
               ),
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text("${widget.review.buyer?.name}",
                 style: theme.textTheme.titleSmall),
           ],
@@ -60,7 +60,7 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
             ),
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Builder(
           builder: (_) {
             if (widget.review.review == null || widget.review.review!.isEmpty) {

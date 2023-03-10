@@ -32,7 +32,7 @@ class SingleProductCard extends StatelessWidget {
                 progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,13 +43,13 @@ class SingleProductCard extends StatelessWidget {
                 children: [
                   Text(product.name!,
                       maxLines: 2, overflow: TextOverflow.ellipsis),
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
                   Text(
                     rupiahFormatter.format(product.price),
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.w700, fontSize: 17),
                   ),
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
                   if (product.averageRating != null ||
                       (product.totalSold != null && product.totalSold! > 0))
                     SizedBox(

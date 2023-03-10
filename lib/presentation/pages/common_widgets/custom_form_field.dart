@@ -81,7 +81,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: prefixText.isEmpty
             ? null
             : Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
                   prefixText,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
@@ -153,7 +153,7 @@ class RupiahTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 15),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         prefixIcon: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Text(
             "Rp",
             style: Theme.of(context)
@@ -198,7 +198,7 @@ class QuantityField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.black54, width: 0.5),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+          borderRadius: const BorderRadius.all(Radius.circular(5))),
       child: Row(
         children: [
           AbsorbPointer(

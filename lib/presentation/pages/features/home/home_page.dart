@@ -43,14 +43,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: HomeAppBar(),
+      appBar: const HomeAppBar(),
       body: RefreshIndicator(
         onRefresh: () => _fetchData(context),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   "Browse By Category",
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 10)),
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 140.0,
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, categoryProvider, child) {
                   if (categoryProvider.getAllCategoriesState ==
                       ProviderState.loading) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (categoryProvider.getAllCategoriesState ==
                       ProviderState.error) {
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                   final categories = categoryProvider.allCategories;
 
                   if (categories == null || categories.isEmpty) {
-                    return Center(child: Text("Categories not found..."));
+                    return const Center(child: Text("Categories not found..."));
                   }
 
                   return GridView.builder(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   "Popular Products",
@@ -107,12 +107,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               sliver: Consumer<ProductProvider>(
                   builder: (context, productProvider, child) {
                 if (productProvider.getPopularProductsState ==
                     ProviderState.loading) {
-                  return SliverFillRemaining(
+                  return const SliverFillRemaining(
                       child: Center(child: CircularProgressIndicator()));
                 }
                 if (productProvider.getPopularProductsState ==
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                 final products = productProvider.popularProducts;
 
                 if (products == null || products.isEmpty) {
-                  return SliverFillRemaining(
+                  return const SliverFillRemaining(
                       child: Center(child: Text("Product not found... ")));
                 }
 
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                     final Product product = products[index];
                     return SingleProductCard(product: product);
                   }),
-                  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                 );
               }),

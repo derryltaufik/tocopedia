@@ -35,7 +35,7 @@ class _WishListPageState extends State<WishListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CartButtonAppBar(title: "My Wishlist ❤️"),
+      appBar: const CartButtonAppBar(title: "My Wishlist ❤️"),
       body: RefreshIndicator(
         onRefresh: () => _fetchData(context),
         child: Consumer<WishlistProvider>(
@@ -57,7 +57,7 @@ class _WishListPageState extends State<WishListPage> {
 
             return MasonryGridView.count(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               crossAxisCount: 2,
               itemCount: products.length,
               itemBuilder: (context, index) {

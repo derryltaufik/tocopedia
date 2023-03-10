@@ -20,7 +20,7 @@ class CartButtonAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: CartButton(),
+              child: const CartButton(),
             ),
           ],
         ),

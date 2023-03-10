@@ -32,11 +32,11 @@ class CheckoutItemDetailTile extends StatelessWidget {
               progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                   child: CircularProgressIndicator(
                       value: downloadProgress.progress)),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +47,7 @@ class CheckoutItemDetailTile extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 3),
+              const SizedBox(height: 3),
               Text(
                 "${cartItemDetail.quantity!} item(s)",
                 style:
@@ -55,7 +55,7 @@ class CheckoutItemDetailTile extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 rupiahFormatter.format(product.price),
                 style: theme.textTheme.titleMedium,

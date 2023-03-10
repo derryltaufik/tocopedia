@@ -37,7 +37,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Buyer Reviews"),
+        title: const Text("Buyer Reviews"),
       ),
       body: Column(children: [
         Padding(
@@ -45,7 +45,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
           child: AverageRatingSection(
               averageRating: widget.product.averageRating!),
         ),
-        Divider(height: 0),
+        const Divider(height: 0),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => _fetchData(context),
@@ -116,7 +116,7 @@ class AverageRatingSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           children: [
             Text(
-              "${averageRating.toStringAsFixed(1)}",
+              averageRating.toStringAsFixed(1),
               style: theme.textTheme.titleLarge!
                   .copyWith(fontWeight: FontWeight.bold, fontSize: 35),
             ),

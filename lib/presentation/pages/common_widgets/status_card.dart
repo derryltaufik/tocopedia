@@ -12,7 +12,7 @@ class StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: color.withOpacity(0.2),

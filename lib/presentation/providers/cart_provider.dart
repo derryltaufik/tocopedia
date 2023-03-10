@@ -130,7 +130,9 @@ class CartProvider with ChangeNotifier {
       final tempCart = await _selectCartItem.execute(_authToken!, productId);
       cart = tempCart;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> selectSeller(String sellerId) async {
@@ -139,7 +141,9 @@ class CartProvider with ChangeNotifier {
       final tempCart = await _selectSeller.execute(_authToken!, sellerId);
       cart = tempCart;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> unselectSeller(String sellerId) async {
@@ -148,7 +152,9 @@ class CartProvider with ChangeNotifier {
       final tempCart = await _unselectSeller.execute(_authToken!, sellerId);
       cart = tempCart;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> unselectCartItem(String productId) async {
@@ -157,7 +163,9 @@ class CartProvider with ChangeNotifier {
       final tempCart = await _unselectCartItem.execute(_authToken!, productId);
       cart = tempCart;
       notifyListeners();
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> removeFromCart(String productId) async {

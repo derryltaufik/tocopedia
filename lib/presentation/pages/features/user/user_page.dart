@@ -79,14 +79,14 @@ class UserPage extends StatelessWidget {
           Consumer<LocalSettingsProvider>(builder: (context, value, child) {
         if (value.appMode == AppMode.buyer) {
           return FilledButton(
-              child: Text("Switch to Seller Mode"),
+              child: const Text("Switch to Seller Mode"),
               onPressed: () => value.switchToSellerMode());
         } else if (value.appMode == AppMode.seller) {
           return FilledButton(
-              child: Text("Switch to Buyer Mode"),
+              child: const Text("Switch to Buyer Mode"),
               onPressed: () => value.switchToBuyerMode());
         }
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

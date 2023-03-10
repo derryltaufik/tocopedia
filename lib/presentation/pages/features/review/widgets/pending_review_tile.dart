@@ -16,7 +16,7 @@ class PendingReviewTile extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,7 +33,7 @@ class PendingReviewTile extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

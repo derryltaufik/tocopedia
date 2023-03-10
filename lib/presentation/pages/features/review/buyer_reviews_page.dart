@@ -93,7 +93,7 @@ class _BuyerReviewsPageState extends State<BuyerReviewsPage>
                 ? ListView.separated(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(8),
-                    separatorBuilder: (context, index) => SizedBox(height: 5),
+                    separatorBuilder: (context, index) => const SizedBox(height: 5),
                     itemCount: filteredReviews.length,
                     itemBuilder: (context, index) {
                       final review = filteredReviews[index];

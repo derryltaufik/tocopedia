@@ -100,13 +100,13 @@ class _SellerEditProductPageState extends State<SellerEditProductPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Product"),
+        title: const Text("Edit Product"),
       ),
       body: ChangeNotifierProvider<PickImageProvider>(
         create: (_) =>
             PickImageProvider(oldImages: widget.product.images ?? []),
         builder: (context, child) => SingleChildScrollView(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Form(
             key: _formKey,
             child: Column(
@@ -114,38 +114,38 @@ class _SellerEditProductPageState extends State<SellerEditProductPage> {
               children: [
                 Text("Fill the name of product you sell *",
                     style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomTextField(
                   controller: _nameController,
                   maxLength: 70,
                   minLength: 1,
                   labelText: "Product Name",
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text("Product Images *", style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 const SizedBox(
                   height: 150,
                   child: PickImageGridView(),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Text("Category *", style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CategoryDropdown(
                     initialCategory: widget.product.category,
                     onChanged: (value) => _selectedCategory = value),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text("Price *", style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomTextField.rupiah(
                   controller: _priceController,
                   labelText: "Product Price",
                   helperText:
                       "Tips: Decide price based on competitive market price",
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text("Stock *", style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomTextField(
                   controller: _stockController,
                   maxLength: 6,
@@ -158,9 +158,9 @@ class _SellerEditProductPageState extends State<SellerEditProductPage> {
                   maxLength: 40,
                   labelText: "Optional: SKU (Stock Keeping Unit)",
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text("Description *", style: theme.textTheme.titleMedium),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomTextField(
                   controller: _descriptionController,
                   minLength: 1,
@@ -169,13 +169,13 @@ class _SellerEditProductPageState extends State<SellerEditProductPage> {
                   keyboardInputType: TextInputType.multiline,
                   maxLines: null,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   children: [
                     Expanded(
                       child: FilledButton(
                           onPressed: () => submit(context),
-                          child: Text("Submit")),
+                          child: const Text("Submit")),
                     )
                   ],
                 )

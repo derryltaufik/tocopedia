@@ -57,7 +57,7 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Orders  💰"),
+        title: const Text("Orders  💰"),
         bottom: TabBar(
           onTap: (value) => setState(() {}),
           isScrollable: true,
@@ -108,7 +108,7 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
 
             return ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(height: 5),
+              separatorBuilder: (context, index) => const SizedBox(height: 5),
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
               itemCount: filteredOrderItems.length,

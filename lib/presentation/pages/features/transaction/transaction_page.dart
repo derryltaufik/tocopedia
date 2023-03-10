@@ -33,7 +33,7 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CartButtonAppBar(title: "Transactions 🧾"),
+      appBar: const CartButtonAppBar(title: "Transactions 🧾"),
       body: RefreshIndicator(
         onRefresh: () => _fetchData(context),
         child: Consumer<OrderItemProvider>(
@@ -58,10 +58,10 @@ class _TransactionPageState extends State<TransactionPage> {
             return ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              separatorBuilder: (context, index) => SizedBox(height: 5),
+              separatorBuilder: (context, index) => const SizedBox(height: 5),
               itemCount: orderItems.length + 1,
               itemBuilder: (context, index) {
-                if (index == 0) return WaitingPaymentCard();
+                if (index == 0) return const WaitingPaymentCard();
                 index--;
                 final OrderItem orderItem = orderItems[index];
                 return SingleOrderItemCard(orderItem: orderItem);

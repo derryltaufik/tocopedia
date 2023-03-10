@@ -18,7 +18,6 @@ import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
-//TODO implement timeout on every http request
 // TODO use dartz Either for exception handling if necessary
 // TODO implement shimmer loading for better UX
 // TODO implement lazy loading (front end) & pagination (backend)
@@ -96,12 +95,12 @@ class MyApp extends StatelessWidget {
 
         if (user != null && user.token!.isNotEmpty) {
           if (localSettingsProvider.appMode == AppMode.buyer) {
-            currentWidget = BuyerNavBar();
+            currentWidget = const BuyerNavBar();
           } else {
-            currentWidget = SellerNavBar();
+            currentWidget = const SellerNavBar();
           }
         } else {
-          currentWidget = AuthPage();
+          currentWidget = const AuthPage();
         }
 
         return MaterialApp(

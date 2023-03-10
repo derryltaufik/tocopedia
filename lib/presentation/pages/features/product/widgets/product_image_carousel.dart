@@ -34,7 +34,7 @@ class _ProductImagePreviewState extends State<ProductImageCarousel> {
                 progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             );
           },
@@ -51,13 +51,13 @@ class _ProductImagePreviewState extends State<ProductImageCarousel> {
               margin: const EdgeInsets.only(bottom: 10, left: 15),
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.5),
+                color: const Color.fromRGBO(0, 0, 0, 0.5),
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Center(
                   child: Text(
                 "${_currentIndex + 1}/${widget.images.length}",
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               )),
             ),
           ],

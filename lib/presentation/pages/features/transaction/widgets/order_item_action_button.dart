@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/helper_variables/order_item_status_enum.dart';
+import 'package:tocopedia/presentation/pages/features/review/buyer_reviews_page.dart';
 import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 
@@ -36,7 +37,7 @@ class OrderItemActionButton extends StatelessWidget {
   Future<void> sendOrderItem(BuildContext context) async {
     final airwaybill = await showDialog<String>(
       context: context,
-      builder: (context) => InputAirwayBillDialog(),
+      builder: (context) => const InputAirwayBillDialog(),
     );
     if (airwaybill != null && airwaybill.isNotEmpty && context.mounted) {
       await handleFutureFunction(
@@ -78,7 +79,7 @@ class OrderItemActionButton extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
@@ -86,7 +87,7 @@ class OrderItemActionButton extends StatelessWidget {
             color: Colors.grey.withOpacity(1),
             spreadRadius: 2,
             blurRadius: 2,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -100,7 +101,7 @@ class OrderItemActionButton extends StatelessWidget {
                   appMode == AppMode.buyer) {
                 return OutlinedButton(
                   style: buttonStyle,
-                  child: Text("Cancel Order"),
+                  child: const Text("Cancel Order"),
                   onPressed: () => cancelOrderItem(context),
                 );
               } else if (statusEnum == Status.waitingConfirmation &&
@@ -109,14 +110,14 @@ class OrderItemActionButton extends StatelessWidget {
                   children: [
                     OutlinedButton(
                       style: buttonStyle,
-                      child: Text("Cancel Order"),
+                      child: const Text("Cancel Order"),
                       onPressed: () => cancelOrderItem(context),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Expanded(
                       child: FilledButton(
                         style: buttonStyle,
-                        child: Text("Process Order"),
+                        child: const Text("Process Order"),
                         onPressed: () => processOrderItem(context),
                       ),
                     ),
@@ -125,24 +126,25 @@ class OrderItemActionButton extends StatelessWidget {
               } else if (statusEnum == Status.processing) {
                 return FilledButton(
                   style: buttonStyle,
-                  child: Text("Send Order"),
+                  child: const Text("Send Order"),
                   onPressed: () => sendOrderItem(context),
                 );
               } else if (statusEnum == Status.sent ||
                   statusEnum == Status.arrivedAtDestination) {
                 return FilledButton(
                   style: buttonStyle,
-                  child: Text("Finish Order"),
+                  child: const Text("Finish Order"),
                   onPressed: () => completeOrderItem(context),
                 );
               } else if (statusEnum == Status.completed) {
                 return FilledButton(
                   style: buttonStyle,
-                  child: Text("Review Product"),
-                  onPressed: () {},
+                  child: const Text("Review Product"),
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed(BuyerReviewsPage.routeName),
                 );
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -170,15 +172,15 @@ class _InputAirwayBillDialogState extends State<InputAirwayBillDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Input Airwaybill"),
+      title: const Text("Input Airwaybill"),
       content: TextField(
-        decoration: InputDecoration(counterText: "", labelText: "Airwaybill"),
+        decoration: const InputDecoration(counterText: "", labelText: "Airwaybill"),
         controller: _airwaybillController,
         maxLength: 30,
       ),
       actions: [
         FilledButton(
-          child: Text("OK"),
+          child: const Text("OK"),
           onPressed: () =>
               Navigator.of(context).pop(_airwaybillController.text),
         ),

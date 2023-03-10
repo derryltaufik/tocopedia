@@ -36,7 +36,7 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Your Orders")),
+      appBar: AppBar(title: const Text("Your Orders")),
       body: RefreshIndicator(
         onRefresh: () => _fetchData(context),
         child: Consumer<OrderProvider>(
@@ -60,7 +60,7 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
               padding: const EdgeInsets.all(8.0),
               child: ListView.separated(
                 physics: const AlwaysScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => SizedBox(height: 15),
+                separatorBuilder: (context, index) => const SizedBox(height: 15),
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final Order order = orders[index];

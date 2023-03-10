@@ -56,7 +56,7 @@ class SingleOrderItemDetailCard extends StatelessWidget {
                         height: 50,
                         fit: BoxFit.cover),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +76,7 @@ class SingleOrderItemDetailCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Divider(
+              const Divider(
                 thickness: 0,
               ),
               Row(
@@ -103,9 +103,9 @@ class SingleOrderItemDetailCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           minimumSize: Size.zero,
-                          padding: EdgeInsets.all(7)),
+                          padding: const EdgeInsets.all(7)),
                       onPressed: () => addToCart(context),
-                      child: Text("Buy Again"),
+                      child: const Text("Buy Again"),
                     )
                 ],
               ),

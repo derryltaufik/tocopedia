@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart';
@@ -136,11 +135,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         ))
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Text("Sort By",
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Wrap(
                   spacing: 10,
                   children: SortSelection.values.map((SortSelection sort) {
@@ -157,11 +156,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text("Price",
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold)),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     Flexible(
@@ -170,7 +169,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         label: "Lowest",
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Flexible(
                       child: RupiahTextField(
                         controller: maxPriceController,
@@ -179,11 +178,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Text("Category",
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Wrap(
                   spacing: 10,
                   children: widget.categorySelection.map((Category category) {
@@ -198,7 +197,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -208,7 +207,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: FilledButton(
-              child: Text("Apply Filter"),
+              child: const Text("Apply Filter"),
               onPressed: () => applyFilter(),
             ),
           ),

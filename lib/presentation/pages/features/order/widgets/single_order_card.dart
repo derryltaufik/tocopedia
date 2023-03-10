@@ -48,7 +48,7 @@ class SingleOrderCard extends StatelessWidget {
                         children: [
                           Icon(Icons.schedule,
                               size: 15, color: theme.primaryColor),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Text(
                             DateFormat("d MMM, HH:mm").format(order.createdAt!
                                 .add(const Duration(days: 1))
@@ -62,12 +62,12 @@ class SingleOrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Divider(),
-              SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  FlutterLogo(),
-                  SizedBox(width: 10),
+                  const FlutterLogo(),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -86,7 +86,7 @@ class SingleOrderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

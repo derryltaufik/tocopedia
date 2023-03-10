@@ -25,11 +25,11 @@ class WaitingPaymentCard extends StatelessWidget {
               Row(
                 children: [
                   Icon(Icons.payments_outlined, color: theme.primaryColor),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text("Waiting For Payment", style: theme.textTheme.bodyLarge),
                 ],
               ),
-              Icon(Icons.arrow_forward_ios_rounded)
+              const Icon(Icons.arrow_forward_ios_rounded)
             ],
           ),
         ),

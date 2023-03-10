@@ -46,8 +46,8 @@ class SingleOrderItemCard extends StatelessWidget {
                       text: orderItem.status!, color: statusEnum.color),
                 ],
               ),
-              Divider(),
-              SizedBox(height: 5),
+              const Divider(),
+              const SizedBox(height: 5),
               Row(
                 children: [
                   ClipRRect(
@@ -58,7 +58,7 @@ class SingleOrderItemCard extends StatelessWidget {
                         height: 50,
                         fit: BoxFit.cover),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,10 +79,10 @@ class SingleOrderItemCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               if (orderItem.orderItemDetails!.length > 1) ...[
                 Text("+ ${orderItem.orderItemDetails!.length - 1} other product(s)"),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

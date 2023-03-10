@@ -83,12 +83,12 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         ViewProductCard(
                             productId: review.product!.id!,
                             name: review.productName!,
                             image: review.productImage!),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         RatingBar.builder(
                           itemSize: 16,
                           initialRating: review.rating!.toDouble(),
@@ -105,23 +105,23 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
                               TextSpan(
                                   text: "${review.buyer?.name}",
                                   style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                                      const TextStyle(fontWeight: FontWeight.bold)),
                               TextSpan(
                                   text:
                                       " - ${DateFormat("dd MMM yyyy").format(review.updatedAt!)}"),
                             ],
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                             review.review == null
                                 ? "No review"
                                 : "${review.review}",
                             style: theme.textTheme.bodyLarge),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         if (review.images != null && review.images!.isNotEmpty)
                           PhotosHorizontalListView(images: review.images!),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                       ],
                     ),
                   ),
@@ -168,7 +168,7 @@ class ViewProductCard extends StatelessWidget {
               width: 50,
               height: 50,
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
                 name,

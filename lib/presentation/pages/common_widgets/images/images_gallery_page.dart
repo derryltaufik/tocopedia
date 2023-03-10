@@ -66,7 +66,7 @@ class _ImagesGalleryPageState extends State<ImagesGalleryPage> {
               },
               itemCount: widget.images.length,
               loadingBuilder: (context, event) => Center(
-                child: Container(
+                child: SizedBox(
                   width: 20.0,
                   height: 20.0,
                   child: CircularProgressIndicator(
@@ -85,7 +85,7 @@ class _ImagesGalleryPageState extends State<ImagesGalleryPage> {
               alignment: AlignmentDirectional.topStart,
               child: IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.close_rounded,
                     color: Colors.white,
                   )),

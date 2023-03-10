@@ -42,7 +42,7 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order Detail"),
+        title: const Text("Order Detail"),
       ),
       body: RefreshIndicator(
         onRefresh: () => _fetchData(context),
@@ -121,7 +121,7 @@ class PaymentDetailsSection extends StatelessWidget {
           "Payment Details",
           style: theme.textTheme.titleMedium,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -130,10 +130,10 @@ class PaymentDetailsSection extends StatelessWidget {
               style:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
-            Text("Tocopedia Pay")
+            const Text("Tocopedia Pay")
           ],
         ),
-        Divider(thickness: 0),
+        const Divider(thickness: 0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -170,7 +170,7 @@ class ShippingInfoSection extends StatelessWidget {
           "Shipping Info",
           style: theme.textTheme.titleMedium,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Table(
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(1),
@@ -185,7 +185,7 @@ class ShippingInfoSection extends StatelessWidget {
                   style: theme.textTheme.bodyMedium!
                       .copyWith(color: Colors.black54),
                 ),
-                Text("Tocopedia Express"),
+                const Text("Tocopedia Express"),
               ],
             ),
             const TableRow(
@@ -215,7 +215,7 @@ class ShippingInfoSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${orderItem.order!.address!.receiverName!}",
+                      "${orderItem.order!.address!.receiverName}",
                       style: theme.textTheme.bodyMedium!
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
@@ -258,11 +258,11 @@ class ProductDetailsSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 5),
+          separatorBuilder: (context, index) => const SizedBox(height: 5),
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: orderItem.orderItemDetails!.length,
           itemBuilder: (context, index) {
             final orderItemDetail = orderItem.orderItemDetails![index];
@@ -293,7 +293,7 @@ class OrderItemInfoSection extends StatelessWidget {
       children: [
         Text(orderItem.status!.toTitleCase(),
             style: theme.textTheme.titleMedium),
-        Divider(thickness: 0),
+        const Divider(thickness: 0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -315,7 +315,7 @@ class OrderItemInfoSection extends StatelessWidget {
               )
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

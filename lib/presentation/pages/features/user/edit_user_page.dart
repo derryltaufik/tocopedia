@@ -48,7 +48,7 @@ class _EditUserPageState extends State<EditUserPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
       ),
       body: SafeArea(
         child: Center(
@@ -56,7 +56,7 @@ class _EditUserPageState extends State<EditUserPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.account_circle, size: 100),
+                const Icon(Icons.account_circle, size: 100),
                 Padding(
                   padding: const EdgeInsets.all(30),
                   child: Form(
@@ -64,7 +64,7 @@ class _EditUserPageState extends State<EditUserPage> {
                       child: Column(
                         children: [
                           TextFormField(
-                            key: Key("name_field"),
+                            key: const Key("name_field"),
                             controller: _nameController..text = user.name!,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.person_rounded),
@@ -91,7 +91,7 @@ class _EditUserPageState extends State<EditUserPage> {
                         color: theme.scaffoldBackgroundColor,
                       );
                     }
-                    return Text("Save Changes");
+                    return const Text("Save Changes");
                   }),
                 ),
               ],

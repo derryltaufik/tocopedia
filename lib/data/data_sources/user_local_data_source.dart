@@ -11,20 +11,32 @@ abstract class UserLocalDataSource {
 class UserLocalDataSourceImpl implements UserLocalDataSource {
   @override
   Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+    } on Exception {
+      rethrow;
+    }
   }
 
   @override
   Future<String?> retrieveToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
-    return token;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String? token = prefs.getString('token');
+      return token;
+    } on Exception {
+      rethrow;
+    }
   }
 
   @override
   Future<void> deleteToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('token');
+    } on Exception {
+      rethrow;
+    }
   }
 }

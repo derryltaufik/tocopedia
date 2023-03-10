@@ -42,7 +42,7 @@ class WishlistActionButtons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10)),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: EdgeInsets.all(5)),
+              padding: const EdgeInsets.all(5)),
           onPressed: () => deleteWishlist(context),
           child: Icon(
             Icons.heart_broken_rounded,
@@ -50,7 +50,7 @@ class WishlistActionButtons extends StatelessWidget {
             color: theme.colorScheme.tertiary,
           ),
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Expanded(
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -58,9 +58,9 @@ class WishlistActionButtons extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 minimumSize: Size.zero,
-                padding: EdgeInsets.all(5)),
+                padding: const EdgeInsets.all(5)),
             onPressed: () => addToCart(context),
-            child: Text("+ Add to Cart"),
+            child: const Text("+ Add to Cart"),
           ),
         ),
       ],

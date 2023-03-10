@@ -41,7 +41,7 @@ class _CartPageState extends State<CartPage> {
         GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-            appBar: AppBar(title: Text("Cart")),
+            appBar: AppBar(title: const Text("Cart")),
             body: SizedBox(
               height: double.infinity,
               child: RefreshIndicator(
@@ -65,9 +65,9 @@ class _CartPageState extends State<CartPage> {
 
                     return ListView.separated(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.only(bottom: 100),
+                      padding: const EdgeInsets.only(bottom: 100),
                       separatorBuilder: (context, index) =>
-                          Divider(thickness: 5),
+                          const Divider(thickness: 5),
                       itemCount: cartItems.length,
                       itemBuilder: (context, index) {
                         final cartItem = cartItems[index];
@@ -85,7 +85,7 @@ class _CartPageState extends State<CartPage> {
           child: Material(
             elevation: 20,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: theme.scaffoldBackgroundColor,
                 boxShadow: [
@@ -93,7 +93,7 @@ class _CartPageState extends State<CartPage> {
                     color: Colors.grey.withOpacity(1),
                     spreadRadius: 2,
                     blurRadius: 2,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),

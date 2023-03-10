@@ -109,7 +109,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
                             width: 50,
                             height: 50,
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                               child: Text(
                             widget.review.productName ?? "",
@@ -162,7 +162,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
                         maxLines: null,
                       ),
                       CheckboxFormField(
-                        title: Text("Hide your name"),
+                        title: const Text("Hide your name"),
                         initialValue: _anonymous,
                         onSaved: (newValue) => _anonymous = newValue ?? false,
                       ),

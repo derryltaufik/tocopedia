@@ -74,7 +74,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ],
           ),
-          Divider(thickness: 0),
+          const Divider(thickness: 0),
           Text(selectedAddress.label!, style: theme.textTheme.titleSmall),
           Text(
               "${selectedAddress.receiverName} (${selectedAddress.receiverPhone})"),
@@ -90,13 +90,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final cart =
         Provider.of<CartProvider>(context, listen: false).getCheckoutCart();
     return Scaffold(
-      appBar: AppBar(title: Text("Checkout")),
+      appBar: AppBar(title: const Text("Checkout")),
       body: Column(
         children: [
           Flexible(
             child: ListView.separated(
-              padding: EdgeInsets.only(bottom: 10),
-              separatorBuilder: (context, index) => Divider(thickness: 5),
+              padding: const EdgeInsets.only(bottom: 10),
+              separatorBuilder: (context, index) => const Divider(thickness: 5),
               itemCount: cart.cartItems.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) return _buildAddressSection(context);
@@ -111,7 +111,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Text("Order ${index + 1}",
                           style: theme.textTheme.titleSmall),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       CheckoutItemTile(cartItem: cart.cartItems[index]),
                     ],
                   ),
@@ -120,7 +120,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             decoration: BoxDecoration(
               color: theme.scaffoldBackgroundColor,
               boxShadow: [
@@ -128,7 +128,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: Colors.grey.withOpacity(1),
                   spreadRadius: 2,
                   blurRadius: 2,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -151,8 +151,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   FilledButton(
                     style: FilledButton.styleFrom(
                         textStyle: theme.textTheme.titleMedium),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.0),
                       child: Text("Checkout"),
                     ),
                     onPressed: () => checkout(context),

@@ -133,7 +133,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
     final product = widget.cartItemDetail.product;
 
     if (loading || product == null) {
-      return ListTile(
+      return const ListTile(
         title: Center(child: CircularProgressIndicator()),
       );
     }
@@ -170,11 +170,11 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
                                   child: CircularProgressIndicator(
                                       value: downloadProgress.progress)),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +185,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 3),
+                          const SizedBox(height: 3),
                           Text(
                             rupiahFormatter.format(product.price),
                             style: theme.textTheme.titleMedium,
@@ -201,17 +201,17 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
             )
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(children: [
             Text("Move To Wishlist",
                 style: theme.textTheme.bodyMedium!
                     .copyWith(color: Colors.black54)),
-            Spacer(),
+            const Spacer(),
             IconButton(
               onPressed: () => deleteCartItem(context),
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete_outline_rounded,
                 color: Colors.black54,
               ),

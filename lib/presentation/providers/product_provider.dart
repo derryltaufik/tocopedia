@@ -156,6 +156,7 @@ class ProductProvider with ChangeNotifier {
       _message = e.toString();
       _getProductState = ProviderState.error;
       notifyListeners();
+      return null;
     }
   }
 

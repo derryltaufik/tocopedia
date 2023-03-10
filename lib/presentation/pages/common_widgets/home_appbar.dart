@@ -22,7 +22,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: CartButton(),
+              child: const CartButton(),
             ),
           ],
         ),

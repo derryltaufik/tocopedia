@@ -5,7 +5,7 @@ import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/providers/category_provider.dart';
 
 class CategoryDropdown extends StatefulWidget {
-  CategoryDropdown({Key? key, this.onChanged, this.initialCategory})
+  const CategoryDropdown({Key? key, this.onChanged, this.initialCategory})
       : super(key: key);
   final Function(Category? value)? onChanged;
   final Category? initialCategory;
@@ -64,7 +64,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                 height: 30,
                 width: 30,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(value.name ?? ""),
             ],
           ),
