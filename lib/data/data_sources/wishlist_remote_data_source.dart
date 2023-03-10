@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -21,55 +22,79 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
 
   @override
   Future<WishlistModel> addWishlist(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<WishlistModel> deleteWishlist(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
 
-    final response = await client.delete(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .delete(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<WishlistModel> getWishlist(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/wishlist');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/wishlist');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return WishlistModel.fromMap(responseBody["data"]["wishlist"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

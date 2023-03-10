@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -19,36 +20,52 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
 
   @override
   Future<List<CategoryModel>> getAllCategories() async {
-    final url = Uri.parse(BASE_URL).replace(path: '/categories');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/categories');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader,
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader,
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return List<CategoryModel>.from(
-          responseBody["data"]["results"].map((x) => CategoryModel.fromMap(x)));
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return List<CategoryModel>.from(responseBody["data"]["results"]
+            .map((x) => CategoryModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CategoryModel> getCategory(String categoryId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/categories/$categoryId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/categories/$categoryId');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader,
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader,
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CategoryModel.fromMap(responseBody["data"]["category"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CategoryModel.fromMap(responseBody["data"]["category"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

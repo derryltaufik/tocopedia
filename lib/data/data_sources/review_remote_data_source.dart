@@ -48,30 +48,39 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
       List<String>? images,
       String? review,
       bool? anonymous}) async {
-    final body = ({
-      "rating": rating,
-      "images": images ?? [],
-      "review": review,
-      "anonymous": anonymous,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+    try {
+      final body = ({
+        "rating": rating,
+        "images": images ?? [],
+        "review": review,
+        "anonymous": anonymous,
+      }..removeWhere(
+          (key, value) => value == null || value.toString().isEmpty));
 
-    final url =
-        Uri.parse(BASE_URL).replace(path: '/reviews/$orderItemDetailId');
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/reviews/$orderItemDetailId');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ReviewModel.fromMap(responseBody["data"]["review"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ReviewModel.fromMap(responseBody["data"]["review"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
@@ -80,106 +89,147 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
       List<String>? images,
       String? review,
       bool? anonymous}) async {
-    final body = ({
-      "rating": rating,
-      "images": images ?? [],
-      "review": review,
-      "anonymous": anonymous,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+    try {
+      final body = ({
+        "rating": rating,
+        "images": images ?? [],
+        "review": review,
+        "anonymous": anonymous,
+      }..removeWhere(
+          (key, value) => value == null || value.toString().isEmpty));
 
-    final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+      final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
 
-    final response = await client.patch(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ReviewModel.fromMap(responseBody["data"]["review"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ReviewModel.fromMap(responseBody["data"]["review"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<ReviewModel>> getBuyerReviews(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/reviews/buyer');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/reviews/buyer');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ReviewModel>.from(
-          responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ReviewModel>.from(
+            responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<ReviewModel>> getProductReviews(String productId) async {
-    final url =
-        Uri.parse(BASE_URL).replace(path: '/reviews/products/$productId');
+    try {
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/reviews/products/$productId');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader,
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader,
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ReviewModel>.from(
-          responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ReviewModel>.from(
+            responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<ReviewModel>> getSellerReviews(String sellerId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/reviews/seller/$sellerId');
+    try {
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/reviews/seller/$sellerId');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader,
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader,
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ReviewModel>.from(
-          responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ReviewModel>.from(
+            responseBody["data"]["results"].map((x) => ReviewModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<ReviewModel> getReview(String reviewId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader,
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader,
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ReviewModel.fromMap(responseBody["data"]["review"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ReviewModel.fromMap(responseBody["data"]["review"]);
+      }
 
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

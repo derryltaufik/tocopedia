@@ -24,24 +24,32 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<UserModel> signUp(String email, String password, String name) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/auth/signup');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/auth/signup');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader,
-      body: json.encode({
-        "email": email,
-        "password": password,
-        "name": name,
-      }),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader,
+            body: json.encode({
+              "email": email,
+              "password": password,
+              "name": name,
+            }),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return UserModel.fromMap(responseBody["data"]["user"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return UserModel.fromMap(responseBody["data"]["user"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
@@ -103,23 +111,31 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UserModel> updateUser(String token,
       {String? name, String? addressId}) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/users');
-    final response = await client.patch(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode({
-        "name": name,
-        "default_address": addressId,
-      }..removeWhere((key, value) => value == null)),
-    );
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/users');
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode({
+              "name": name,
+              "default_address": addressId,
+            }..removeWhere((key, value) => value == null)),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return UserModel.fromMap(responseBody["data"]["user"])
-          .copyWith(token: token);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return UserModel.fromMap(responseBody["data"]["user"])
+            .copyWith(token: token);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

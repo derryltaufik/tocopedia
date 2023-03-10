@@ -14,9 +14,12 @@ class RemoteStorageServiceImpl implements RemoteStorageService {
       final cloudinary =
           CloudinaryPublic(CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET);
 
-      CloudinaryResponse response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(imageFile.path, folder: folderName),
-      );
+      CloudinaryResponse response = await cloudinary
+          .uploadFile(
+            CloudinaryFile.fromFile(imageFile.path, folder: folderName),
+          )
+          .timeout(const Duration(seconds: 5));
+
       return response.secureUrl;
     } catch (e) {
       rethrow;

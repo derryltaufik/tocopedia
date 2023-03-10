@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -57,12 +58,14 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
 
     final url = Uri.parse(BASE_URL).replace(path: '/addresses');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+    final response = await client
+        .post(
+          url,
+          headers: defaultHeader
+            ..addEntries({"Authorization": "Bearer $token"}.entries),
+          body: json.encode(body),
+        )
+        .timeout(const Duration(seconds: 5));
 
     final responseBody = json.decode(response.body);
 
@@ -80,87 +83,120 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       String? notes,
       String? receiverName,
       String? receiverPhone}) async {
-    final body = ({
-      "label": label,
-      "complete_address": completeAddress,
-      "notes": notes,
-      "receiver_name": receiverName,
-      "receiver_phone": receiverPhone,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+    try {
+      final body = ({
+        "label": label,
+        "complete_address": completeAddress,
+        "notes": notes,
+        "receiver_name": receiverName,
+        "receiver_phone": receiverPhone,
+      }..removeWhere(
+          (key, value) => value == null || value.toString().isEmpty));
 
-    final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
 
-    final response = await client.patch(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return AddressModel.fromMap(responseBody["data"]["address"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return AddressModel.fromMap(responseBody["data"]["address"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<AddressModel> deleteAddress(String token, String addressId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
 
-    final response = await client.delete(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .delete(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return AddressModel.fromMap(responseBody["data"]["address"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return AddressModel.fromMap(responseBody["data"]["address"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<AddressModel> getAddress(String token, String addressId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return AddressModel.fromMap(responseBody["data"]["address"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return AddressModel.fromMap(responseBody["data"]["address"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<AddressModel>> getUserAddresses(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/addresses');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/addresses');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<AddressModel>.from(
-          responseBody["data"]["results"].map((x) => AddressModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<AddressModel>.from(responseBody["data"]["results"]
+            .map((x) => AddressModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

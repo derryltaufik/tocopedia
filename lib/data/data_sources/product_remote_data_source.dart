@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -56,16 +57,24 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<ProductModel> getProduct(String id) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/products/$id');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/products/$id');
 
-    final response = await client.get(url, headers: defaultHeader);
+      final response = await client
+          .get(url, headers: defaultHeader)
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return ProductModel.fromMap(responseBody["data"]["product"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return ProductModel.fromMap(responseBody["data"]["product"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
@@ -76,48 +85,64 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       int? maximumPrice,
       String? sortBy,
       String? sortOrder}) async {
-    final queryParams = ({
-      "q": query,
-      "category": category?.id,
-      "min-price": minimumPrice,
-      "max-price": maximumPrice,
-      "sort-by": sortBy,
-      "sort-order": sortOrder
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty))
-        .map((key, value) => MapEntry(key, value.toString()));
+    try {
+      final queryParams = ({
+        "q": query,
+        "category": category?.id,
+        "min-price": minimumPrice,
+        "max-price": maximumPrice,
+        "sort-by": sortBy,
+        "sort-order": sortOrder
+      }..removeWhere((key, value) => value == null || value.toString().isEmpty))
+          .map((key, value) => MapEntry(key, value.toString()));
 
-    final url = Uri.parse(BASE_URL).replace(
-      path: '/products/search',
-      queryParameters: queryParams,
-    );
+      final url = Uri.parse(BASE_URL).replace(
+        path: '/products/search',
+        queryParameters: queryParams,
+      );
 
-    final response = await client.get(url, headers: defaultHeader);
+      final response = await client
+          .get(url, headers: defaultHeader)
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ProductModel>.from(
-          responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ProductModel>.from(responseBody["data"]["results"]
+            .map((x) => ProductModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<ProductModel>> getPopularProducts() async {
-    final url = Uri.parse(BASE_URL).replace(
-      path: '/products/popular',
-    );
+    try {
+      final url = Uri.parse(BASE_URL).replace(
+        path: '/products/popular',
+      );
 
-    final response = await client.get(url, headers: defaultHeader);
+      final response = await client
+          .get(url, headers: defaultHeader)
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ProductModel>.from(
-          responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ProductModel>.from(responseBody["data"]["results"]
+            .map((x) => ProductModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
@@ -129,52 +154,69 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       String? sku,
       required String description,
       required String categoryId}) async {
-    final body = ({
-      "name": name,
-      "category": categoryId,
-      "images": images,
-      "price": price,
-      "stock": stock,
-      "SKU": sku,
-      "description": description
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+    try {
+      final body = ({
+        "name": name,
+        "category": categoryId,
+        "images": images,
+        "price": price,
+        "stock": stock,
+        "SKU": sku,
+        "description": description
+      }..removeWhere(
+          (key, value) => value == null || value.toString().isEmpty));
 
-    final url = Uri.parse(BASE_URL).replace(path: '/products');
+      final url = Uri.parse(BASE_URL).replace(path: '/products');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ProductModel.fromMap(responseBody["data"]["product"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ProductModel.fromMap(responseBody["data"]["product"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<ProductModel>> getUserProducts(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/products/seller');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/products/seller');
 
-    final response = await client.get(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return List<ProductModel>.from(
-          responseBody["data"]["results"].map((x) => ProductModel.fromMap(x)));
+      if (response.statusCode ~/ 100 == 2) {
+        return List<ProductModel>.from(responseBody["data"]["results"]
+            .map((x) => ProductModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
@@ -190,57 +232,74 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     String? categoryId,
     bool? active,
   }) async {
-    final String? status = active == null
-        ? null
-        : active == true
-            ? "active"
-            : "inactive";
+    try {
+      final String? status = active == null
+          ? null
+          : active == true
+              ? "active"
+              : "inactive";
 
-    final body = ({
-      "name": name,
-      "category": categoryId,
-      "images": images,
-      "price": price,
-      "stock": stock,
-      "SKU": sku,
-      "description": description,
-      "status": status,
-    }..removeWhere((key, value) => value == null || value.toString().isEmpty));
+      final body = ({
+        "name": name,
+        "category": categoryId,
+        "images": images,
+        "price": price,
+        "stock": stock,
+        "SKU": sku,
+        "description": description,
+        "status": status,
+      }..removeWhere(
+          (key, value) => value == null || value.toString().isEmpty));
 
-    final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
+      final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
 
-    final response = await client.patch(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode(body),
-    );
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ProductModel.fromMap(responseBody["data"]["product"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ProductModel.fromMap(responseBody["data"]["product"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<ProductModel> deleteProduct(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
 
-    final response = await client.delete(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-    );
+      final response = await client
+          .delete(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return ProductModel.fromMap(responseBody["data"]["product"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return ProductModel.fromMap(responseBody["data"]["product"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

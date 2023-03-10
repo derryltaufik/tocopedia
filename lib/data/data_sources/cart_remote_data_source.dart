@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -33,149 +34,239 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
 
   @override
   Future<CartModel> getCart(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart');
 
-    final response = await client.get(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> clearCart(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/clear');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart/clear');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
+      final responseBody = json.decode(response.body);
 
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> addToCart(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/add/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart/add/$productId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> removeFromCart(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/remove/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart/remove/$productId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> selectCartItem(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/select/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart/select/$productId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> selectSeller(String token, String sellerId) async {
-    final url =
-        Uri.parse(BASE_URL).replace(path: '/cart/select/seller/$sellerId');
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+    try {
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/cart/select/seller/$sellerId');
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> unSelectCartItem(String token, String productId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/unselect/$productId');
+    try {
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/cart/unselect/$productId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> unselectSeller(String token, String sellerId) async {
-    final url =
-        Uri.parse(BASE_URL).replace(path: '/cart/unselect/seller/$sellerId');
+    try {
+      final url =
+          Uri.parse(BASE_URL).replace(path: '/cart/unselect/seller/$sellerId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<CartModel> updateCart(
       String token, String productId, int quantity) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/cart/update/$productId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/cart/update/$productId');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries),
-        body: json.encode({"quantity": quantity}));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode({"quantity": quantity}),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return CartModel.fromMap(responseBody["data"]["cart"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return CartModel.fromMap(responseBody["data"]["cart"]);
+      }
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }
