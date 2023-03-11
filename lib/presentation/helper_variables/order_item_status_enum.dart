@@ -15,7 +15,7 @@ enum Status {
   final String description;
   final Color color;
 
-  static fromString(String status) {
+  static Status fromString(String status) {
     return Status.values.firstWhere((element) => element.description == status);
   }
 }

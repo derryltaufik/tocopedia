@@ -25,7 +25,7 @@ class CategoryButton extends StatelessWidget {
             height: 30,
             width: 30,
           ),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Expanded(
             child: Text(
               category.name!,

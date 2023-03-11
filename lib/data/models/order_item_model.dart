@@ -12,7 +12,7 @@ class OrderItemModel {
     this.order,
     this.buyer,
     this.seller,
-    this.products,
+    this.orderItemDetails,
     this.subtotal,
     this.quantityTotal,
     this.airwaybill,
@@ -26,7 +26,7 @@ class OrderItemModel {
   final OrderModel? order;
   final UserModel? buyer;
   final UserModel? seller;
-  final List<OrderItemDetailModel>? products;
+  final List<OrderItemDetailModel>? orderItemDetails;
   final int? subtotal;
   final int? quantityTotal;
   final String? airwaybill;
@@ -37,7 +37,7 @@ class OrderItemModel {
 
   @override
   String toString() {
-    return 'OrderItemModel{ id: $id, order: $order, buyer: $buyer, seller: $seller, products: $products, subtotal: $subtotal, quantityTotal: $quantityTotal, airwaybill: $airwaybill, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
+    return 'OrderItemModel{ id: $id, order: $order, buyer: $buyer, seller: $seller, orderItemDetails: $orderItemDetails, subtotal: $subtotal, quantityTotal: $quantityTotal, airwaybill: $airwaybill, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, v: $v,}';
   }
 
   OrderItem toEntity() {
@@ -46,9 +46,10 @@ class OrderItemModel {
       order: order?.toEntity(),
       buyer: buyer?.toEntity(),
       seller: seller?.toEntity(),
-      products: products == null
+      orderItemDetails: orderItemDetails == null
           ? null
-          : List<OrderItemDetail>.from(products!.map((x) => x.toEntity())),
+          : List<OrderItemDetail>.from(
+              orderItemDetails!.map((x) => x.toEntity())),
       status: status,
       airwaybill: airwaybill,
       quantityTotal: quantityTotal,
@@ -64,7 +65,7 @@ class OrderItemModel {
     OrderModel? order,
     UserModel? buyer,
     UserModel? seller,
-    List<OrderItemDetailModel>? products,
+    List<OrderItemDetailModel>? orderItemDetails,
     int? subtotal,
     int? quantityTotal,
     String? airwaybill,
@@ -78,7 +79,7 @@ class OrderItemModel {
         order: order ?? this.order,
         buyer: buyer ?? this.buyer,
         seller: seller ?? this.seller,
-        products: products ?? this.products,
+        orderItemDetails: orderItemDetails ?? this.orderItemDetails,
         subtotal: subtotal ?? this.subtotal,
         quantityTotal: quantityTotal ?? this.quantityTotal,
         airwaybill: airwaybill ?? this.airwaybill,
@@ -99,10 +100,10 @@ class OrderItemModel {
         buyer: json["buyer"] == null ? null : UserModel.fromMap(json["buyer"]),
         seller:
             json["seller"] == null ? null : UserModel.fromMap(json["seller"]),
-        products: json["products"] == null
+        orderItemDetails: json["order_item_details"] == null
             ? []
-            : List<OrderItemDetailModel>.from(
-                json["products"]!.map((x) => OrderItemDetailModel.fromMap(x))),
+            : List<OrderItemDetailModel>.from(json["order_item_details"]!
+                .map((x) => OrderItemDetailModel.fromMap(x))),
         subtotal: json["subtotal"],
         quantityTotal: json["quantity_total"],
         airwaybill: json["airwaybill"],
@@ -121,9 +122,9 @@ class OrderItemModel {
         "order": order?.toMap(),
         "buyer": buyer?.toMap(),
         "seller": seller?.toMap(),
-        "products": products == null
+        "order_item_details": orderItemDetails == null
             ? []
-            : List<dynamic>.from(products!.map((x) => x.toMap())),
+            : List<dynamic>.from(orderItemDetails!.map((x) => x.toMap())),
         "subtotal": subtotal,
         "quantity_total": quantityTotal,
         "airwaybill": airwaybill,

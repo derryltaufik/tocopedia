@@ -50,7 +50,8 @@ class OrderItemRepositoryImpl implements OrderItemRepository {
   @override
   Future<OrderItem> processOrderItem(String token, String orderItemId) async {
     try {
-      final result = await remoteDataSource.cancelOrderItem(token, orderItemId);
+      final result =
+          await remoteDataSource.processOrderItem(token, orderItemId);
       return result.toEntity();
     } catch (e) {
       rethrow;

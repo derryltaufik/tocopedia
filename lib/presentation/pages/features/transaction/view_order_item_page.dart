@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/helper_variables/string_extension.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart';
+import 'package:tocopedia/presentation/pages/features/transaction/widgets/order_item_action_button.dart';
+import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/pages/features/transaction/widgets/single_order_item_detail_card.dart';
 
@@ -26,96 +29,75 @@ class _ViewOrderItemPageState extends State<ViewOrderItemPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<OrderItemProvider>(context, listen: false)
-          .getOrderItem(widget.orderItemId);
+      _fetchData(context);
     });
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<OrderItemProvider>(context, listen: false)
+        .getOrderItem(widget.orderItemId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order Detail"),
+        title: const Text("Order Detail"),
       ),
-      body: Column(
-        children: [
-          Consumer<OrderItemProvider>(
-              builder: (context, orderItemProvider, child) {
-            if (orderItemProvider.getOrderItemState == ProviderState.loading) {
-              return Expanded(
-                  child: Center(child: CircularProgressIndicator()));
-            }
-            if (orderItemProvider.getOrderItemState == ProviderState.error) {
-              return Expanded(
-                  child: Center(child: Text(orderItemProvider.message)));
-            }
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child: Consumer<OrderItemProvider>(
+            builder: (context, orderItemProvider, child) {
+          if (orderItemProvider.getOrderItemState == ProviderState.loading) {
+            return const SingleChildFullPageScrollView.loading();
+          }
+          if (orderItemProvider.getOrderItemState == ProviderState.error) {
+            return SingleChildFullPageScrollView(
+                child: Text(orderItemProvider.message));
+          }
 
-            final orderItem = orderItemProvider.orderItem;
+          final orderItem = orderItemProvider.orderItem;
 
-            if (orderItem == null) {
-              return Expanded(
-                  child: Center(child: Text("You don't have any order yet.")));
-            }
+          if (orderItem == null) {
+            return const SingleChildFullPageScrollView(
+                child: Text("Order not found"));
+          }
 
-            return Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: OrderItemInfoSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ProductDetailsSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ShippingInfoSection(orderItem: orderItem),
-                    ),
-                    Container(height: 10, color: Colors.black12),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: PaymentDetailsSection(orderItem: orderItem),
-                    ),
-                    Container(height: 0, color: Colors.black12),
-                  ],
-                ),
-              ),
-            );
-          }),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(1),
-                  spreadRadius: 2,
-                  blurRadius: 2,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.titleMedium),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: Text("Review Product"),
-                    ),
-                    onPressed: () {},
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: OrderItemInfoSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ProductDetailsSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ShippingInfoSection(orderItem: orderItem),
+                      ),
+                      Container(height: 10, color: Colors.black12),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: PaymentDetailsSection(orderItem: orderItem),
+                      ),
+                      Container(height: 0, color: Colors.black12),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+              OrderItemActionButton(orderItem: orderItem),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -139,7 +121,7 @@ class PaymentDetailsSection extends StatelessWidget {
           "Payment Details",
           style: theme.textTheme.titleMedium,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -148,10 +130,10 @@ class PaymentDetailsSection extends StatelessWidget {
               style:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
-            Text("Tocopedia Pay")
+            const Text("Tocopedia Pay")
           ],
         ),
-        Divider(thickness: 0),
+        const Divider(thickness: 0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -188,7 +170,7 @@ class ShippingInfoSection extends StatelessWidget {
           "Shipping Info",
           style: theme.textTheme.titleMedium,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Table(
           columnWidths: const <int, TableColumnWidth>{
             0: FlexColumnWidth(1),
@@ -203,7 +185,7 @@ class ShippingInfoSection extends StatelessWidget {
                   style: theme.textTheme.bodyMedium!
                       .copyWith(color: Colors.black54),
                 ),
-                Text("Tocopedia Express"),
+                const Text("Tocopedia Express"),
               ],
             ),
             const TableRow(
@@ -233,7 +215,7 @@ class ShippingInfoSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${orderItem.order!.address!.receiverName!}",
+                      "${orderItem.order!.address!.receiverName}",
                       style: theme.textTheme.bodyMedium!
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
@@ -276,14 +258,14 @@ class ProductDetailsSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(height: 5),
+          separatorBuilder: (context, index) => const SizedBox(height: 5),
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: orderItem.products!.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: orderItem.orderItemDetails!.length,
           itemBuilder: (context, index) {
-            final orderItemDetail = orderItem.products![index];
+            final orderItemDetail = orderItem.orderItemDetails![index];
             return SingleOrderItemDetailCard(orderItemDetail: orderItemDetail);
           },
         )
@@ -303,12 +285,15 @@ class OrderItemInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isBuyerMode =
+        Provider.of<LocalSettingsProvider>(context, listen: false).appMode ==
+            AppMode.buyer;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(orderItem.status!.toTitleCase(),
             style: theme.textTheme.titleMedium),
-        Divider(thickness: 0),
+        const Divider(thickness: 0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -317,19 +302,20 @@ class OrderItemInfoSection extends StatelessWidget {
               style:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
-            GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(
-                  ViewOrderPage.routeName,
-                  arguments: orderItem.order!.id!),
-              child: Text(
-                "View Order",
-                style: theme.textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.bold, color: theme.primaryColor),
-              ),
-            )
+            if (isBuyerMode)
+              GestureDetector(
+                onTap: () => Navigator.of(context).pushNamed(
+                    ViewOrderPage.routeName,
+                    arguments: orderItem.order!.id!),
+                child: Text(
+                  "View Order",
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold, color: theme.primaryColor),
+                ),
+              )
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

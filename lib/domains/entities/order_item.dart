@@ -8,7 +8,7 @@ class OrderItem {
     required this.order,
     required this.buyer,
     required this.seller,
-    required this.products,
+    required this.orderItemDetails,
     required this.subtotal,
     required this.quantityTotal,
     required this.airwaybill,
@@ -22,7 +22,7 @@ class OrderItem {
   final Order? order;
   final User? buyer;
   final User? seller;
-  final List<OrderItemDetail>? products;
+  final List<OrderItemDetail>? orderItemDetails;
   final int? subtotal;
   final int? quantityTotal;
   final String? airwaybill;

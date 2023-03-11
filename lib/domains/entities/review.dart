@@ -1,29 +1,41 @@
+import 'package:tocopedia/domains/entities/order_item_detail.dart';
+import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/domains/entities/user.dart';
 
 class Review {
   Review({
-    required this.id,
-    required this.orderItemId,
-    required this.buyerId,
-    required this.productId,
-    required this.rating,
-    required this.images,
-    required this.review,
-    required this.anonymous,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
+    this.id,
+    this.orderItemDetail,
+    this.seller,
+    this.buyer,
+    this.product,
+    this.images,
+    this.anonymous,
+    this.completed,
+    this.totalUpdate,
+    this.createdAt,
+    this.updatedAt,
+    this.productName,
+    this.productImage,
+    this.review,
+    this.v,
+    this.rating,
   });
 
-  final String id;
-  final String orderItemId;
-  final String buyerId;
-  final String productId;
-  final int rating;
-  final List<String> images;
-  final String review;
-  final bool anonymous;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
-
+  final String? id;
+  final OrderItemDetail? orderItemDetail;
+  final User? seller;
+  final User? buyer;
+  final Product? product;
+  final List<String>? images;
+  final bool? anonymous;
+  final bool? completed;
+  final int? totalUpdate;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? productName;
+  final String? productImage;
+  final String? review;
+  final int? v;
+  final int? rating;
 }

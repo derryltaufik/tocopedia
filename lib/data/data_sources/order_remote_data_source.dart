@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:tocopedia/common/constants.dart';
@@ -25,85 +26,133 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   @override
   Future<OrderModel> checkout(String token, String addressId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/orders/checkout');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/orders/checkout');
 
-    final response = await client.post(
-      url,
-      headers: defaultHeader
-        ..addEntries({"Authorization": "Bearer $token"}.entries),
-      body: json.encode({"address": addressId}),
-    );
+      final response = await client
+          .post(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+            body: json.encode({"address": addressId}),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return OrderModel.fromMap(responseBody["data"]["order"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return OrderModel.fromMap(responseBody["data"]["order"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<OrderModel> payOrder(String token, String orderId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/pay');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/pay');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return OrderModel.fromMap(responseBody["data"]["order"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return OrderModel.fromMap(responseBody["data"]["order"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<OrderModel> cancelOrder(String token, String orderId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/cancel');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/cancel');
 
-    final response = await client.patch(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .patch(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return OrderModel.fromMap(responseBody["data"]["order"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return OrderModel.fromMap(responseBody["data"]["order"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<OrderModel> getOrder(String token, String orderId) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId');
 
-    final response = await client.get(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return OrderModel.fromMap(responseBody["data"]["order"]);
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return OrderModel.fromMap(responseBody["data"]["order"]);
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 
   @override
   Future<List<OrderModel>> getUserOrders(String token) async {
-    final url = Uri.parse(BASE_URL).replace(path: '/orders');
+    try {
+      final url = Uri.parse(BASE_URL).replace(path: '/orders');
 
-    final response = await client.get(url,
-        headers: defaultHeader
-          ..addEntries({"Authorization": "Bearer $token"}.entries));
+      final response = await client
+          .get(
+            url,
+            headers: defaultHeader
+              ..addEntries({"Authorization": "Bearer $token"}.entries),
+          )
+          .timeout(const Duration(seconds: 5));
 
-    final responseBody = json.decode(response.body);
-    if (response.statusCode ~/ 100 == 2) {
-      return List<OrderModel>.from(
-          responseBody["data"]["results"].map((x) => OrderModel.fromMap(x)));
+      final responseBody = json.decode(response.body);
+      if (response.statusCode ~/ 100 == 2) {
+        return List<OrderModel>.from(
+            responseBody["data"]["results"].map((x) => OrderModel.fromMap(x)));
+      }
+
+      throw ServerException(responseBody["error"].toString());
+    } on TimeoutException catch (e) {
+      throw ServerTimeoutException(e.duration);
+    } on Exception {
+      rethrow;
     }
-
-    throw ServerException(responseBody["error"].toString());
   }
 }

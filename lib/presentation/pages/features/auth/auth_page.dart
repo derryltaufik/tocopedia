@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_snack_bar.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 enum AuthFormMode { signUp, login }
@@ -49,13 +50,7 @@ class _AuthPageState extends State<AuthPage> {
     //show error message
     if (userProvider.authState == ProviderState.error) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(userProvider.message),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showCustomSnackBar(context, message: userProvider.message);
       }
     }
   }
@@ -77,7 +72,7 @@ class _AuthPageState extends State<AuthPage> {
         child: Consumer<UserProvider>(
           builder: (context, value, child) {
             if (value.autoLoginState == ProviderState.loading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return Center(
@@ -95,7 +90,7 @@ class _AuthPageState extends State<AuthPage> {
                           style: theme.textTheme.displayMedium!.copyWith(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(15).copyWith(top: 0),
@@ -105,7 +100,7 @@ class _AuthPageState extends State<AuthPage> {
                                 children: [
                                   if (_formMode == AuthFormMode.signUp)
                                     TextFormField(
-                                      key: Key("name_field"),
+                                      key: const Key("name_field"),
                                       controller: _nameController,
                                       decoration: const InputDecoration(
                                         icon: Icon(Icons.person_rounded),
@@ -120,9 +115,9 @@ class _AuthPageState extends State<AuthPage> {
                                         return null;
                                       },
                                     ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   TextFormField(
-                                    key: Key("email_field"),
+                                    key: const Key("email_field"),
                                     controller: _emailController,
                                     decoration: const InputDecoration(
                                       icon: Icon(Icons.email_rounded),
@@ -144,9 +139,9 @@ class _AuthPageState extends State<AuthPage> {
                                       return null;
                                     },
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   TextFormField(
-                                    key: Key("password_field"),
+                                    key: const Key("password_field"),
                                     controller: _passwordController,
                                     decoration: const InputDecoration(
                                       icon: Icon(Icons.key_rounded),
@@ -170,11 +165,11 @@ class _AuthPageState extends State<AuthPage> {
                               )),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       FilledButton(
                         onPressed: () => submitForm(context),
                         style: FilledButton.styleFrom(
-                          minimumSize: Size.fromHeight(
+                          minimumSize: const Size.fromHeight(
                               40), // fromHeight use double.infinity as width and 40 is the height
                         ),
                         child: Consumer<UserProvider>(
@@ -189,13 +184,13 @@ class _AuthPageState extends State<AuthPage> {
                             _formMode == AuthFormMode.signUp
                                 ? "Sign Up"
                                 : "Login",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20.0, // insert your font size here
                             ),
                           );
                         }),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

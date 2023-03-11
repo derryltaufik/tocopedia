@@ -1,11 +1,11 @@
 import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/cart_item_detail.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
+import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
 
 class CartItemDetailTile extends StatefulWidget {
@@ -133,7 +133,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
     final product = widget.cartItemDetail.product;
 
     if (loading || product == null) {
-      return ListTile(
+      return const ListTile(
         title: Center(child: CircularProgressIndicator()),
       );
     }
@@ -149,165 +149,85 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
               onChanged: (value) => toggleCartItem(context, value!),
             ),
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 75,
-                    height: 75,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(
-                        imageUrl: product.images![0],
-                        fit: BoxFit.cover,
-                        progressIndicatorBuilder: (_, __, downloadProgress) =>
-                            Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress)),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pushNamed(
+                  ViewProductPage.routeName,
+                  arguments: product.id!,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 75,
+                      height: 75,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                          imageUrl: product.images![0],
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (_, __, downloadProgress) =>
+                              Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress)),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.name!,
-                          style: theme.textTheme.bodyLarge,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          rupiahFormatter.format(product.price),
-                          style: theme.textTheme.titleMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name!,
+                            style: theme.textTheme.bodyLarge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            rupiahFormatter.format(product.price),
+                            style: theme.textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(children: [
             Text("Move To Wishlist",
                 style: theme.textTheme.bodyMedium!
                     .copyWith(color: Colors.black54)),
-            Spacer(),
+            const Spacer(),
             IconButton(
               onPressed: () => deleteCartItem(context),
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete_outline_rounded,
                 color: Colors.black54,
               ),
               iconSize: 20,
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black54, width: 0.5),
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: Row(
-                children: [
-                  AbsorbPointer(
-                    absorbing:
-                        int.parse(_quantityController.text) > 1 ? false : true,
-                    child: GestureDetector(
-                      onTap: () => removeFromCart(context),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2)
-                            .copyWith(right: 0),
-                        child: Icon(Icons.remove,
-                            color: int.parse(_quantityController.text) > 1
-                                ? theme.primaryColor
-                                : Colors.black12),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      focusNode: _quantityFocus,
-                      textAlign: TextAlign.center,
-                      decoration: null,
-                      style: theme.textTheme.bodySmall,
-                      keyboardType: TextInputType.number,
-                      controller: _quantityController,
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        NumericalRangeFormatter(min: 1, max: product.stock!)
-                      ],
-                    ),
-                  ),
-                  // Text("${widget.cartItem.quantity}"),
-                  AbsorbPointer(
-                    absorbing:
-                        int.parse(_quantityController.text) < product.stock!
-                            ? false
-                            : true,
-                    child: GestureDetector(
-                      onTap: () => addToCart(context),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2)
-                            .copyWith(left: 0),
-                        child: Icon(Icons.add,
-                            color: int.parse(_quantityController.text) <
-                                    product.stock!
-                                ? theme.primaryColor
-                                : Colors.black12),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            QuantityField(
+              controller: _quantityController,
+              focusNode: _quantityFocus,
+              maximum: product.stock!,
+              minimum: 1,
+              onDecrease: () => removeFromCart(context),
+              onIncrease: () => addToCart(context),
             ),
           ]),
         )
       ],
     );
-  }
-}
-
-class NumericalRangeFormatter extends TextInputFormatter {
-  final int min;
-  final int max;
-
-  NumericalRangeFormatter({required this.min, required this.max});
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    if (newValue.text == '' || int.parse(newValue.text) < min) {
-      // String newText = min.toStringAsFixed(0);
-      // return const TextEditingValue().copyWith(
-      //     text: newText,
-      //     selection:
-      //         TextSelection.fromPosition(TextPosition(offset: newText.length)));
-      // //if > product stock, set to product stock
-    } else {
-      String newText = max.toStringAsFixed(0);
-
-      return int.parse(newValue.text) > max
-          ? const TextEditingValue().copyWith(
-              text: newText,
-              selection: TextSelection.fromPosition(
-                  TextPosition(offset: newText.length)))
-          : newValue;
-    }
-    return newValue;
   }
 }

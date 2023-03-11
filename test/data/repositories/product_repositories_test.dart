@@ -1,7 +1,7 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
 import 'package:http/http.dart' as http;
+import 'package:tocopedia/data/data_sources/remote_storage_service.dart';
 import 'package:tocopedia/data/repositories/product_repository_impl.dart';
 
 void main() {
@@ -9,7 +9,9 @@ void main() {
 
   setUp(() {
     repository = ProductRepositoryImpl(
-        remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()));
+      remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()),
+      remoteStorageService: RemoteStorageServiceImpl(),
+    );
   });
 
   group("Get Product", () {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/cart_item.dart';
 import 'package:tocopedia/presentation/pages/features/cart/widgets/checkout_item_detail_tile.dart';
 
@@ -21,11 +21,11 @@ class CheckoutItemTile extends StatelessWidget {
           "${cartItem.seller!.name!} Store",
           style: theme.textTheme.titleMedium,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) => Divider(
+          physics: const NeverScrollableScrollPhysics(),
+          separatorBuilder: (context, index) => const Divider(
             thickness: 0,
             height: 20,
           ),
@@ -35,7 +35,7 @@ class CheckoutItemTile extends StatelessWidget {
             return CheckoutItemDetailTile(cartItemDetail: cartItemDetail);
           },
         ),
-        Divider(thickness: 0),
+        const Divider(thickness: 0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

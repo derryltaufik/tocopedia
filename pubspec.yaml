@@ -43,6 +43,12 @@ dependencies:
   flutter_staggered_grid_view: ^0.6.2
   carousel_slider: ^4.2.1
   cached_network_image: ^3.2.3
+  image_picker: ^0.8.6+4
+  image_cropper: ^3.0.1
+  cloudinary_public: ^0.20.0
+  flutter_rating_bar: ^4.0.1
+  photo_view: ^0.14.0
+#  relative_time: ^3.0.0
 
 dev_dependencies:
   flutter_test:

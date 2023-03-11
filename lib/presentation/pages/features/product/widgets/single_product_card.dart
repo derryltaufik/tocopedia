@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
+import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_action_buttons.dart';
 
 class SingleProductCard extends StatelessWidget {
-  const SingleProductCard({Key? key, required this.product}) : super(key: key);
+  const SingleProductCard(
+      {Key? key, required this.product, this.isWishlist = false})
+      : super(key: key);
 
   final Product product;
+  final bool isWishlist;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class SingleProductCard extends StatelessWidget {
                 progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               ),
             ),
@@ -39,38 +43,48 @@ class SingleProductCard extends StatelessWidget {
                 children: [
                   Text(product.name!,
                       maxLines: 2, overflow: TextOverflow.ellipsis),
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
                   Text(
                     rupiahFormatter.format(product.price),
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.w700, fontSize: 17),
                   ),
-                  SizedBox(height: 3),
-                  Row(
-                    children: [
-                      if (product.averageRating != null) ...[
-                        Icon(
-                          Icons.star_rounded,
-                          color: theme.primaryColor,
-                        ),
-                        Text(
-                          product.averageRating!.toStringAsFixed(1),
-                          style: theme.textTheme.bodyMedium!
-                              .copyWith(color: Colors.black54),
-                        ),
-                        VerticalDivider(
-                          indent: 6,
-                          endIndent: 6,
-                        ),
-                      ],
-                      if (product.totalSold != null && product.totalSold! > 0)
-                        Text(
-                          "Sold ${NumberFormat.compact().format(product.totalSold)}",
-                          style: theme.textTheme.bodyMedium!
-                              .copyWith(color: Colors.black54),
-                        ),
-                    ],
-                  )
+                  const SizedBox(height: 3),
+                  if (product.averageRating != null ||
+                      (product.totalSold != null && product.totalSold! > 0))
+                    SizedBox(
+                      height: 20,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (product.averageRating != null) ...[
+                            Icon(
+                              Icons.star_rounded,
+                              color: theme.primaryColor,
+                              size: 20,
+                            ),
+                            Text(
+                              product.averageRating!.toStringAsFixed(1),
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black54),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1,
+                              indent: 2,
+                              endIndent: 2,
+                            ),
+                          ],
+                          if (product.totalSold != null &&
+                              product.totalSold! > 0)
+                            Text(
+                              "Sold ${NumberFormat.compact().format(product.totalSold)}",
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black54),
+                            ),
+                        ],
+                      ),
+                    ),
+                  if (isWishlist) WishlistActionButtons(productId: product.id!)
                 ],
               ),
             ),

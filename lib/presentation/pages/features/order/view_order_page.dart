@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tocopedia/common/constants.dart';
+import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/address.dart';
-import 'package:tocopedia/domains/entities/order.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/domains/entities/order_item_detail.dart';
-import 'package:tocopedia/presentation/pages/common_widgets/loading_dialog.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/features/home/home_page.dart';
 import 'package:tocopedia/presentation/providers/order_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
+
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 
 class ViewOrderPage extends StatefulWidget {
   static const String routeName = "orders/view";
@@ -26,73 +27,34 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<OrderProvider>(context, listen: false)
-          .getOrder(widget.orderId);
+      _fetchData(context);
     });
   }
 
-  Future<void> payOrder(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog(
-          message: "Processing payment...",
-        );
-      },
-    );
-    try {
-      await Provider.of<OrderProvider>(context, listen: false)
-          .payOrder(widget.orderId);
+  Future<void> _fetchData(BuildContext context) async {
+    Provider.of<OrderProvider>(context, listen: false).getOrder(widget.orderId);
+  }
 
-      if (context.mounted) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Payment Successfull!"),
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } on Exception catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          e.toString(),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+  Future<void> payOrder(BuildContext context) async {
+    await handleFutureFunction(context,
+        loadingMessage: "Processing payment...",
+        successMessage: "Payment Successful!",
+        function: Provider.of<OrderProvider>(context, listen: false)
+            .payOrder(widget.orderId),
+        onSuccess: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false));
   }
 
   Future<void> cancelOrder(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return LoadingDialog(
-          message: "Cancelling order...",
-        );
-      },
+    await handleFutureFunction(
+      context,
+      loadingMessage: "Cancelling order...",
+      successMessage: "Order Cancelled",
+      function: Provider.of<OrderProvider>(context, listen: false)
+          .cancelOrder(widget.orderId),
+      onSuccess: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false),
     );
-    try {
-      await Provider.of<OrderProvider>(context, listen: false)
-          .cancelOrder(widget.orderId);
-
-      if (context.mounted) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Order Cancelled"),
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } on Exception catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          e.toString(),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
   }
 
   Widget _buildProductTile(OrderItemDetail product, ThemeData theme) {
@@ -127,97 +89,108 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(orderItem.seller!.name!, style: theme.textTheme.titleMedium),
-        SizedBox(height: 10),
-        ...orderItem.products!
+        const SizedBox(height: 10),
+        ...orderItem.orderItemDetails!
             .map((product) => _buildProductTile(product, theme))
             .toList(),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
         Text("Shipment Address", style: theme.textTheme.titleSmall),
         Text(
           "${address.receiverName!}\n${address.receiverPhone!}\n${address.completeAddress!}",
           style: theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
         ),
-        SizedBox(height: 15),
+        const SizedBox(height: 15),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Order"),
+        title: const Text("Order"),
       ),
-      body: Consumer<OrderProvider>(builder: (context, orderProvider, child) {
-        if (orderProvider.getOrderState == ProviderState.loading ||
-            orderProvider.getOrderState == ProviderState.empty) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (orderProvider.getOrderState == ProviderState.error) {
-          return Center(child: Text(orderProvider.message));
-        }
-        final Order order = orderProvider.order!;
-        final theme = Theme.of(context);
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Payment Detail", style: theme.textTheme.titleLarge),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Total Price", style: theme.textTheme.titleMedium),
-                        Text(rupiahFormatter.format(order.totalPrice),
-                            style: theme.textTheme.titleMedium),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Product Bought", style: theme.textTheme.titleLarge),
-                    SizedBox(height: 20),
-                    ...order.orderItems!.map(
-                      (orderItem) {
-                        return _buildOrderItemTile(
-                            order.address!, orderItem, theme);
-                      },
-                    ).toList(),
-                    if (order.status! == "unpaid")
+      body: RefreshIndicator(
+        onRefresh: () => _fetchData(context),
+        child:
+            Consumer<OrderProvider>(builder: (context, orderProvider, child) {
+          if (orderProvider.getOrderState == ProviderState.loading) {
+            return const SingleChildFullPageScrollView.loading();
+          }
+          if (orderProvider.getOrderState == ProviderState.error) {
+            return SingleChildFullPageScrollView(
+                child: Text(orderProvider.message));
+          }
+          final order = orderProvider.order;
+
+          if (order == null) {
+            return const SingleChildFullPageScrollView(
+                child: Text("Order not found"));
+          }
+
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Payment Detail", style: theme.textTheme.titleLarge),
+                      const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          OutlinedButton(
-                              onPressed: () => cancelOrder(context),
-                              child: Text("Cancel Order")),
-                          SizedBox(width: 20),
-                          Expanded(
-                              child: FilledButton(
-                                  onPressed: () => payOrder(context),
-                                  child: Text("Pay Now")))
+                          Text("Total Price",
+                              style: theme.textTheme.titleMedium),
+                          Text(rupiahFormatter.format(order.totalPrice),
+                              style: theme.textTheme.titleMedium),
                         ],
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+                const Divider(
+                  thickness: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Product Bought", style: theme.textTheme.titleLarge),
+                      const SizedBox(height: 20),
+                      ...order.orderItems!.map(
+                        (orderItem) {
+                          return _buildOrderItemTile(
+                              order.address!, orderItem, theme);
+                        },
+                      ).toList(),
+                      if (order.status! == "unpaid")
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            OutlinedButton(
+                                onPressed: () => cancelOrder(context),
+                                child: const Text("Cancel Order")),
+                            const SizedBox(width: 20),
+                            Expanded(
+                                child: FilledButton(
+                                    onPressed: () => payOrder(context),
+                                    child: const Text("Pay Now")))
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 }

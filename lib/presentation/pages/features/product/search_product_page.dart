@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/domains/entities/product.dart';
 import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
+import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/filter_bottom_sheet.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
@@ -22,20 +24,23 @@ class SearchProductPage extends StatefulWidget {
 
 class _SearchProductPageState extends State<SearchProductPage> {
   late SearchArguments _searchArguments;
+  Set<Category>? _categorySelection;
   late final _searchProduct =
       Provider.of<ProductProvider>(context, listen: false).searchProduct;
 
   @override
   void initState() {
     super.initState();
-
     _searchArguments = widget.searchArguments;
   }
 
-  Future<void> filter(BuildContext context) async {
+  Future<void> showFilterOptions(BuildContext context) async {
+    _categorySelection ??= Provider.of<ProductProvider>(context, listen: false)
+        .getSearchedProductCategories();
 
-    final searchArguments =
-        await showFilterBottomSheet(context, _searchArguments);
+    final searchArguments = await showFilterBottomSheet(context,
+        searchArguments: _searchArguments,
+        categorySelection: _categorySelection!);
     FocusManager.instance.primaryFocus
         ?.unfocus(); // to fix autofocused on search textfield https://github.com/flutter/flutter/issues/54277
 
@@ -44,68 +49,61 @@ class _SearchProductPageState extends State<SearchProductPage> {
         _searchArguments = searchArguments;
       });
     }
-
-  }
-
-  Future<void> filter(BuildContext context) async {
-    //TODO bottomsheet should know current filter
-    final searchArguments = await showFilterBottomSheet(context);
-    //TODO should detect if there's no change, don't call searchProduct
-    if (searchArguments != null && context.mounted) {
-      await Provider.of<ProductProvider>(context, listen: false)
-          .searchProduct(searchArguments);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_searchArguments.toString());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: HomeAppBar(query: widget.searchArguments.searchQuery ?? ""),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0).copyWith(bottom: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Search results for: \"${widget.searchArguments.searchQuery ?? ""}\"",
-              style: theme.textTheme.titleMedium,
-            ),
-            Flexible(
-              child: FutureBuilder(
-                  future: _searchProduct(_searchArguments),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final products = snapshot.data!;
+      body: RefreshIndicator(
+        onRefresh: () => _searchProduct(_searchArguments),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0).copyWith(bottom: 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Search results for: \"${widget.searchArguments.searchQuery ?? ""}\"",
+                style: theme.textTheme.titleMedium,
+              ),
+              Flexible(
+                child: FutureBuilder(
+                    future: _searchProduct(_searchArguments),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final products = snapshot.data!;
 
-                      if (products.isEmpty) {
-                        return Center(
-                            child: Text(
-                                "Product not found... Try another keyword"));
+                        if (products.isEmpty) {
+                          return const SingleChildFullPageScrollView(
+                              child: Text(
+                                  "Product not found... Try another keyword"));
+                        }
+
+                        return MasonryGridView.count(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final Product product = products[index];
+                            return SingleProductCard(product: product);
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return SingleChildFullPageScrollView(
+                            child: Text('${snapshot.error}'));
                       }
-
-                      return MasonryGridView.count(
-                        crossAxisCount: 2,
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          final Product product = products[index];
-                          return SingleProductCard(product: product);
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('${snapshot.error}'));
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  }),
-            )
-          ],
+                      return const SingleChildFullPageScrollView.loading();
+                    }),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FilledButton.icon(
-        onPressed: () => filter(context),
-        icon: Icon(Icons.filter_alt_outlined),
-        label: Text("Sort & Filter"),
+        onPressed: () => showFilterOptions(context),
+        icon: const Icon(Icons.filter_alt_outlined),
+        label: const Text("Sort & Filter"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

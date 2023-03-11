@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/order_item.dart';
 import 'package:tocopedia/domains/use_cases/order_item/cancel_order_item.dart';
@@ -29,17 +27,25 @@ class OrderItemProvider with ChangeNotifier {
 
   OrderItem? get orderItem => _orderItem;
 
-  List<OrderItem>? _orderItemList;
+  List<OrderItem>? _buyerOrderItemList;
 
-  List<OrderItem>? get orderItemList => _orderItemList;
+  List<OrderItem>? get buyerOrderItemList => _buyerOrderItemList;
+
+  List<OrderItem>? _sellerOrderItemList;
+
+  List<OrderItem>? get sellerOrderItemList => _sellerOrderItemList;
 
   ProviderState _getOrderItemState = ProviderState.empty;
 
   ProviderState get getOrderItemState => _getOrderItemState;
 
-  ProviderState _getUserOrderItemsState = ProviderState.empty;
+  ProviderState _getBuyerOrderItemsState = ProviderState.empty;
 
-  ProviderState get getUserOrderItemsState => _getUserOrderItemsState;
+  ProviderState get getBuyerOrderItemsState => _getBuyerOrderItemsState;
+
+  ProviderState _getSellerOrderItemsState = ProviderState.empty;
+
+  ProviderState get getSellerOrderItemsState => _getSellerOrderItemsState;
 
   OrderItemProvider(
       {required GetBuyerOrderItems getBuyerOrderItems,
@@ -63,16 +69,16 @@ class OrderItemProvider with ChangeNotifier {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
 
-      _getUserOrderItemsState = ProviderState.loading;
+      _getBuyerOrderItemsState = ProviderState.loading;
       notifyListeners();
 
       final orderItemList = await _getBuyerOrderItems.execute(_authToken!);
-      _orderItemList = orderItemList;
-      _getUserOrderItemsState = ProviderState.loaded;
+      _buyerOrderItemList = orderItemList;
+      _getBuyerOrderItemsState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
       _message = e.toString();
-      _getUserOrderItemsState = ProviderState.error;
+      _getBuyerOrderItemsState = ProviderState.error;
       notifyListeners();
     }
   }
@@ -81,16 +87,16 @@ class OrderItemProvider with ChangeNotifier {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
 
-      _getUserOrderItemsState = ProviderState.loading;
+      _getSellerOrderItemsState = ProviderState.loading;
       notifyListeners();
 
       final orderItemList = await _getSellerOrderItems.execute(_authToken!);
-      _orderItemList = orderItemList;
-      _getUserOrderItemsState = ProviderState.loaded;
+      _sellerOrderItemList = orderItemList;
+      _getSellerOrderItemsState = ProviderState.loaded;
       notifyListeners();
     } catch (e) {
       _message = e.toString();
-      _getUserOrderItemsState = ProviderState.error;
+      _getSellerOrderItemsState = ProviderState.error;
       notifyListeners();
     }
   }
@@ -110,6 +116,55 @@ class OrderItemProvider with ChangeNotifier {
       _message = e.toString();
       _getOrderItemState = ProviderState.error;
       notifyListeners();
+    }
+  }
+
+  Future<void> cancelOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _cancelOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+      getSellerOrderItems();
+      getBuyerOrderItems();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> processOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _processOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+      getSellerOrderItems();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> sendOrderItem(String orderItemId, String airwaybill) async {
+    try {
+      final orderItem = await _sendOrderItem.execute(_authToken!, orderItemId,
+          airwaybill: airwaybill);
+      _orderItem = orderItem;
+      notifyListeners();
+      getSellerOrderItems();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> completeOrderItem(String orderItemId) async {
+    try {
+      final orderItem =
+          await _completeOrderItem.execute(_authToken!, orderItemId);
+      _orderItem = orderItem;
+      notifyListeners();
+      getBuyerOrderItems();
+    } catch (e) {
+      rethrow;
     }
   }
 

@@ -99,11 +99,11 @@ class _CartItemTileState extends State<CartItemTile> {
             )
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) => Divider(thickness: 0),
+          physics: const NeverScrollableScrollPhysics(),
+          separatorBuilder: (context, index) => const Divider(thickness: 0),
           itemCount: widget.cartItem.cartItemDetails!.length,
           itemBuilder: (context, index) {
             final cartItemDetail = widget.cartItem.cartItemDetails![index];

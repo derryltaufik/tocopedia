@@ -1,7 +1,5 @@
 import 'package:tocopedia/data/data_sources/user_remote_data_source.dart';
 import 'package:tocopedia/data/data_sources/user_local_data_source.dart';
-import 'package:tocopedia/data/models/address_model.dart';
-import 'package:tocopedia/domains/entities/address.dart';
 
 import 'package:tocopedia/domains/entities/user.dart';
 import 'package:tocopedia/domains/repositories/user_repository.dart';
@@ -15,14 +13,10 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<User> updateUser(String token,
-      {String? name, String? password, Address? defaultAddress}) async {
+      {String? name, String? addressId}) async {
     try {
       final userModel = await remoteDataSource.updateUser(token,
-          password: password,
-          defaultAddress: defaultAddress != null
-              ? AddressModel.fromEntity(defaultAddress)
-              : null,
-          name: name);
+          addressId: addressId, name: name);
       return userModel.toEntity();
     } catch (e) {
       rethrow;
@@ -77,6 +71,15 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final result = await remoteDataSource.signUp(email, password, name);
       return result.toEntity();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await localDataSource.deleteToken();
     } catch (e) {
       rethrow;
     }
