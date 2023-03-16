@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { OrderItem } = require("./order_item");
 const validator = require("validator");
 const { Product, productSchema } = require("./product");
 

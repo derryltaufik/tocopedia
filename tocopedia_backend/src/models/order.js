@@ -68,7 +68,7 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.pre("save", async function (next) {
-  if (this.isNew) {
+  if (this.isNew || this.total_price == 0) {
     order = this;
 
     let total_price = 0;
@@ -77,7 +77,8 @@ orderSchema.pre("save", async function (next) {
     let cover_image;
     for (order_item_id of order.order_items) {
       const order_item = await OrderItem.findById(order_item_id);
-      if (!cover_image) cover_image = order_item.order_item_details[0].product_image;
+      if (!cover_image)
+        cover_image = order_item.order_item_details[0].product_image;
       total_price += order_item.subtotal;
       total_quantity += order_item.quantity_total;
     }

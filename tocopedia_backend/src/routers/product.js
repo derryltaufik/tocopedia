@@ -2,6 +2,7 @@ const express = require("express");
 const { Product } = require("../models/product");
 const auth = require("../middleware/auth");
 const { Category } = require("../models/category");
+const { User } = require("../models/user");
 
 const router = new express.Router();
 
@@ -39,18 +40,33 @@ router.post("/products", auth, async (req, res) => {
 });
 
 router.get("/products/popular", async (req, res) => {
-  const query = Product.find({ status: "active" });
-
-  query.sort({ total_sold: -1 });
-
-  query.limit(100);
   try {
-    const results = await Product.find(query, {})
-      .populate(populateQuery)
-      .select(selectQuery);
+    // pick 120 random items
+    const results = await Product.aggregate([
+      {
+        $match: {
+          status: "active",
+          total_sold: { $gte: 1000 },
+          average_rating: { $gte: 4.8 },
+          price: { $gte: 10000 },
+        },
+      },
+      { $sample: { size: 60 } },
+      { $project: { description: 0 } },
+    ]);
+
+    await Category.populate(results, {
+      path: "category",
+      select: "_id name",
+    });
+    await User.populate(results, {
+      path: "owner",
+      select: "_id name",
+    });
     if (!results) {
       return res.status(404).send({ error: "Product not found" });
     }
+
     return res.send({ data: { results } });
   } catch (error) {
     return res.status(400).send({ error: error.message });

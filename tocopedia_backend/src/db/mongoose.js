@@ -7,3 +7,5 @@ mongoose
   })
   .then(() => console.log("connected to mongoDB"))
   .catch((e) => console.log(e));
+
+module.exports = mongoose;

@@ -20,7 +20,7 @@ const populateQuery = [
         path: "cart_item_details",
         populate: {
           path: "product",
-          select: "-createdAt -updatedAt -__v -owner",
+          select: "-createdAt -updatedAt -__v -owner -description",
           populate: [
             {
               path: "owner",
@@ -42,16 +42,25 @@ const populateQuery = [
 ];
 
 router.get("/cart", auth, async (req, res) => {
-  //retreive product object when opening the cart page
   try {
     const owner = req.user._id;
-    const cart = await Cart.findOne({ owner }).populate(populateQuery);
+    let cart = await Cart.findOne({ owner });
+
+    if (!cart) {
+      cart = await Cart.create({
+        owner,
+        cart_items: [],
+      });
+    }
+    await cart.populate(populateQuery);
 
     return res.send({ data: { cart } });
   } catch (error) {
     return res.status(400).send({ error: error.message });
   }
 });
+
+//TODO move logic to cart's method
 
 //add to cart
 router.patch("/cart/add/:product_id", auth, async (req, res) => {
