@@ -65,13 +65,14 @@ class WishlistProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addWishlist(String productId) async {
+  Future<Wishlist?> addWishlist(String productId) async {
     try {
       if (!_verifyToken()) throw Exception("You need to login");
 
       final wishlist = await _addWishlist.execute(_authToken!, productId);
       _wishlist = wishlist;
       notifyListeners();
+      return wishlist;
     } catch (e) {
       _message = e.toString();
       rethrow;

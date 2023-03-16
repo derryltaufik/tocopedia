@@ -128,7 +128,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text("${product.owner?.name} Store",
+                    child: Text("${product.owner?.name}",
                         style: subHeadingStyle),
                   ),
                   const SizedBox(height: 20),

@@ -253,7 +253,7 @@ class ProductDetailsSection extends StatelessWidget {
               style: theme.textTheme.titleMedium,
             ),
             Text(
-              "${orderItem.seller!.name!} Store",
+              "${orderItem.seller?.name}",
               style: theme.textTheme.titleSmall,
             ),
           ],

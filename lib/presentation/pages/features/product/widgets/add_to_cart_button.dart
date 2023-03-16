@@ -16,7 +16,7 @@ class AddToCartButton extends StatelessWidget {
   void addToCart(BuildContext context) async {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final theme = Theme.of(context);
-    cartProvider.addToCart(productId);
+    await cartProvider.addToCart(productId);
 
     if (cartProvider.updateCartState == ProviderState.error) {
       if (context.mounted) {

@@ -38,66 +38,55 @@ class _SearchProductPageState extends State<SearchProductPage> {
     _categorySelection ??= Provider.of<ProductProvider>(context, listen: false)
         .getSearchedProductCategories();
 
-    final searchArguments = await showFilterBottomSheet(context,
+    SearchArguments? searchArguments = await showFilterBottomSheet(context,
         searchArguments: _searchArguments,
         categorySelection: _categorySelection!);
     FocusManager.instance.primaryFocus
         ?.unfocus(); // to fix autofocused on search textfield https://github.com/flutter/flutter/issues/54277
 
     if (searchArguments != null) {
+      searchArguments = searchArguments.copyWith(searchQuery: _searchArguments.searchQuery);
       setState(() {
-        _searchArguments = searchArguments;
+        _searchArguments = searchArguments!;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: HomeAppBar(query: widget.searchArguments.searchQuery ?? ""),
       body: RefreshIndicator(
         onRefresh: () => _searchProduct(_searchArguments),
         child: Padding(
           padding: const EdgeInsets.all(10.0).copyWith(bottom: 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Search results for: \"${widget.searchArguments.searchQuery ?? ""}\"",
-                style: theme.textTheme.titleMedium,
-              ),
-              Flexible(
-                child: FutureBuilder(
-                    future: _searchProduct(_searchArguments),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final products = snapshot.data!;
+          child: FutureBuilder(
+              future: _searchProduct(_searchArguments),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final products = snapshot.data!;
 
-                        if (products.isEmpty) {
-                          return const SingleChildFullPageScrollView(
-                              child: Text(
-                                  "Product not found... Try another keyword"));
-                        }
+                  if (products.isEmpty) {
+                    return const SingleChildFullPageScrollView(
+                        child: Text(
+                            "Product not found... Try another keyword"));
+                  }
 
-                        return MasonryGridView.count(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final Product product = products[index];
-                            return SingleProductCard(product: product);
-                          },
-                        );
-                      } else if (snapshot.hasError) {
-                        return SingleChildFullPageScrollView(
-                            child: Text('${snapshot.error}'));
-                      }
-                      return const SingleChildFullPageScrollView.loading();
-                    }),
-              )
-            ],
-          ),
+                  return MasonryGridView.count(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final Product product = products[index];
+                      return SingleProductCard(product: product);
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return SingleChildFullPageScrollView(
+                      child: Text('${snapshot.error}'));
+                }
+                return const SingleChildFullPageScrollView.loading();
+              }),
         ),
       ),
       floatingActionButton: FilledButton.icon(
