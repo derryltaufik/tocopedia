@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/cart_item_detail.dart';
+import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_form_field.dart';
 import 'package:tocopedia/presentation/pages/features/product/view_product_page.dart';
 import 'package:tocopedia/presentation/providers/cart_provider.dart';
+import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 
 class CartItemDetailTile extends StatefulWidget {
   final CartItemDetail cartItemDetail;
@@ -122,9 +124,19 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
     }
   }
 
-  void deleteCartItem(BuildContext context) async {
+  Future<void> deleteCartItem(BuildContext context) async {
     await Provider.of<CartProvider>(context, listen: false)
         .updateCart(widget.cartItemDetail.product!.id!, 0);
+  }
+
+  void moveToWishlist(BuildContext context) async {
+    final wishlist = await handleFutureFunction(context,
+        successMessage: "Product moved to wishlist",
+        function: Provider.of<WishlistProvider>(context, listen: false)
+            .addWishlist(widget.cartItemDetail.product!.id!));
+    if (wishlist != null && context.mounted) {
+      await deleteCartItem(context);
+    }
   }
 
   @override
@@ -205,9 +217,12 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(children: [
-            Text("Move To Wishlist",
-                style: theme.textTheme.bodyMedium!
-                    .copyWith(color: Colors.black54)),
+            GestureDetector(
+              onTap: () => moveToWishlist(context),
+              child: Text("Move To Wishlist",
+                  style: theme.textTheme.bodyMedium!
+                      .copyWith(color: Colors.black54)),
+            ),
             const Spacer(),
             IconButton(
               onPressed: () => deleteCartItem(context),

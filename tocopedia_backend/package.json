@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "env-cmd -f ./config/dev.env nodemon src/app.js",
+    "init": "env-cmd -f ./config/dev.env node src/init.js",
     "start": "node src/app.js"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "validator": "^13.9.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "env-cmd": "^10.1.0",
     "nodemon": "^2.0.20"
   }

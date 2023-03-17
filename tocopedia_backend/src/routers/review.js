@@ -98,9 +98,9 @@ router.patch("/reviews/:review_id", auth, async (req, res) => {
 
 router.get("/reviews/buyer", auth, async (req, res) => {
   try {
-    let reviews = await Review.find({ buyer: req.user._id }).populate(
-      populateQuery
-    );
+    let reviews = await Review.find({ buyer: req.user._id })
+      .sort({ updatedAt: -1 })
+      .populate(populateQuery);
 
     if (!reviews) return res.status(404).send({ error: "review not found" });
 
@@ -120,7 +120,9 @@ router.get("/reviews/seller/:seller_id", async (req, res) => {
     let reviews = await Review.find({
       seller: req.params.seller_id,
       completed: true,
-    }).populate(populateQuery);
+    })
+      .sort({ updatedAt: -1 })
+      .populate(populateQuery);
 
     if (!reviews) return res.status(404).send({ error: "review not found" });
 
@@ -142,18 +144,16 @@ router.get("/reviews/products/:product_id", async (req, res) => {
     let reviews = await Review.find({
       product: product_id,
       completed: true,
-    }).populate(populateQuery);
+    })
+      .sort({ updatedAt: -1 })
+      .populate(populateQuery);
 
     if (!reviews)
       return res
         .status(404)
         .send({ error: "this product does not have any review" });
 
-    reviews = reviews.map((review) => {
-      review = censorBuyerName(review);
-      review = truncateReview(review);
-      return review;
-    });
+    reviews = reviews.map((review) => (review = censorBuyerName(review)));
 
     return res.send({ data: { results: reviews } });
   } catch (error) {
@@ -163,9 +163,9 @@ router.get("/reviews/products/:product_id", async (req, res) => {
 
 router.get("/reviews/:review_id", auth, async (req, res) => {
   try {
-    let review = await Review.findById(req.params.review_id).populate(
-      populateQuery
-    );
+    let review = await Review.findById(req.params.review_id)
+      .sort({ updatedAt: -1 })
+      .populate(populateQuery);
 
     if (!review) return res.status(404).send({ error: "review not found" });
 
@@ -178,10 +178,14 @@ router.get("/reviews/:review_id", auth, async (req, res) => {
 });
 
 const censorBuyerName = (review) => {
-  if (review.anonymous) {
-    review.buyer.name = "Anonymous";
+  const newReview = { ...review.toObject() };
+  const name = newReview.buyer.name;
+
+  if (review.anonymous === true) {
+    newReview.buyer.name = `${name[0]}***${name.slice(-1)}`;
   }
-  return review;
+
+  return newReview;
 };
 
 const truncateReview = (review) => {

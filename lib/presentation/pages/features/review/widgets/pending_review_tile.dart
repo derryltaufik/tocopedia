@@ -14,58 +14,67 @@ class PendingReviewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 75,
-              height: 75,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black12,
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(
+        AddReviewPage.routeName,
+        arguments: AddReviewPageArguments(
+          review: review,
+          initialRating: 5,
+        ),
+      ),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 75,
+                height: 75,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black12,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: review.productImage!,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: CachedNetworkImage(
-                imageUrl: review.productImage!,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    DateFormat("dd MMM yyyy").format(review.createdAt!),
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.black54),
-                  ),
-                  Text(
-                    "${review.productName}",
-                    style: theme.textTheme.titleMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  RatingBar.builder(
-                    onRatingUpdate: (double value) =>
-                        Navigator.of(context).pushNamed(
-                      AddReviewPage.routeName,
-                      arguments: AddReviewPageArguments(
-                        review: review,
-                        initialRating: value.toInt(),
-                      ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat("dd MMM yyyy").format(review.createdAt!),
+                      style: theme.textTheme.bodyMedium!
+                          .copyWith(color: Colors.black54),
                     ),
-                    glow: false,
-                    itemBuilder: (_, __) => const Icon(Icons.star_rounded,
-                        color: CustomColors.starColor),
-                  ),
-                ],
+                    Text(
+                      "${review.productName}",
+                      style: theme.textTheme.titleMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    RatingBar.builder(
+                      onRatingUpdate: (double value) =>
+                          Navigator.of(context).pushNamed(
+                        AddReviewPage.routeName,
+                        arguments: AddReviewPageArguments(
+                          review: review,
+                          initialRating: value.toInt(),
+                        ),
+                      ),
+                      glow: false,
+                      itemBuilder: (_, __) => const Icon(Icons.star_rounded,
+                          color: CustomColors.starColor),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -58,27 +58,34 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
   }
 
   Widget _buildProductTile(OrderItemDetail product, ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                product.productName!,
-                style: theme.textTheme.titleSmall,
-                softWrap: true,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.productName!,
+                    style: theme.textTheme.titleSmall,
+                    softWrap: true,
+                  ),
+                  Text(
+                    "${product.quantity} X ${rupiahFormatter.format(product.productPrice)}",
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black54),
+                  ),
+                ],
               ),
-              Text(
-                "${product.quantity} X ${rupiahFormatter.format(product.productPrice)}",
-                style:
-                    theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 20),
+            Text(rupiahFormatter
+                .format(product.quantity! * product.productPrice!)),
+          ],
         ),
-        Text(rupiahFormatter.format(product.quantity! * product.productPrice!)),
+        const SizedBox(height: 10)
       ],
     );
   }

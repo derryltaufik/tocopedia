@@ -18,14 +18,15 @@ class CheckoutItemTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${cartItem.seller!.name!} Store",
+          "${cartItem.seller?.name}",
           style: theme.textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) => const Divider(
+          separatorBuilder: (context, index) =>
+          const Divider(
             thickness: 0,
             height: 20,
           ),

@@ -18,6 +18,7 @@ import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
+// TODO enable avatar for user & seller
 // TODO use dartz Either for exception handling if necessary
 // TODO implement shimmer loading for better UX
 // TODO implement lazy loading (front end) & pagination (backend)
@@ -99,6 +100,8 @@ class MyApp extends StatelessWidget {
           } else {
             currentWidget = const SellerNavBar();
           }
+        } else if (localSettingsProvider.appMode == AppMode.guest) {
+          currentWidget = const BuyerNavBar();
         } else {
           currentWidget = const AuthPage();
         }

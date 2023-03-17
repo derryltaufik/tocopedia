@@ -191,13 +191,14 @@ async function updateProductSold(order_item) {
 async function createReviewTemplate(order_item) {
   for (order_item_detail of order_item.order_item_details) {
     const product = await Product.findById(order_item_detail.product);
-    const review = new Review({
+    const review = await Review.create({
       buyer: order_item.buyer,
       seller: order_item.seller,
       product,
       order_item_detail,
+      createdAt: order_item.createdAt,
+      updatedAt: order_item.updatedAt,
     });
-    await review.save();
   }
 }
 

@@ -3,8 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/format_rupiah.dart';
 import 'package:tocopedia/domains/entities/product.dart';
+import 'package:tocopedia/presentation/helper_variables/search_arguments.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/home_appbar.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/single_child_full_page_scroll_view.dart';
+import 'package:tocopedia/presentation/pages/features/product/view_seller_home_page.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/add_to_cart_button.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/product_image_carousel.dart';
 import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_button.dart';
@@ -128,8 +130,20 @@ class _ViewProductPageState extends State<ViewProductPage> {
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text("${product.owner?.name} Store",
-                        style: subHeadingStyle),
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        ViewSellerHomePage.routeName,
+                        arguments: SearchArguments(sellerId: product.owner?.id),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.storefront_outlined, size: 40),
+                          SizedBox(width: 10),
+                          Text("${product.owner?.name}",
+                              style: subHeadingStyle),
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
                 ],

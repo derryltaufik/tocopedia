@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { addressSchema } = require("./address");
 const { Cart } = require("./cart");
+const { UserWishlist } = require("./user_wishlist");
 const ObjectID = mongoose.Schema.Types.ObjectId;
 
 const userSchema = new mongoose.Schema(
@@ -66,10 +67,12 @@ userSchema.pre("save", async function (next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   if (this.isNew) {
-    const cart = new Cart({
+    await Cart.create({
       owner: user._id,
     });
-    await cart.save();
+    await UserWishlist.create({
+      owner: user._id,
+    });
   }
   next();
 });

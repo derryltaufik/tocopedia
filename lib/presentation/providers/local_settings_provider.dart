@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppMode {
-  buyer,
-  seller,
-}
+enum AppMode { buyer, seller, guest }
 
 class LocalSettingsProvider with ChangeNotifier {
   AppMode _appMode = AppMode.buyer;
@@ -17,6 +14,11 @@ class LocalSettingsProvider with ChangeNotifier {
 
   void switchToSellerMode() {
     _appMode = AppMode.seller;
+    notifyListeners();
+  }
+
+  void switchToGuestMode() {
+    _appMode = AppMode.guest;
     notifyListeners();
   }
 }

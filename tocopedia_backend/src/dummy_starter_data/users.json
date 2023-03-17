@@ -1,0 +1,67 @@
+[
+    {
+        "email": "user1@example.com",
+        "name": "Derryl Taufik",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller1@example.com",
+        "name": "BSU Gold",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller2@example.com",
+        "name": "Apola Gadget Store",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller3@example.com",
+        "name": "Electric City",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller4@example.com",
+        "name": "EntarKomputer",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller5@example.com",
+        "name": "Hobby n Tertainment",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller6@example.com",
+        "name": "Super Momma Olshop",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller7@example.com",
+        "name": "Chad Men Store",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller8@example.com",
+        "name": "Sunny Dept Store",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller9@example.com",
+        "name": "ShutterSnap Professional",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller10@example.com",
+        "name": "FurFur pet shop",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller11@example.com",
+        "name": "Supermart Online",
+        "password": "asdfasdf"
+    },
+    {
+        "email": "seller12@example.com",
+        "name": "Health n Body Care",
+        "password": "asdfasdf"
+    }
+]

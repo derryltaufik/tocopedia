@@ -94,7 +94,7 @@ class _CartItemTileState extends State<CartItemTile> {
               onChanged: (value) => toggleSeller(context, value!),
             ),
             Text(
-              "${widget.cartItem.seller!.name!} Store",
+              "${widget.cartItem.seller?.name}",
               style: Theme.of(context).textTheme.titleSmall,
             )
           ],

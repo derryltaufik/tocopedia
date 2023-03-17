@@ -2,6 +2,7 @@ import 'package:tocopedia/domains/entities/category.dart';
 import 'package:tocopedia/presentation/helper_variables/sort_selection_enum.dart';
 
 class SearchArguments {
+  String? sellerId;
   String? searchQuery;
   Category? category;
   int? minimumPrice;
@@ -9,22 +10,19 @@ class SearchArguments {
   SortSelection? sortSelection;
 
   SearchArguments(
-      {this.searchQuery,
+      {this.sellerId,
+      this.searchQuery,
       this.category,
       this.minimumPrice,
       this.maximumPrice,
       this.sortSelection});
 
   @override
-  String toString() {
-    return 'SearchArguments{searchQuery: $searchQuery, category: $category, minimumPrice: $minimumPrice, maximumPrice: $maximumPrice, sortSelection: $sortSelection}';
-  }
-
-  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SearchArguments &&
           runtimeType == other.runtimeType &&
+          sellerId == other.sellerId &&
           searchQuery == other.searchQuery &&
           category == other.category &&
           minimumPrice == other.minimumPrice &&
@@ -33,14 +31,15 @@ class SearchArguments {
 
   @override
   int get hashCode =>
+      sellerId.hashCode ^
       searchQuery.hashCode ^
       category.hashCode ^
       minimumPrice.hashCode ^
       maximumPrice.hashCode ^
       sortSelection.hashCode;
 
-
   SearchArguments copyWith({
+    String? sellerId,
     String? searchQuery,
     Category? category,
     int? minimumPrice,
@@ -48,6 +47,7 @@ class SearchArguments {
     SortSelection? sortSelection,
   }) {
     return SearchArguments(
+      sellerId: sellerId ?? this.sellerId,
       searchQuery: searchQuery ?? this.searchQuery,
       category: category ?? this.category,
       minimumPrice: minimumPrice ?? this.minimumPrice,
@@ -55,5 +55,4 @@ class SearchArguments {
       sortSelection: sortSelection ?? this.sortSelection,
     );
   }
-
 }
