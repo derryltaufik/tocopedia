@@ -10,7 +10,6 @@ import 'package:tocopedia/presentation/pages/features/product/widgets/filter_bot
 import 'package:tocopedia/presentation/pages/features/product/widgets/single_product_card.dart';
 import 'package:tocopedia/presentation/providers/product_provider.dart';
 
-//TODO bug: when opening multiple search page & user press back, search result shows the same result from provider
 class SearchProductPage extends StatefulWidget {
   static const routeName = "/products/search";
 

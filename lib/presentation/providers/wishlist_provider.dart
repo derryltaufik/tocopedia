@@ -48,7 +48,6 @@ class WishlistProvider with ChangeNotifier {
       _message = e.toString();
       _getWishlistState = ProviderState.error;
       notifyListeners();
-      rethrow;
     }
   }
 

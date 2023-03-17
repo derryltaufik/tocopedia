@@ -92,8 +92,6 @@ class ReviewProvider with ChangeNotifier {
 
   Future<void> getProductReviews(String productId) async {
     try {
-      if (!_verifyToken()) throw Exception("You need to login");
-
       _getProductReviewsState = ProviderState.loading;
       notifyListeners();
 

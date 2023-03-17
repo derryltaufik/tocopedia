@@ -37,7 +37,6 @@ class _EditUserPageState extends State<EditUserPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nameController.dispose();
   }

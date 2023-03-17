@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/custom_snack_bar.dart';
+import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
 
 enum AuthFormMode { signUp, login }
@@ -57,7 +58,6 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nameController.dispose();
     _passwordController.dispose();
@@ -220,7 +220,15 @@ class _AuthPageState extends State<AuthPage> {
                               ),
                             ),
                         ],
-                      )
+                      ),
+                      SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: () => Provider.of<LocalSettingsProvider>(context,
+                                listen: false)
+                            .switchToGuestMode(),
+                        child: const Text("Continue as Guest",
+                            style: TextStyle(color: Colors.black38)),
+                      ),
                     ],
                   ),
                 ),
