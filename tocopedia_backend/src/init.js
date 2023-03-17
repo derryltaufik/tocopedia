@@ -197,94 +197,94 @@ const getDummyAddresses = (total_addresses) => {
 async function initDemo() {
   const user_demo = await User.findOne({ email: "user1@example.com" });
 
-  // //fill user's address. set 1 as default;
-  // const addresses = getDummyAddresses(5);
-  // const new_addresses = await Address.create(
-  //   addresses.map((e) => {
-  //     return { ...e, owner: user_demo };
-  //   })
-  // );
-  // user_demo.default_address = new_addresses[0];
-  // await user_demo.save();
+  //fill user's address. set 1 as default;
+  const addresses = getDummyAddresses(5);
+  const new_addresses = await Address.create(
+    addresses.map((e) => {
+      return { ...e, owner: user_demo };
+    })
+  );
+  user_demo.default_address = new_addresses[0];
+  await user_demo.save();
 
-  // //fill user's cart
-  // const cart_demo = await Cart.findOne({ owner: user_demo });
-  // let random_products;
-  // random_products = await Product.aggregate([{ $sample: { size: 10 } }]);
-  // for (const product of random_products) {
-  //   await cart_demo.addToCart(product);
-  // }
+  //fill user's cart
+  const cart_demo = await Cart.findOne({ owner: user_demo });
+  let random_products;
+  random_products = await Product.aggregate([{ $sample: { size: 10 } }]);
+  for (const product of random_products) {
+    await cart_demo.addToCart(product);
+  }
 
-  // //fill user's wishlist
-  // const wishlist_demo = await UserWishlist.findOne({ owner: user_demo._id });
-  // random_products = await Product.aggregate([{ $sample: { size: 20 } }]);
-  // wishlist_demo.wishlist_products = random_products;
-  // await wishlist_demo.save();
+  //fill user's wishlist
+  const wishlist_demo = await UserWishlist.findOne({ owner: user_demo._id });
+  random_products = await Product.aggregate([{ $sample: { size: 20 } }]);
+  wishlist_demo.wishlist_products = random_products;
+  await wishlist_demo.save();
 
-  //fill user's transaction
+  // fill user's transaction
 
-  // const available_addresses = await Address.find({ owner: user_demo._id });
+  const available_addresses = await Address.find({ owner: user_demo._id });
 
-  // const sellers = await User.find({
-  //   email: { $regex: "seller", $options: "i" },
-  // });
+  const sellers = await User.find({
+    email: { $regex: "seller", $options: "i" },
+  });
 
-  // const order_count = 50;
-  // const dates = random.consecutiveDate(
-  //   (count = order_count),
-  //   (days_range = 30)
-  // );
+  const order_count = 50;
+  const dates = random.consecutiveDate(
+    (count = order_count),
+    (days_range = 30)
+  );
 
-  // for (let i = 0; i < order_count; i++) {
-  //   let order = await Order.create({
-  //     owner: user_demo._id,
-  //     address:
-  //       available_addresses[random.int(0, available_addresses.length - 1)],
-  //     status: "paid",
-  //     createdAt: dates[i],
-  //     updatedAt: dates[i],
-  //   });
-  //   const order_item_count = random.poisson(1) + 1;
-  //   const order_items = [];
+  for (let i = 0; i < order_count; i++) {
+    let order = await Order.create({
+      owner: user_demo._id,
+      address:
+        available_addresses[random.int(0, available_addresses.length - 1)],
+      status: "paid",
+      createdAt: dates[i],
+      updatedAt: dates[i],
+    });
+    const order_item_count = random.poisson(1) + 1;
+    const order_items = [];
 
-  //   for (let j = 0; j < order_item_count; j++) {
-  //     //get random seller
-  //     const seller = sellers[random.int(0, sellers.length - 1)];
-  //     //get random seller's product
-  //     const products = await Product.aggregate([
-  //       { $match: { owner: seller._id } },
-  //       { $sample: { size: random.poisson(1) + 1 } },
-  //     ]);
-  //     const order_item_details = [];
-  //     for (const product of products) {
-  //       const order_item_detail = await OrderItemDetail.create({
-  //         product: product,
-  //         product_image: product.images[0],
-  //         product_name: product.name,
-  //         product_price: product.price,
-  //         quantity: random.poisson(1) + 1,
-  //       });
-  //       order_item_details.push(order_item_detail);
-  //     }
-  //     const order_item = await OrderItem.create({
-  //       order: order._id,
-  //       buyer: user_demo._id,
-  //       seller: seller._id,
-  //       order_item_details,
-  //       status: "completed",
-  //       airwaybill: faker.helpers.replaceSymbols("TOCO????########"),
-  //       createdAt: dates[i],
-  //       updatedAt: dates[i],
-  //     });
-  //     order_items.push(order_item);
-  //   }
-  //   order.order_items = order_items;
-  //   try {
-  //     await order.save();
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+    for (let j = 0; j < order_item_count; j++) {
+      //get random seller
+      const seller = sellers[random.int(0, sellers.length - 1)];
+      //get random seller's product
+      const products = await Product.aggregate([
+        { $match: { owner: seller._id } },
+        { $sample: { size: random.poisson(1) + 1 } },
+      ]);
+      const order_item_details = [];
+      for (const product of products) {
+        const order_item_detail = await OrderItemDetail.create({
+          product: product,
+          product_image: product.images[0],
+          product_name: product.name,
+          product_price: product.price,
+          quantity: random.poisson(1) + 1,
+        });
+        order_item_details.push(order_item_detail);
+      }
+      const order_item = await OrderItem.create({
+        order: order._id,
+        buyer: user_demo._id,
+        seller: seller._id,
+        order_item_details,
+        status: "completed",
+        airwaybill: faker.helpers.replaceSymbols("TOCO????########"),
+        createdAt: dates[i],
+        updatedAt: dates[i],
+      });
+      order_items.push(order_item);
+    }
+    order.order_items = order_items;
+    try {
+      await order.save();
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   // fill user's reviews;
 
@@ -308,7 +308,6 @@ async function initDemo() {
             curated_reviews_messages[
               random.int(0, curated_reviews_messages.length - 1)
             ],
-          images: random_images,
           completed: true,
           total_update: 1,
         },
