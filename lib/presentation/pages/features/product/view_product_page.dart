@@ -137,8 +137,8 @@ class _ViewProductPageState extends State<ViewProductPage> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.storefront_outlined, size: 40),
-                          SizedBox(width: 10),
+                          const Icon(Icons.storefront_outlined, size: 40),
+                          const SizedBox(width: 10),
                           Text("${product.owner?.name}",
                               style: subHeadingStyle),
                         ],

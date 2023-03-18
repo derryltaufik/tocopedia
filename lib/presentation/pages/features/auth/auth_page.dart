@@ -128,7 +128,7 @@ class _AuthPageState extends State<AuthPage> {
                                         return 'Please input your email';
                                       }
                                       final bool emailValid = RegExp(
-                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                           .hasMatch(value);
                                       if (!emailValid) {
                                         return 'Please enter valid email address';
@@ -226,7 +226,7 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       GestureDetector(
                         onTap: () => Provider.of<LocalSettingsProvider>(context,
                                 listen: false)
