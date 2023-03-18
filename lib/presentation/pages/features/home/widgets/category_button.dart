@@ -24,6 +24,10 @@ class CategoryButton extends StatelessWidget {
             imageUrl: category.image!,
             height: 30,
             width: 30,
+            progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                child: CircularProgressIndicator(
+                    value: downloadProgress.progress)),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           const SizedBox(height: 2),
           Expanded(

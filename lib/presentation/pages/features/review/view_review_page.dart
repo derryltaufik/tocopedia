@@ -104,8 +104,8 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
                             children: [
                               TextSpan(
                                   text: "${review.buyer?.name}",
-                                  style:
-                                      const TextStyle(fontWeight: FontWeight.bold)),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
                               TextSpan(
                                   text:
                                       " - ${DateFormat("dd MMM yyyy").format(review.updatedAt!)}"),
@@ -167,6 +167,10 @@ class ViewProductCard extends StatelessWidget {
               imageUrl: image,
               width: 50,
               height: 50,
+              progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress)),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             const SizedBox(width: 12),
             Expanded(

@@ -45,8 +45,14 @@ class PickImageTile extends StatelessWidget {
       } else if (pickedImage is File) {
         imageWidget = Image.file(pickedImage, fit: BoxFit.cover);
       } else if (pickedImage is String) {
-        imageWidget =
-            CachedNetworkImage(imageUrl: pickedImage, fit: BoxFit.cover);
+        imageWidget = CachedNetworkImage(
+          imageUrl: pickedImage,
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+              child:
+                  CircularProgressIndicator(value: downloadProgress.progress)),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        );
       }
       return Stack(
         children: [
