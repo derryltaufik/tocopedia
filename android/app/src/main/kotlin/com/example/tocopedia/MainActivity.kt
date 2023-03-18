@@ -1,4 +1,4 @@
-package com.example.tocopedia
+package com.derryltaufik.tocopedia
 
 import io.flutter.embedding.android.FlutterActivity
 
