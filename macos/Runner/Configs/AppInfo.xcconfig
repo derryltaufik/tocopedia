@@ -8,7 +8,7 @@
 PRODUCT_NAME = tocopedia
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.tocopedia
+PRODUCT_BUNDLE_IDENTIFIER = com.derryltaufik.tocopedia
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.derryltaufik. All rights reserved.

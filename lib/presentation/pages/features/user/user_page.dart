@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/future_function_handler.dart';
 import 'package:tocopedia/presentation/pages/features/address/view_all_addresses_page.dart';
-import 'package:tocopedia/presentation/pages/features/auth/auth_page.dart';
 import 'package:tocopedia/presentation/pages/features/user/edit_user_page.dart';
 import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 import 'package:tocopedia/presentation/providers/user_provider.dart';
@@ -42,9 +41,10 @@ class UserPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   FilledButton(
-                    onPressed: () => Navigator.of(context)
-                        .pushNamedAndRemoveUntil(
-                            AuthPage.routeName, (route) => false),
+                    onPressed: () {
+                      Provider.of<LocalSettingsProvider>(context, listen: false)
+                          .switchToBuyerMode();
+                    },
                     child: const Text("Login"),
                   ),
                 ],

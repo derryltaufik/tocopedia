@@ -106,16 +106,10 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (context) =>
             ProductReviewsPage(product: routeSettings.arguments as Product),
       );
-    case ProductReviewsPage.routeName:
-      return MaterialPageRoute(
-        settings: routeSettings,
-        builder: (context) =>
-            ProductReviewsPage(product: routeSettings.arguments as Product),
-      );
     case BuyerReviewsPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (context) => BuyerReviewsPage(),
+        builder: (context) => const BuyerReviewsPage(),
       );
     case AddReviewPage.routeName:
       return MaterialPageRoute(

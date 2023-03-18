@@ -42,8 +42,7 @@ class SingleOrderItemCard extends StatelessWidget {
                       )
                     ],
                   ),
-                  StatusCard(
-                      text: orderItem.status!, color: statusEnum.color),
+                  StatusCard(text: orderItem.status!, color: statusEnum.color),
                 ],
               ),
               const Divider(),
@@ -53,10 +52,17 @@ class SingleOrderItemCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                        imageUrl: orderItem.orderItemDetails![0].productImage!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover),
+                      imageUrl: orderItem.orderItemDetails![0].productImage!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (_, __, downloadProgress) =>
+                          Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress)),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -81,7 +87,8 @@ class SingleOrderItemCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               if (orderItem.orderItemDetails!.length > 1) ...[
-                Text("+ ${orderItem.orderItemDetails!.length - 1} other product(s)"),
+                Text(
+                    "+ ${orderItem.orderItemDetails!.length - 1} other product(s)"),
                 const SizedBox(height: 10),
               ],
               Column(

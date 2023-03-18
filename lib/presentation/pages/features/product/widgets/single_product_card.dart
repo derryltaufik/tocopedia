@@ -29,11 +29,11 @@ class SingleProductCard extends StatelessWidget {
               aspectRatio: 1 / 1,
               child: CachedNetworkImage(
                 imageUrl: product.images![0],
+                fit: BoxFit.cover,
                 progressIndicatorBuilder: (_, __, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
-                fit: BoxFit.cover,
               ),
             ),
             Padding(

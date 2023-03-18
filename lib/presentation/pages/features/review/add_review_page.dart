@@ -100,6 +100,10 @@ class _AddReviewPageState extends State<AddReviewPage> {
                             imageUrl: widget.review.productImage!,
                             width: 50,
                             height: 50,
+                            progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
                           const SizedBox(width: 10),
                           Expanded(

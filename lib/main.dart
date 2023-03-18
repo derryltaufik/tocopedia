@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/seller_navigation_bar.dart';
 
@@ -18,6 +20,8 @@ import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
+// TODO flutter web refresh page causing null check failed -> use suitable routing solution for web https://github.com/flutter/flutter/issues/59277
+// TODO change cloud file storage to S3 https://aws.amazon.com/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/
 // TODO enable avatar for user & seller
 // TODO use dartz Either for exception handling if necessary
 // TODO implement shimmer loading for better UX
@@ -93,32 +97,45 @@ class MyApp extends StatelessWidget {
           builder: (context, userProvider, localSettingsProvider, child) {
         final user = userProvider.user;
         Widget currentWidget;
+        final isLoggedIn =
+            user != null && user.token != null && user.token!.isNotEmpty;
 
-        if (user != null && user.token!.isNotEmpty) {
-          if (localSettingsProvider.appMode == AppMode.buyer) {
+        if (localSettingsProvider.appMode == AppMode.buyer) {
+          if (isLoggedIn) {
             currentWidget = const BuyerNavBar();
           } else {
-            currentWidget = const SellerNavBar();
+            currentWidget = const AuthPage();
           }
         } else if (localSettingsProvider.appMode == AppMode.guest) {
           currentWidget = const BuyerNavBar();
+        } else if (localSettingsProvider.appMode == AppMode.seller) {
+          if (isLoggedIn) {
+            currentWidget = const SellerNavBar();
+          } else {
+            currentWidget = const AuthPage();
+          }
         } else {
-          currentWidget = const AuthPage();
+          currentWidget = const BuyerNavBar();
         }
 
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.lightGreen,
-            ),
-            // colorSchemeSeed: Colors.lightGreen,
+        return FlutterWebFrame(
+          builder: (context) => MaterialApp(
+            title: 'Tocopedia',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.lightGreen,
+              ),
+              // colorSchemeSeed: Colors.lightGreen,
 
-            // colorSchemeSeed: const Color.fromRGBO(17, 164, 94, 1),
+              // colorSchemeSeed: const Color.fromRGBO(17, 164, 94, 1),
+            ),
+            home: currentWidget,
+            onGenerateRoute: generateRoute,
           ),
-          home: currentWidget,
-          onGenerateRoute: generateRoute,
+          maximumSize: const Size(475.0, 812.0),
+          enabled: kIsWeb,
+          backgroundColor: Colors.grey,
         );
       }),
     );

@@ -51,10 +51,17 @@ class SingleOrderItemDetailCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                        imageUrl: orderItemDetail.productImage!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover),
+                      imageUrl: orderItemDetail.productImage!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (_, __, downloadProgress) =>
+                          Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress)),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(

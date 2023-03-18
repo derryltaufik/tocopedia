@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
@@ -71,10 +72,6 @@ class _AuthPageState extends State<AuthPage> {
       body: SafeArea(
         child: Consumer<UserProvider>(
           builder: (context, value, child) {
-            if (value.autoLoginState == ProviderState.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             return Center(
               child: SingleChildScrollView(
                 child: Padding(
@@ -131,7 +128,7 @@ class _AuthPageState extends State<AuthPage> {
                                         return 'Please input your email';
                                       }
                                       final bool emailValid = RegExp(
-                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                           .hasMatch(value);
                                       if (!emailValid) {
                                         return 'Please enter valid email address';
@@ -175,18 +172,26 @@ class _AuthPageState extends State<AuthPage> {
                         child: Consumer<UserProvider>(
                             builder: (context, value, child) {
                           if (value.authState == ProviderState.loading) {
-                            return Center(
-                                child: CircularProgressIndicator(
-                              color: theme.scaffoldBackgroundColor,
-                            ));
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Loading",
+                                  style: TextStyle(fontSize: 20.0),
+                                ),
+                                AnimatedTextKit(
+                                  animatedTexts: [
+                                    TyperAnimatedText("..."),
+                                  ],
+                                ),
+                              ],
+                            );
                           }
                           return Text(
                             _formMode == AuthFormMode.signUp
                                 ? "Sign Up"
                                 : "Login",
-                            style: const TextStyle(
-                              fontSize: 20.0, // insert your font size here
-                            ),
+                            style: const TextStyle(fontSize: 20.0),
                           );
                         }),
                       ),
@@ -221,7 +226,7 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       GestureDetector(
                         onTap: () => Provider.of<LocalSettingsProvider>(context,
                                 listen: false)

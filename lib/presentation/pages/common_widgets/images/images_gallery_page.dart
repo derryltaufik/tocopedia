@@ -134,6 +134,10 @@ class _ImagesGalleryPageState extends State<ImagesGalleryPage> {
                                   fit: BoxFit.cover,
                                   height: size,
                                   width: size,
+                                  progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress)),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
                                 ),
                               ),
                             );
