@@ -48,6 +48,8 @@ dependencies:
   cloudinary_public: ^0.20.0
   flutter_rating_bar: ^4.0.1
   photo_view: ^0.14.0
+  flutter_web_frame: ^0.0.3
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -63,16 +65,6 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to flutter_native_splash package
-# 1) flutter clean
-# 2) flutter pub get
-# 3) flutter pub run flutter_native_splash:create
-flutter_native_splash:
-  color: "#fafafa"
-  image: assets/splash_screen/tocopedia_logo.png
-  branding: assets/splash_screen/tocopedia_brand.png
-  branding_mode: bottom
 
 # The following section is specific to Flutter packages.
 flutter:
