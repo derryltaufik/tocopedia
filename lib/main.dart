@@ -20,6 +20,7 @@ import 'package:tocopedia/injection.dart' as di;
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 import 'package:tocopedia/routing.dart';
 
+// TODO flutter web refresh page causing null check failed -> use suitable routing solution for web https://github.com/flutter/flutter/issues/59277
 // TODO change cloud file storage to S3 https://aws.amazon.com/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/
 // TODO enable avatar for user & seller
 // TODO use dartz Either for exception handling if necessary
@@ -119,7 +120,7 @@ class MyApp extends StatelessWidget {
 
         return FlutterWebFrame(
           builder: (context) => MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Tocopedia',
             theme: ThemeData(
               useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
