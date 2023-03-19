@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                   }
 
                   return GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     scrollDirection: Axis.horizontal,
                     itemCount: categories.length,
                     gridDelegate:
@@ -134,8 +135,9 @@ class _HomePageState extends State<HomePage> {
                     final Product product = products[index];
                     return SingleProductCard(product: product);
                   }),
-                  gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
                 );
               }),
             ),
