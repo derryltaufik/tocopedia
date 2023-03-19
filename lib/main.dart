@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/seller_navigation_bar.dart';
 
@@ -30,6 +31,7 @@ import 'package:tocopedia/routing.dart';
 
 void main() {
   di.init();
+  GoogleFonts.config.allowRuntimeFetching = false;
   runApp(const MyApp());
 }
 

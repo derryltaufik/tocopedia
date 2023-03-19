@@ -50,6 +50,7 @@ dependencies:
   photo_view: ^0.14.0
   flutter_web_frame: ^0.0.3
   animated_text_kit: ^4.2.2
+  google_fonts: ^4.0.3
 
 dev_dependencies:
   flutter_test:
@@ -76,9 +77,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/splash_screen/tocopedia_logo.png
+    - assets/google_fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
