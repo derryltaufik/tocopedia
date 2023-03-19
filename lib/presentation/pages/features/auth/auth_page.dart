@@ -91,6 +91,7 @@ class _AuthPageState extends State<AuthPage> {
                         nameController: _nameController,
                         emailController: _emailController,
                         passwordController: _passwordController,
+                        onSubmit: (_) => submitForm(context),
                       ),
                       const SizedBox(height: 10),
                       LoginButton(
@@ -255,17 +256,20 @@ class FormSection extends StatelessWidget {
     required TextEditingController nameController,
     required TextEditingController emailController,
     required TextEditingController passwordController,
+    void Function(String)? onSubmit,
   })  : _authFormKey = authFormKey,
         _formMode = formMode,
         _nameController = nameController,
         _emailController = emailController,
-        _passwordController = passwordController;
+        _passwordController = passwordController,
+        _onSubmit = onSubmit;
 
   final GlobalKey<FormState> _authFormKey;
   final AuthFormMode _formMode;
   final TextEditingController _nameController;
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
+  final void Function(String)? _onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -327,6 +331,7 @@ class FormSection extends StatelessWidget {
                     labelText: 'Password',
                   ),
                   textInputAction: TextInputAction.done,
+                  onFieldSubmitted: _onSubmit,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
                   validator: (value) {
