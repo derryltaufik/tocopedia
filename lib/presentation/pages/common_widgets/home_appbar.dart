@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/cart_button.dart';
 import 'package:tocopedia/presentation/pages/common_widgets/product_search_bar.dart';
 
-class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String query;
 
   const HomeAppBar({Key? key, this.query = ""}) : super(key: key);
