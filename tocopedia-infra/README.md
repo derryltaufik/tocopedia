@@ -146,12 +146,14 @@ A workflow in `.github/workflows/deploy-frontend.yml` automatically builds and d
 3. Skip the initial upload — GitHub Actions will handle it
 4. Note your **Account ID** from the Cloudflare dashboard URL or sidebar
 
-### Create API token
+### Create API token (minimal permissions)
 
-1. Go to **Cloudflare Dashboard → My Profile → API Tokens → Create Token**
-2. Use the **Edit Cloudflare Workers** template
-3. Under **Account Resources**, select your account
-4. **Create Token** → copy the token
+1. Go to **Cloudflare Dashboard → My Profile → API Tokens → Create Token → Create Custom Token**
+2. **Token name:** `tocopedia-pages-deploy`
+3. **Permissions:**
+   - Account — Cloudflare Pages — Edit
+4. **Account Resources:** Include — *select only your account*
+5. **Create Token** → copy the token
 
 ### Add GitHub secrets
 
