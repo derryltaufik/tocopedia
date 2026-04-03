@@ -105,7 +105,7 @@ docker compose --profile seed run --rm seed
 
 A workflow in `.github/workflows/deploy-backend.yml` automatically deploys on merge to `main`. It needs two GitHub secrets:
 
-1. Go to **Settings → Secrets and variables → Actions → New repository secret**
+1. Go to **Settings → Secrets and variables → Actions → Repository secrets → New repository secret**
 2. Add the following:
 
 | Secret | Value |
