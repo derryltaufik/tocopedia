@@ -71,19 +71,62 @@ docker --version && docker compose version
 
 ## Step 6 — Deploy the backend
 
-On the EC2 instance:
+There are two ways to deploy: manually via SSH or automatically via GitHub Actions.
+
+### Option A: Manual deploy
+
+SSH into the instance and run:
 
 ```bash
 git clone https://github.com/derryltaufik/tocopedia.git
 cd tocopedia/tocopedia-backend
 
 cp .env.example .env
-# Edit .env — set JWT_SECRET to a long random string
-# PORT and MONGODB_URL can stay as-is
+vi .env
+# Press i to enter insert mode, edit JWT_SECRET to a long random string
+# Set MONGODB_URL to your Atlas connection string
+# Press Esc, then type :wq and Enter to save and quit
 
 docker compose up -d
-docker compose ps    # both api and mongo should show "Up"
+docker compose ps    # api should show "Up"
 ```
+
+For subsequent deploys:
+
+```bash
+cd ~/tocopedia
+git pull origin main
+cd tocopedia-backend
+docker compose down
+docker compose up -d --build
+```
+
+### Option B: Automatic deploy (CI/CD)
+
+A workflow in `.github/workflows/deploy-backend.yml` automatically deploys when changes to `tocopedia-backend/` are merged to `main`. Env vars are injected from GitHub secrets — no manual `.env` on the instance needed.
+
+**First-time setup on the instance:**
+
+```bash
+git clone https://github.com/derryltaufik/tocopedia.git
+```
+
+**Set up GitHub secrets:**
+
+1. Go to **Settings → Secrets and variables → Actions → Repository secrets → New repository secret**
+2. Add the following:
+
+| Secret | Value |
+|---|---|
+| `EC2_HOST` | Public IP of the instance (`terraform output public_ip`) |
+| `EC2_SSH_KEY` | Contents of your private SSH key (`cat ~/.ssh/id_ed25519`) |
+| `APP_PORT` | Backend port (e.g. `3000`) |
+| `MONGODB_URL` | MongoDB connection string (e.g. Atlas URL) |
+| `JWT_SECRET` | Secret key for JWT token signing |
+
+After setup, any merge to `main` that changes `tocopedia-backend/` will automatically deploy.
+
+### Verify
 
 Test from your local machine:
 
@@ -98,22 +141,8 @@ On the EC2 instance:
 
 ```bash
 cd ~/tocopedia/tocopedia-backend
-docker compose --profile seed run --rm seed
+docker compose --profile local run --rm seed
 ```
-
-## Step 8 — Set up CI/CD (GitHub Actions)
-
-A workflow in `.github/workflows/deploy-backend.yml` automatically deploys on merge to `main`. It needs two GitHub secrets:
-
-1. Go to **Settings → Secrets and variables → Actions → Repository secrets → New repository secret**
-2. Add the following:
-
-| Secret | Value |
-|---|---|
-| `EC2_HOST` | Public IP of the instance (`terraform output public_ip`) |
-| `EC2_SSH_KEY` | Contents of your private SSH key (`cat ~/.ssh/id_ed25519`) |
-
-After setup, any merge to `main` that changes `tocopedia-backend/` will automatically deploy.
 
 ## Tear down
 

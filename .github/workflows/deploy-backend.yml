@@ -20,5 +20,12 @@ jobs:
             cd ~/tocopedia
             git pull origin main
             cd tocopedia-backend
+
+            cat > .env <<EOL
+            PORT=${{ secrets.APP_PORT }}
+            MONGODB_URL=${{ secrets.MONGODB_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            EOL
+
             docker compose down
             docker compose up -d --build
