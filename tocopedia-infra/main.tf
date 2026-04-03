@@ -68,17 +68,17 @@ resource "aws_instance" "backend" {
   vpc_security_group_ids = [aws_security_group.tocopedia.id]
 
   user_data = <<-EOF
-    #!/bin/bash
-    set -e
-    dnf update -y
-    dnf install -y docker git
-    systemctl enable --now docker
-    usermod -aG docker ec2-user
-    mkdir -p /usr/local/lib/docker/cli-plugins
-    curl -fsSL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64" \
-      -o /usr/local/lib/docker/cli-plugins/docker-compose
-    chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-  EOF
+#!/bin/bash
+set -e
+dnf update -y
+dnf install -y docker git
+systemctl enable --now docker
+usermod -aG docker ec2-user
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -fsSL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64" \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+EOF
 
   tags = {
     Name    = "tocopedia-backend"
