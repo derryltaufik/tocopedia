@@ -71,13 +71,9 @@ resource "aws_instance" "backend" {
 #!/bin/bash
 set -e
 dnf update -y
-dnf install -y docker git
+dnf install -y docker docker-compose-plugin git
 systemctl enable --now docker
 usermod -aG docker ec2-user
-mkdir -p /usr/local/lib/docker/cli-plugins
-curl -fsSL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64" \
-  -o /usr/local/lib/docker/cli-plugins/docker-compose
-chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 EOF
 
   tags = {
