@@ -5,17 +5,8 @@
       "Sid": "DescribeResources",
       "Effect": "Allow",
       "Action": [
-        "ec2:DescribeInstances",
-        "ec2:DescribeInstanceStatus",
-        "ec2:DescribeImages",
-        "ec2:DescribeKeyPairs",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeAccountAttributes",
-        "ec2:DescribeTags",
-        "ec2:DescribeNetworkInterfaces"
+        "ec2:Describe*",
+        "ec2:GetInstanceTypesFromInstanceRequirements"
       ],
       "Resource": "*"
     },
@@ -53,16 +44,28 @@
       }
     },
     {
-      "Sid": "LaunchInstance",
+      "Sid": "LaunchInstanceType",
       "Effect": "Allow",
       "Action": "ec2:RunInstances",
-      "Resource": "*",
+      "Resource": "arn:aws:ec2:ap-southeast-1:*:instance/*",
       "Condition": {
         "StringEquals": {
-          "aws:RequestedRegion": "ap-southeast-1",
           "ec2:InstanceType": "t4g.nano"
         }
       }
+    },
+    {
+      "Sid": "LaunchInstanceResources",
+      "Effect": "Allow",
+      "Action": "ec2:RunInstances",
+      "Resource": [
+        "arn:aws:ec2:ap-southeast-1:*:key-pair/*",
+        "arn:aws:ec2:ap-southeast-1:*:security-group/*",
+        "arn:aws:ec2:ap-southeast-1:*:subnet/*",
+        "arn:aws:ec2:ap-southeast-1:*:network-interface/*",
+        "arn:aws:ec2:ap-southeast-1:*:volume/*",
+        "arn:aws:ec2:ap-southeast-1::image/*"
+      ]
     },
     {
       "Sid": "ManageTaggedInstances",
