@@ -1,0 +1,4 @@
+region            = "ap-southeast-1"
+ssh_public_key    = "ssh-ed25519 AAAA... you@machine"
+ssh_allowed_cidrs = ["YOUR_IP/32"]  # replace with your IP: curl ifconfig.me
+app_port          = 3000
