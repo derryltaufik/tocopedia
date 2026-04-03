@@ -1,0 +1,98 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DescribeResources",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "ec2:GetInstanceTypesFromInstanceRequirements"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ManageKeyPair",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateKeyPair",
+        "ec2:ImportKeyPair",
+        "ec2:DeleteKeyPair"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-1"
+        }
+      }
+    },
+    {
+      "Sid": "ManageSecurityGroup",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateSecurityGroup",
+        "ec2:DeleteSecurityGroup",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-1"
+        }
+      }
+    },
+    {
+      "Sid": "LaunchInstanceType",
+      "Effect": "Allow",
+      "Action": "ec2:RunInstances",
+      "Resource": "arn:aws:ec2:ap-southeast-1:*:instance/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:InstanceType": "t4g.nano"
+        }
+      }
+    },
+    {
+      "Sid": "LaunchInstanceResources",
+      "Effect": "Allow",
+      "Action": "ec2:RunInstances",
+      "Resource": [
+        "arn:aws:ec2:ap-southeast-1:*:key-pair/*",
+        "arn:aws:ec2:ap-southeast-1:*:security-group/*",
+        "arn:aws:ec2:ap-southeast-1:*:subnet/*",
+        "arn:aws:ec2:ap-southeast-1:*:network-interface/*",
+        "arn:aws:ec2:ap-southeast-1:*:volume/*",
+        "arn:aws:ec2:ap-southeast-1::image/*"
+      ]
+    },
+    {
+      "Sid": "ManageTaggedInstances",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:StartInstances",
+        "ec2:StopInstances",
+        "ec2:TerminateInstances",
+        "ec2:RebootInstances"
+      ],
+      "Resource": "arn:aws:ec2:ap-southeast-1:*:instance/*",
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/Project": "tocopedia"
+        }
+      }
+    },
+    {
+      "Sid": "CreateTags",
+      "Effect": "Allow",
+      "Action": "ec2:CreateTags",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-1"
+        }
+      }
+    }
+  ]
+}
