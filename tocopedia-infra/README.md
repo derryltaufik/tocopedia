@@ -112,6 +112,9 @@ A workflow in `.github/workflows/deploy-backend.yml` automatically deploys on me
 |---|---|
 | `EC2_HOST` | Public IP of the instance (`terraform output public_ip`) |
 | `EC2_SSH_KEY` | Contents of your private SSH key (`cat ~/.ssh/id_ed25519`) |
+| `APP_PORT` | Backend port (e.g. `3000`) |
+| `MONGODB_URL` | MongoDB connection string (e.g. Atlas URL) |
+| `JWT_SECRET` | Secret key for JWT token signing |
 
 After setup, any merge to `main` that changes `tocopedia-backend/` will automatically deploy.
 
