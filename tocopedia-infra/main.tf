@@ -79,6 +79,7 @@ apt-get update -y
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 systemctl enable --now docker
 usermod -aG docker ubuntu
+chmod 666 /var/run/docker.sock
 EOF
 
   tags = {
