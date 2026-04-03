@@ -9,12 +9,6 @@ variable "ssh_public_key" {
   type        = string
 }
 
-variable "ssh_allowed_cidrs" {
-  description = "CIDR blocks allowed to SSH. Restrict to your IP for security."
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
 variable "app_port" {
   description = "Port the backend API listens on"
   type        = number
