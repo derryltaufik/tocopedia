@@ -8,7 +8,7 @@ output "public_ip" {
 }
 
 output "ssh_command" {
-  value       = "ssh -i ~/.ssh/YOUR_KEY ec2-user@${aws_instance.backend.public_ip}"
+  value       = "ssh -i ~/.ssh/YOUR_KEY ubuntu@${aws_instance.backend.public_ip}"
   description = "SSH command to connect to the instance"
 }
 

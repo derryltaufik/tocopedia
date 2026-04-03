@@ -51,7 +51,7 @@ Note the outputs after apply:
 
 ```
 public_ip   = "x.x.x.x"
-ssh_command = "ssh -i ~/.ssh/id_ed25519 ec2-user@x.x.x.x"
+ssh_command = "ssh -i ~/.ssh/id_ed25519 ubuntu@x.x.x.x"
 api_url     = "http://x.x.x.x:3000"
 ```
 
@@ -60,7 +60,7 @@ api_url     = "http://x.x.x.x:3000"
 Wait ~60 seconds after `terraform apply` for the instance to finish installing Docker.
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 ec2-user@<public_ip>
+ssh -i ~/.ssh/id_ed25519 ubuntu@<public_ip>
 ```
 
 Verify Docker is ready:
@@ -116,7 +116,7 @@ terraform destroy
 | Resource | Detail |
 |---|---|
 | Instance | `t4g.nano` (ARM64, 2 vCPU, 0.5 GB RAM) |
-| OS | Amazon Linux 2023 |
+| OS | Ubuntu 24.04 LTS (Noble) |
 | Region | `ap-southeast-1` (configurable) |
 | Runtime | Docker + Compose (installed via user_data) |
 | Ports | 22 (SSH), 3000 (API) |
