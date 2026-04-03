@@ -135,7 +135,40 @@ curl http://<public_ip>:3000/
 # → {"status":"success"}
 ```
 
-## Step 7 — Seed the database (optional)
+## Step 7 — Deploy the frontend (Cloudflare Pages)
+
+A workflow in `.github/workflows/deploy-frontend.yml` automatically builds and deploys the Flutter web app when changes to `tocopedia-flutter/` are merged to `main`.
+
+### One-time Cloudflare setup
+
+1. Go to **Cloudflare Dashboard → Workers & Pages → Create → Pages → Direct Upload**
+2. Name the project (e.g. `tocopedia`) → **Create project**
+3. Skip the initial upload — GitHub Actions will handle it
+4. Note your **Account ID** from the Cloudflare dashboard URL or sidebar
+
+### Create API token
+
+1. Go to **Cloudflare Dashboard → My Profile → API Tokens → Create Token**
+2. Use the **Edit Cloudflare Workers** template
+3. Under **Account Resources**, select your account
+4. **Create Token** → copy the token
+
+### Add GitHub secrets
+
+Add these to **Settings → Secrets and variables → Actions → Repository secrets**:
+
+| Secret | Value |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | API token from above |
+| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
+| `CLOUDFLARE_PAGES_PROJECT_NAME` | Project name (e.g. `tocopedia`) |
+| `API_URL` | Backend URL (e.g. `http://18.140.65.18:3000`) |
+
+After setup, any merge to `main` that changes `tocopedia-flutter/` will build and deploy automatically.
+
+The frontend will be available at `https://<project-name>.pages.dev`.
+
+## Step 8 — Seed the database (optional)
 
 On the EC2 instance:
 
