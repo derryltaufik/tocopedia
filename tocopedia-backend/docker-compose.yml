@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      target: production
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  seed:
+    build:
+      context: .
+      target: seed
+    env_file:
+      - .env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    profiles:
+      - seed
+
+volumes:
+  mongo_data:
