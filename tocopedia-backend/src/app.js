@@ -35,6 +35,10 @@ app.get("/", async (req, res) => {
   res.send({ status: "success" });
 });
 
+app.get("/hello", async (req, res) => {
+  res.send({ message: "hello world" });
+});
+
 app.listen(PORT, () => {
   console.log(`server listening on port ${PORT}`);
 });
