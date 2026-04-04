@@ -33,20 +33,12 @@ resource "aws_key_pair" "tocopedia" {
 
 resource "aws_security_group" "tocopedia" {
   name        = "tocopedia-backend"
-  description = "Tocopedia backend: SSH + app port"
+  description = "Tocopedia backend: SSH only"
 
   ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "API"
-    from_port   = var.app_port
-    to_port     = var.app_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -80,6 +72,7 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 systemctl enable --now docker
 usermod -aG docker ubuntu
 chmod 666 /var/run/docker.sock
+su - ubuntu -c "git clone https://github.com/derryltaufik/tocopedia.git /home/ubuntu/tocopedia"
 EOF
 
   tags = {

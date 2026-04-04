@@ -25,7 +25,8 @@ jobs:
             PORT=${{ secrets.APP_PORT }}
             MONGODB_URL=${{ secrets.MONGODB_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
+            CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
             EOL
 
-            docker compose down
-            docker compose up -d --build
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml up -d --build
