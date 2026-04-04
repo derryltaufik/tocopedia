@@ -22,7 +22,7 @@ jobs:
             cd tocopedia-backend
 
             cat > .env <<EOL
-            PORT=${{ secrets.APP_PORT }}
+            PORT=3000
             MONGODB_URL=${{ secrets.MONGODB_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
