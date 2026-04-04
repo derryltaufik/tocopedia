@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: .
+      target: production
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: tocopedia_tunnel
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?CLOUDFLARE_TUNNEL_TOKEN is required}
+    depends_on:
+      - api
+    restart: unless-stopped
