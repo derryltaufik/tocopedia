@@ -7,7 +7,7 @@
     "test": "jest --forceExit --detectOpenHandles",
     "dev": "env-cmd -f ./config/dev.env nodemon src/app.js",
     "init": "env-cmd -f ./config/dev.env node src/init.js",
-    "seed": "docker compose --profile local run --rm seed",
+    "seed": "docker compose run --rm seed",
     "start": "node src/app.js"
   },
   "keywords": [],
