@@ -7,6 +7,9 @@ services:
       - "${PORT:-3000}:${PORT:-3000}"
     env_file:
       - .env
+    depends_on:
+      mongo:
+        condition: service_healthy
     restart: unless-stopped
 
   mongo:
@@ -21,8 +24,6 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    profiles:
-      - local
 
   seed:
     build:
@@ -33,8 +34,6 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
-    profiles:
-      - local
 
 volumes:
   mongo_data:
