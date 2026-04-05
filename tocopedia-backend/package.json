@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --forceExit --detectOpenHandles",
     "dev": "env-cmd -f ./config/dev.env nodemon src/app.js",
     "init": "env-cmd -f ./config/dev.env node src/init.js",
     "seed": "docker compose --profile local run --rm seed",
@@ -24,6 +24,9 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "env-cmd": "^10.1.0",
-    "nodemon": "^3.1.14"
+    "jest": "^30.3.0",
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
   }
 }

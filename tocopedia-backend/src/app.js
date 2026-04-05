@@ -16,8 +16,6 @@ const wishlistRouter = require("./routers/wishlist");
 
 const app = express();
 
-const PORT = process.env.PORT;
-
 app.use(cors());
 app.use(express.json());
 app.use(authRouter);
@@ -35,6 +33,11 @@ app.get("/", async (req, res) => {
   res.send({ status: "success" });
 });
 
-app.listen(PORT, () => {
-  console.log(`server listening on port ${PORT}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT;
+  app.listen(PORT, () => {
+    console.log(`server listening on port ${PORT}`);
+  });
+}
+
+module.exports = app;
