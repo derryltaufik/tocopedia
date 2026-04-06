@@ -1,0 +1,59 @@
+name: Build Release APK
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.6"
+
+      - name: Parse version from tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          TAG="${TAG#v}"
+          if [[ "$TAG" == *"+"* ]]; then
+            BUILD_NAME="${TAG%%+*}"
+            BUILD_NUMBER="${TAG##*+}"
+          else
+            BUILD_NAME="$TAG"
+            BUILD_NUMBER="${GITHUB_RUN_NUMBER}"
+          fi
+          echo "BUILD_NAME=$BUILD_NAME" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Decode keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > /tmp/keystore.jks
+
+      - name: Create key.properties
+        working-directory: tocopedia-flutter/android
+        env:
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          echo "storePassword=$STORE_PASSWORD" > key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> key.properties
+          echo "keyAlias=$KEY_ALIAS" >> key.properties
+          echo "storeFile=/tmp/keystore.jks" >> key.properties
+
+      - name: Build APK
+        working-directory: tocopedia-flutter
+        run: |
+          flutter build apk --release \
+            --build-name=$BUILD_NAME \
+            --build-number=$BUILD_NUMBER \
+            --dart-define=BASE_URL=${{ secrets.API_URL }} \
+            --dart-define=CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
+            --dart-define=CLOUDINARY_UPLOAD_PRESET=${{ secrets.CLOUDINARY_UPLOAD_PRESET }}
+
+      - name: Upload APK to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tocopedia-flutter/build/app/outputs/flutter-apk/app-release.apk
