@@ -72,7 +72,8 @@ class ProductRepositoryImpl implements ProductRepository {
       List<String> imageUrls = [];
 
       for (int i = 0; i < images.length; i++) {
-        final imageUrl = await remoteStorageService.uploadImage(images[i]);
+        final imageUrl =
+            await remoteStorageService.uploadImage(token, images[i]);
 
         imageUrls.add(imageUrl);
       }
@@ -122,7 +123,8 @@ class ProductRepositoryImpl implements ProductRepository {
 
       if (newImages != null && newImages.isNotEmpty) {
         for (int i = 0; i < newImages.length; i++) {
-          final imageUrl = await remoteStorageService.uploadImage(newImages[i]);
+          final imageUrl =
+              await remoteStorageService.uploadImage(token, newImages[i]);
 
           imageUrls?.add(imageUrl);
         }
