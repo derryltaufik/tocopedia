@@ -57,6 +57,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 10m
           script: |
             cd ~/tocopedia
             git pull origin main
