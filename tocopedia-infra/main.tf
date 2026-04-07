@@ -102,8 +102,66 @@ resource "aws_iam_user_policy" "s3_upload" {
   })
 }
 
+resource "aws_iam_user_policy" "ecr_access" {
+  name = "ecr-access"
+  user = aws_iam_user.s3_uploader.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = "ecr:GetAuthorizationToken"
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
+        ]
+        Resource = aws_ecr_repository.backend.arn
+      }
+    ]
+  })
+}
+
 resource "aws_iam_access_key" "s3_uploader" {
   user = aws_iam_user.s3_uploader.name
+}
+
+resource "aws_ecr_repository" "backend" {
+  name                 = "tocopedia-backend"
+  image_tag_mutability = "MUTABLE"
+  force_delete         = true
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+
+  tags = { Project = "tocopedia" }
+}
+
+resource "aws_ecr_lifecycle_policy" "backend" {
+  repository = aws_ecr_repository.backend.name
+
+  policy = jsonencode({
+    rules = [{
+      rulePriority = 1
+      description  = "Keep last 5 images"
+      selection = {
+        tagStatus   = "any"
+        countType   = "imageCountMoreThan"
+        countNumber = 5
+      }
+      action = { type = "expire" }
+    }]
+  })
 }
 
 resource "aws_instance" "backend" {

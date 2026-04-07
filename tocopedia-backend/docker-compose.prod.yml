@@ -8,9 +8,7 @@ services:
     restart: unless-stopped
 
   api:
-    build:
-      context: .
-      target: production
+    image: ${ECR_IMAGE:?ECR_IMAGE is required}
     expose:
       - "3000"
     env_file:

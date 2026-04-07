@@ -7,8 +7,48 @@ on:
       - "tocopedia-backend/**"
   workflow_dispatch:
 
+env:
+  AWS_REGION: ap-southeast-1
+  ECR_REPOSITORY: tocopedia-backend
+
 jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.build.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        id: build
+        working-directory: tocopedia-backend
+        run: |
+          IMAGE="${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
+          docker buildx build \
+            --platform linux/arm64 \
+            --target production \
+            --tag "$IMAGE" \
+            --tag "${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest" \
+            --push .
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
   deploy:
+    needs: build-push
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to EC2
@@ -27,7 +67,25 @@ jobs:
             MONGODB_URL=${{ secrets.MONGODB_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}
+            AWS_REGION=${{ secrets.AWS_REGION }}
+            ECR_IMAGE=${{ needs.build-push.outputs.image }}
             EOL
 
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d --build
+            # Install AWS CLI if not present
+            if ! command -v aws &> /dev/null; then
+              curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o /tmp/awscli.zip
+              unzip -qo /tmp/awscli.zip -d /tmp
+              sudo /tmp/aws/install
+              rm -rf /tmp/awscli.zip /tmp/aws
+            fi
+
+            export AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}"
+            export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            export AWS_REGION="${{ secrets.AWS_REGION }}"
+            aws ecr get-login-password | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+            docker compose -f docker-compose.prod.yml pull api
+            docker compose -f docker-compose.prod.yml up -d
