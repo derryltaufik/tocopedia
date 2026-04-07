@@ -45,7 +45,6 @@ dependencies:
   cached_network_image: ^3.2.3
   image_picker: ^1.0.7
   image_cropper: ^12.1.1
-  cloudinary_public: ^0.23.1
   flutter_rating_bar: ^4.0.1
   photo_view: ^0.15.0
   flutter_web_frame: ^1.0.0

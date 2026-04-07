@@ -1,28 +1,31 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:http/http.dart' as http;
 import 'package:tocopedia/common/env_variables.dart';
 
 abstract class RemoteStorageService {
-  Future<String> uploadImage(File imageFile, {String? folderName});
+  Future<String> uploadImage(String token, File imageFile);
 }
 
 class RemoteStorageServiceImpl implements RemoteStorageService {
   @override
-  Future<String> uploadImage(File imageFile, {String? folderName}) async {
-    try {
-      final cloudinary =
-          CloudinaryPublic(CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET);
+  Future<String> uploadImage(String token, File imageFile) async {
+    final uri = Uri.parse('$BASE_URL/upload');
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..files.add(await http.MultipartFile.fromPath('image', imageFile.path));
 
-      CloudinaryResponse response = await cloudinary
-          .uploadFile(
-            CloudinaryFile.fromFile(imageFile.path, folder: folderName),
-          )
-          .timeout(const Duration(seconds: 5));
+    final streamedResponse =
+        await request.send().timeout(const Duration(seconds: 30));
+    final response = await http.Response.fromStream(streamedResponse);
 
-      return response.secureUrl;
-    } catch (e) {
-      rethrow;
+    if (response.statusCode != 201) {
+      final body = jsonDecode(response.body);
+      throw Exception(body['error'] ?? 'Failed to upload image');
     }
+
+    final body = jsonDecode(response.body);
+    return body['data']['url'];
   }
 }
