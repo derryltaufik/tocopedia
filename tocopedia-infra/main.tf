@@ -53,6 +53,59 @@ resource "aws_security_group" "tocopedia" {
   tags = { Project = "tocopedia" }
 }
 
+resource "aws_s3_bucket" "images" {
+  bucket = var.s3_bucket_name
+
+  tags = { Project = "tocopedia" }
+}
+
+resource "aws_s3_bucket_public_access_block" "images" {
+  bucket = aws_s3_bucket.images.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_policy" "images_public_read" {
+  bucket = aws_s3_bucket.images.id
+  depends_on = [aws_s3_bucket_public_access_block.images]
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = "*"
+      Action    = "s3:GetObject"
+      Resource  = "${aws_s3_bucket.images.arn}/*"
+    }]
+  })
+}
+
+resource "aws_iam_user" "s3_uploader" {
+  name = "tocopedia-s3-uploader"
+  tags = { Project = "tocopedia" }
+}
+
+resource "aws_iam_user_policy" "s3_upload" {
+  name = "s3-upload"
+  user = aws_iam_user.s3_uploader.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "s3:PutObject"
+      Resource = "${aws_s3_bucket.images.arn}/*"
+    }]
+  })
+}
+
+resource "aws_iam_access_key" "s3_uploader" {
+  user = aws_iam_user.s3_uploader.name
+}
+
 resource "aws_instance" "backend" {
   ami                    = data.aws_ami.ubuntu_arm64.id
   instance_type          = "t4g.nano"
