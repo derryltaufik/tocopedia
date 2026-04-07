@@ -17,13 +17,13 @@ output "s3_bucket_name" {
   description = "S3 bucket name for image uploads"
 }
 
-output "s3_uploader_access_key_id" {
-  value       = aws_iam_access_key.s3_uploader.id
-  description = "Access key ID for the S3 uploader IAM user"
+output "deploy_access_key_id" {
+  value       = aws_iam_access_key.deploy.id
+  description = "Access key ID for the deploy IAM user"
 }
 
-output "s3_uploader_secret_access_key" {
-  value       = aws_iam_access_key.s3_uploader.secret
+output "deploy_secret_access_key" {
+  value       = aws_iam_access_key.deploy.secret
   sensitive   = true
-  description = "Secret access key for the S3 uploader IAM user"
+  description = "Secret access key for the deploy IAM user"
 }
