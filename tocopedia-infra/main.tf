@@ -33,7 +33,7 @@ resource "aws_key_pair" "tocopedia" {
 
 resource "aws_security_group" "tocopedia" {
   name        = "tocopedia-backend"
-  description = "Tocopedia backend: SSH only"
+  description = "Tocopedia backend: SSH + app port"
 
   ingress {
     description = "SSH"
