@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
 
   api:
-    image: ${ECR_IMAGE:?ECR_IMAGE is required}
+    image: tocopedia-backend:latest
     expose:
       - "3000"
     env_file:
