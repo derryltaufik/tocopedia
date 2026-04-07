@@ -1,6 +1,6 @@
 # Tocopedia Infrastructure
 
-Terraform config to provision a single EC2 t4g.nano instance running the backend with Docker.
+Terraform config to provision the backend infrastructure: EC2 t4g.nano instance with Docker, S3 bucket for image uploads, EC2 Instance Connect Endpoint for SSH, and a dedicated IAM user for S3/EICE access.
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ Terraform config to provision a single EC2 t4g.nano instance running the backend
 ## Step 2 — Create IAM User
 
 1. **IAM → Users → Create user**
-2. Username: `tocopedia-deploy` — **uncheck** "Provide user access to the AWS Management Console"
+2. Username: `tocopedia-terraform` — **uncheck** "Provide user access to the AWS Management Console"
 3. **Permissions** → "Attach policies directly" → search `tocopedia-deploy-policy` → attach
 4. **Create user**
 5. Open the user → **Security credentials** → **Create access key** → use case: **CLI**
@@ -43,16 +43,18 @@ cp terraform.tfvars.example terraform.tfvars
 source .env
 
 terraform init
-terraform plan     # preview: 3 resources (key pair, security group, EC2)
+terraform plan     # preview: ~9 resources (key pair, security group, EC2, S3 bucket + policy, IAM user + keys, EICE)
 terraform apply    # type "yes" to confirm
 ```
 
 Note the outputs after apply:
 
 ```
-public_ip   = "x.x.x.x"
-ssh_command = "ssh -i ~/.ssh/id_ed25519 ubuntu@x.x.x.x"
-api_url     = "http://x.x.x.x:3000"
+instance_id               = "i-xxxxxxxxxxxxxxxxx"
+public_ip                 = "x.x.x.x"
+ssh_command               = "ssh ubuntu@x.x.x.x"
+s3_bucket_name            = "tocopedia-images"
+deploy_access_key_id      = "AKIA..."
 ```
 
 ## Step 5 — SSH into the instance
@@ -60,7 +62,7 @@ api_url     = "http://x.x.x.x:3000"
 Wait ~60 seconds after `terraform apply` for the instance to finish installing Docker.
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 ubuntu@<public_ip>
+ssh ubuntu@<public_ip>
 ```
 
 Verify Docker is ready:
@@ -103,7 +105,7 @@ docker compose up -d --build
 
 ### Option B: Automatic deploy (CI/CD)
 
-A workflow in `.github/workflows/deploy-backend.yml` automatically deploys when changes to `tocopedia-backend/` are merged to `main`. Env vars are injected from GitHub secrets — no manual `.env` on the instance needed.
+A workflow in `.github/workflows/deploy-backend.yml` automatically deploys when changes to `tocopedia-backend/` are pushed to `main`. The image is built and pushed to GHCR, then deployed to EC2 via an EICE tunnel. Env vars are injected from GitHub secrets — no manual `.env` on the instance needed.
 
 **First-time setup on the instance:**
 
@@ -118,13 +120,17 @@ git clone https://github.com/derryltaufik/tocopedia.git
 
 | Secret | Value |
 |---|---|
-| `EC2_HOST` | Public IP of the instance (`terraform output public_ip`) |
+| `AWS_ACCESS_KEY_ID` | Access key of the `tocopedia-deploy` user (`terraform output deploy_access_key_id`) |
+| `AWS_SECRET_ACCESS_KEY` | Secret key (`terraform output -raw deploy_secret_access_key`) |
+| `AWS_S3_BUCKET` | S3 bucket name (`terraform output s3_bucket_name`) |
+| `AWS_REGION` | AWS region (e.g. `ap-southeast-1`) |
+| `INSTANCE_ID` | EC2 instance ID (`terraform output instance_id`) |
 | `EC2_SSH_KEY` | Contents of your private SSH key (`cat ~/.ssh/id_ed25519`) |
-| `APP_PORT` | Backend port (e.g. `3000`) |
 | `MONGODB_URL` | MongoDB connection string (e.g. Atlas URL) |
 | `JWT_SECRET` | Secret key for JWT token signing |
+| `CLOUDFLARE_TUNNEL_TOKEN` | Cloudflare Tunnel token for the backend |
 
-After setup, any merge to `main` that changes `tocopedia-backend/` will automatically deploy.
+After setup, any push to `main` that changes `tocopedia-backend/` will automatically build, push to GHCR, and deploy via EICE.
 
 ### Verify
 
@@ -197,13 +203,18 @@ terraform destroy
 | OS | Ubuntu 24.04 LTS (Noble) |
 | Region | `ap-southeast-1` (configurable) |
 | Runtime | Docker + Compose (installed via user_data) |
-| Ports | 22 (SSH), 3000 (API) |
+| SSH access | EC2 Instance Connect Endpoint (EICE) |
+| Image storage | S3 bucket (`tocopedia-images`) with public read |
+| IAM | `tocopedia-deploy` user for S3 uploads + EICE deploy access |
 
 ## IAM Policy Scope
 
-The policy in `iam-policy.json` is scoped to:
+The policy in `iam-policy.json` is for the **Terraform operator** user (`tocopedia-terraform`) and is scoped to:
 
 - **Read-only describe** for all EC2 resources
 - **Instance type locked** to `t4g.nano` (can't launch expensive instances)
 - **Region locked** to `ap-southeast-1`
 - **Stop/terminate** only instances tagged `Project=tocopedia`
+- **S3** — create/delete/configure buckets matching `tocopedia-*`
+- **IAM** — manage users and inline policies matching `tocopedia-*`
+- **EC2 Instance Connect Endpoint** — create/delete in `ap-southeast-1`
