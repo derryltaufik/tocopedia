@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const rateLimit = require("express-rate-limit");
 const auth = require("../middleware/auth");
 const upload = require("../middleware/upload");
@@ -13,23 +14,26 @@ const uploadLimiter = rateLimit({
   message: { error: "Too many uploads, please try again later" },
 });
 
-router.post(
-  "/upload",
-  auth,
-  uploadLimiter,
-  upload.single("image"),
-  async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).send({ error: "No image file provided" });
-      }
+router.post("/upload", auth, uploadLimiter, (req, res) => {
+  upload.single("image")(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).send({ error: err.message });
+    }
+    if (err) {
+      return res.status(400).send({ error: err.message });
+    }
 
+    if (!req.file) {
+      return res.status(400).send({ error: "No image file provided" });
+    }
+
+    try {
       const url = await uploadFile(req.file);
       return res.status(201).send({ data: { url } });
     } catch (error) {
-      return res.status(400).send({ error: error.message });
+      return res.status(500).send({ error: "Upload failed" });
     }
-  }
-);
+  });
+});
 
 module.exports = router;

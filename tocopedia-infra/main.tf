@@ -83,14 +83,14 @@ resource "aws_s3_bucket_policy" "images_public_read" {
   })
 }
 
-resource "aws_iam_user" "s3_uploader" {
-  name = "tocopedia-s3-uploader"
+resource "aws_iam_user" "deploy" {
+  name = "tocopedia-deploy"
   tags = { Project = "tocopedia" }
 }
 
 resource "aws_iam_user_policy" "s3_upload" {
   name = "s3-upload"
-  user = aws_iam_user.s3_uploader.name
+  user = aws_iam_user.deploy.name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -104,7 +104,7 @@ resource "aws_iam_user_policy" "s3_upload" {
 
 resource "aws_iam_user_policy" "eice_access" {
   name = "eice-access"
-  user = aws_iam_user.s3_uploader.name
+  user = aws_iam_user.deploy.name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -132,8 +132,8 @@ resource "aws_iam_user_policy" "eice_access" {
   })
 }
 
-resource "aws_iam_access_key" "s3_uploader" {
-  user = aws_iam_user.s3_uploader.name
+resource "aws_iam_access_key" "deploy" {
+  user = aws_iam_user.deploy.name
 }
 
 # Look up default VPC and its first subnet for EICE
