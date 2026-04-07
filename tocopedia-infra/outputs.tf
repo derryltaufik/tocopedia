@@ -27,3 +27,8 @@ output "s3_uploader_secret_access_key" {
   sensitive   = true
   description = "Secret access key for the S3 uploader IAM user"
 }
+
+output "ecr_repository_url" {
+  value       = aws_ecr_repository.backend.repository_url
+  description = "ECR repository URL for backend Docker images"
+}
