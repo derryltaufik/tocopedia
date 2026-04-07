@@ -49,6 +49,7 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       packages: read
     steps:
@@ -92,14 +93,22 @@ jobs:
           TUNNEL_PID=$!
 
           # Wait for tunnel to be ready
+          TUNNEL_READY=false
           for i in $(seq 1 15); do
             if ssh $SSH_OPTS -o ConnectTimeout=2 ubuntu@localhost true 2>/dev/null; then
               echo "Tunnel ready"
+              TUNNEL_READY=true
               break
             fi
             echo "Waiting for tunnel... ($i)"
             sleep 2
           done
+
+          if [ "$TUNNEL_READY" != "true" ]; then
+            echo "::error::EICE tunnel failed to connect after 15 attempts"
+            kill $TUNNEL_PID || true
+            exit 1
+          fi
 
           # Stream Docker image to server
           echo "Streaming Docker image to server..."
