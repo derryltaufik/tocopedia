@@ -5,33 +5,145 @@ on:
     branches: [main]
     paths:
       - "tocopedia-backend/**"
+      - ".github/workflows/deploy-backend.yml"
   workflow_dispatch:
 
+env:
+  GHCR_IMAGE: ghcr.io/derryltaufik/tocopedia-backend
+  AWS_REGION: ap-southeast-1
+
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/tocopedia
-            git pull origin main
-            cd tocopedia-backend
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: tocopedia-backend
+          file: tocopedia-backend/Dockerfile
+          target: production
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ${{ env.GHCR_IMAGE }}:latest
+            ${{ env.GHCR_IMAGE }}:sha-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: docker/setup-qemu-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image from GHCR
+        run: docker pull --platform linux/arm64 ${{ env.GHCR_IMAGE }}:latest
+
+      - name: Deploy via EC2 Instance Connect
+        env:
+          INSTANCE_ID: ${{ secrets.INSTANCE_ID }}
+        run: |
+          set -e
+
+          echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+
+          SSH_OPTS="-p 2222 -i /tmp/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+          # Open EICE tunnel in background
+          aws ec2-instance-connect open-tunnel \
+            --instance-id "$INSTANCE_ID" \
+            --remote-port 22 \
+            --local-port 2222 \
+            --region ${{ env.AWS_REGION }} &
+          TUNNEL_PID=$!
+
+          # Wait for tunnel to be ready
+          TUNNEL_READY=false
+          for i in $(seq 1 15); do
+            if ssh $SSH_OPTS -o ConnectTimeout=2 ubuntu@localhost true 2>/dev/null; then
+              echo "Tunnel ready"
+              TUNNEL_READY=true
+              break
+            fi
+            echo "Waiting for tunnel... ($i)"
+            sleep 2
+          done
+
+          if [ "$TUNNEL_READY" != "true" ]; then
+            echo "::error::EICE tunnel failed to connect after 15 attempts"
+            kill $TUNNEL_PID || true
+            exit 1
+          fi
+
+          # Stream Docker image to server
+          echo "Streaming Docker image to server..."
+          docker save "${{ env.GHCR_IMAGE }}:latest" | gzip | ssh $SSH_OPTS ubuntu@localhost 'gunzip | docker load'
+
+          # Tag with local name expected by docker-compose.prod.yml
+          ssh $SSH_OPTS ubuntu@localhost "docker tag '${{ env.GHCR_IMAGE }}:latest' tocopedia-backend:latest"
+
+          # Sync config files (compose, nginx, scripts — excludes .env, node_modules, src)
+          rsync -az --delete \
+            --exclude='.env' \
+            --exclude='node_modules/' \
+            --exclude='src/' \
+            -e "ssh $SSH_OPTS" \
+            tocopedia-backend/ \
+            ubuntu@localhost:~/tocopedia/tocopedia-backend/
+
+          # Write .env and restart services
+          ssh $SSH_OPTS ubuntu@localhost "
+            cd ~/tocopedia/tocopedia-backend
 
             cat > .env <<EOL
-            PORT=3000
-            MONGODB_URL=${{ secrets.MONGODB_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}
-            AWS_REGION=${{ secrets.AWS_REGION }}
-            EOL
+          PORT=3000
+          MONGODB_URL=${{ secrets.MONGODB_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }}
+          AWS_REGION=${{ secrets.AWS_REGION }}
+          EOL
 
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d --build
+            docker compose -f docker-compose.prod.yml up -d
+            docker system prune -f
+          "
+
+          kill $TUNNEL_PID || true
+          rm /tmp/deploy_key
