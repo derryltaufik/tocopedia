@@ -20,6 +20,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
     restart: unless-stopped
 
   mongo:
@@ -30,6 +32,23 @@ services:
       - mongo_data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=${AWS_REGION:-ap-southeast-1}
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./scripts/init-localstack.sh:/etc/localstack/init/ready.d/init-s3.sh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,3 +66,4 @@ services:
 
 volumes:
   mongo_data:
+  localstack_data:

@@ -12,6 +12,7 @@ const cartRouter = require("./routers/cart");
 const orderRouter = require("./routers/order");
 const orderItemRouter = require("./routers/order_item");
 const reviewRouter = require("./routers/review");
+const uploadRouter = require("./routers/upload");
 const wishlistRouter = require("./routers/wishlist");
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(orderItemRouter);
 app.use(categoryRouter);
 app.use(addressRouter);
 app.use(reviewRouter);
+app.use(uploadRouter);
 app.use(wishlistRouter);
 
 app.get("/", async (req, res) => {
