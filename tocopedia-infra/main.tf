@@ -102,8 +102,8 @@ resource "aws_iam_user_policy" "s3_upload" {
   })
 }
 
-resource "aws_iam_user_policy" "ecr_access" {
-  name = "ecr-access"
+resource "aws_iam_user_policy" "eice_access" {
+  name = "eice-access"
   user = aws_iam_user.s3_uploader.name
 
   policy = jsonencode({
@@ -111,21 +111,22 @@ resource "aws_iam_user_policy" "ecr_access" {
     Statement = [
       {
         Effect = "Allow"
-        Action = "ecr:GetAuthorizationToken"
-        Resource = "*"
+        Action = [
+          "ec2-instance-connect:OpenTunnel",
+          "ec2-instance-connect:SendSSHPublicKey"
+        ]
+        Resource = [
+          aws_instance.backend.arn,
+          aws_ec2_instance_connect_endpoint.backend.arn
+        ]
       },
       {
         Effect = "Allow"
         Action = [
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:PutImage",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload"
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceConnectEndpoints"
         ]
-        Resource = aws_ecr_repository.backend.arn
+        Resource = "*"
       }
     ]
   })
@@ -135,33 +136,24 @@ resource "aws_iam_access_key" "s3_uploader" {
   user = aws_iam_user.s3_uploader.name
 }
 
-resource "aws_ecr_repository" "backend" {
-  name                 = "tocopedia-backend"
-  image_tag_mutability = "MUTABLE"
-  force_delete         = true
-
-  image_scanning_configuration {
-    scan_on_push = false
-  }
-
-  tags = { Project = "tocopedia" }
+# Look up default VPC and its first subnet for EICE
+data "aws_vpc" "default" {
+  default = true
 }
 
-resource "aws_ecr_lifecycle_policy" "backend" {
-  repository = aws_ecr_repository.backend.name
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
 
-  policy = jsonencode({
-    rules = [{
-      rulePriority = 1
-      description  = "Keep last 5 images"
-      selection = {
-        tagStatus   = "any"
-        countType   = "imageCountMoreThan"
-        countNumber = 5
-      }
-      action = { type = "expire" }
-    }]
-  })
+resource "aws_ec2_instance_connect_endpoint" "backend" {
+  subnet_id          = data.aws_subnets.default.ids[0]
+  security_group_ids = [aws_security_group.tocopedia.id]
+  preserve_client_ip = false
+
+  tags = { Project = "tocopedia" }
 }
 
 resource "aws_instance" "backend" {
