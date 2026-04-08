@@ -3,6 +3,19 @@ name: Build Release APK
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      build_name:
+        description: "Version name (e.g. 0.0.1)"
+        required: true
+        default: "0.0.1"
+      build_number:
+        description: "Build number"
+        required: true
+        default: "1"
+
+permissions:
+  contents: write
 
 jobs:
   build-android:
@@ -14,16 +27,21 @@ jobs:
         with:
           flutter-version: "3.41.6"
 
-      - name: Parse version from tag
+      - name: Parse version
         run: |
-          TAG="${{ github.event.release.tag_name }}"
-          TAG="${TAG#v}"
-          if [[ "$TAG" == *"+"* ]]; then
-            BUILD_NAME="${TAG%%+*}"
-            BUILD_NUMBER="${TAG##*+}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            BUILD_NAME="${{ inputs.build_name }}"
+            BUILD_NUMBER="${{ inputs.build_number }}"
           else
-            BUILD_NAME="$TAG"
-            BUILD_NUMBER="${GITHUB_RUN_NUMBER}"
+            TAG="${{ github.event.release.tag_name }}"
+            TAG="${TAG#v}"
+            if [[ "$TAG" == *"+"* ]]; then
+              BUILD_NAME="${TAG%%+*}"
+              BUILD_NUMBER="${TAG##*+}"
+            else
+              BUILD_NAME="$TAG"
+              BUILD_NUMBER="${GITHUB_RUN_NUMBER}"
+            fi
           fi
           echo "BUILD_NAME=$BUILD_NAME" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
@@ -52,6 +70,7 @@ jobs:
             --dart-define=BASE_URL=${{ secrets.API_URL }}
 
       - name: Upload APK to release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           files: tocopedia-flutter/build/app/outputs/flutter-apk/app-release.apk
