@@ -58,6 +58,7 @@ const getPresignedUploadUrl = async (contentType, fileExtension) => {
 
   const presignedUrl = await getSignedUrl(s3Presign, command, {
     expiresIn: PRESIGN_EXPIRES_IN,
+    signableHeaders: new Set(["content-type"]),
   });
 
   const baseUrl =

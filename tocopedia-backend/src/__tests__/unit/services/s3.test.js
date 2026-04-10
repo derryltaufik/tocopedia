@@ -44,6 +44,14 @@ describe("S3 Service", () => {
       expect(mockGetSignedUrl).toHaveBeenCalledTimes(1);
     });
 
+    it("should sign content-type header to enforce MIME type on S3 PUT", async () => {
+      await getPresignedUploadUrl("image/jpeg", ".jpg");
+
+      const [, , options] = mockGetSignedUrl.mock.calls[0];
+      expect(options.signableHeaders).toBeInstanceOf(Set);
+      expect(options.signableHeaders.has("content-type")).toBe(true);
+    });
+
     it("should reject invalid content type", async () => {
       await expect(
         getPresignedUploadUrl("text/html", ".html")
