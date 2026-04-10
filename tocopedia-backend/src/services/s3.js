@@ -18,6 +18,18 @@ if (process.env.AWS_ENDPOINT_URL) {
 
 const s3 = new S3Client(config);
 
+// Separate client for presigning — uses the public-facing endpoint so
+// clients outside the docker network can upload directly.
+// requestChecksumCalculation disabled so the presigned URL doesn't embed
+// a CRC32 checksum (which would be computed for an empty body and fail
+// when the client uploads the real file).
+const presignConfig = { ...config, requestChecksumCalculation: "WHEN_REQUIRED" };
+if (process.env.AWS_S3_PRESIGN_ENDPOINT) {
+  presignConfig.endpoint = process.env.AWS_S3_PRESIGN_ENDPOINT;
+  presignConfig.forcePathStyle = true;
+}
+const s3Presign = new S3Client(presignConfig);
+
 const ALLOWED_MIME_TYPES = [
   "image/jpeg",
   "image/png",
@@ -44,7 +56,7 @@ const getPresignedUploadUrl = async (contentType, fileExtension) => {
     ContentType: contentType,
   });
 
-  const presignedUrl = await getSignedUrl(s3, command, {
+  const presignedUrl = await getSignedUrl(s3Presign, command, {
     expiresIn: PRESIGN_EXPIRES_IN,
   });
 
