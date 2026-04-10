@@ -114,7 +114,7 @@ void init() {
   locator.registerLazySingleton<WishlistRemoteDataSource>(
       () => WishlistRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<RemoteStorageService>(
-      () => RemoteStorageServiceImpl());
+      () => RemoteStorageServiceImpl(client: locator()));
   locator.registerLazySingleton<ReviewRemoteDataSource>(
       () => ReviewRemoteDataSourceImpl(client: locator()));
 

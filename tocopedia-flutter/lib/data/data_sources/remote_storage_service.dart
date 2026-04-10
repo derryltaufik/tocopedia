@@ -9,6 +9,10 @@ abstract class RemoteStorageService {
 }
 
 class RemoteStorageServiceImpl implements RemoteStorageService {
+  final http.Client client;
+
+  RemoteStorageServiceImpl({required this.client});
+
   @override
   Future<String> uploadImage(String token, File imageFile) async {
     // Step 1: Get presigned URL from backend
@@ -22,7 +26,7 @@ class RemoteStorageServiceImpl implements RemoteStorageService {
       },
     );
 
-    final presignResponse = await http
+    final presignResponse = await client
         .get(presignUri, headers: {'Authorization': 'Bearer $token'}).timeout(
             const Duration(seconds: 10));
 
@@ -37,7 +41,7 @@ class RemoteStorageServiceImpl implements RemoteStorageService {
 
     // Step 2: Upload directly to S3 using presigned URL
     final fileBytes = await imageFile.readAsBytes();
-    final uploadResponse = await http
+    final uploadResponse = await client
         .put(
           Uri.parse(presignedUrl),
           headers: {'Content-Type': contentType},
