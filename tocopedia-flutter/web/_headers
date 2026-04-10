@@ -1,0 +1,29 @@
+# Static assets that rarely change — cache for 1 day, revalidate after
+/canvaskit/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/icons/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/splash/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# App code — short cache, revalidate in background so deploys are picked up
+/main.dart.js
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/flutter.js
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Entry points — always revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/flutter_service_worker.js
+  Cache-Control: public, max-age=0, must-revalidate
