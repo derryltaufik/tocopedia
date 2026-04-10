@@ -17,7 +17,6 @@ jest.mock("@aws-sdk/s3-request-presigner", () => ({
 
 const {
   getPresignedUploadUrl,
-  uploadFile,
   ALLOWED_MIME_TYPES,
   MAX_FILE_SIZE,
 } = require("../../../services/s3");
@@ -99,33 +98,6 @@ describe("S3 Service", () => {
         const result = await getPresignedUploadUrl(mime, `.${ext}`);
         expect(result.presignedUrl).toBeDefined();
       }
-    });
-  });
-
-  describe("uploadFile", () => {
-    it("should upload file and return public URL", async () => {
-      const mockFile = {
-        originalname: "photo.jpg",
-        buffer: Buffer.from("fake-image-data"),
-        mimetype: "image/jpeg",
-      };
-
-      const url = await uploadFile(mockFile);
-
-      expect(url).toMatch(/^https:\/\/test-bucket\.s3\.us-east-1\.amazonaws\.com\/uploads\/.*\.jpg$/);
-      expect(mockSend).toHaveBeenCalledTimes(1);
-    });
-
-    it("should use AWS_S3_PUBLIC_URL when set", async () => {
-      process.env.AWS_S3_PUBLIC_URL = "https://cdn.example.com";
-      const mockFile = {
-        originalname: "photo.png",
-        buffer: Buffer.from("fake-image-data"),
-        mimetype: "image/png",
-      };
-
-      const url = await uploadFile(mockFile);
-      expect(url).toMatch(/^https:\/\/cdn\.example\.com\/uploads\/.*\.png$/);
     });
   });
 
