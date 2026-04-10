@@ -17,9 +17,6 @@ on:
 permissions:
   contents: write
 
-permissions:
-  contents: write
-
 jobs:
   build-android:
     runs-on: ubuntu-latest
