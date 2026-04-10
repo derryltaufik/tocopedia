@@ -11,66 +11,21 @@ abstract class RemoteStorageService {
 class RemoteStorageServiceImpl implements RemoteStorageService {
   @override
   Future<String> uploadImage(String token, File imageFile) async {
-    // Step 1: Get presigned URL from backend
-    final extension = _getExtension(imageFile.path);
-    final contentType = _getContentType(extension);
+    final uri = Uri.parse('$BASE_URL/upload');
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..files.add(await http.MultipartFile.fromPath('image', imageFile.path));
 
-    final presignUri = Uri.parse('$BASE_URL/upload/presign').replace(
-      queryParameters: {
-        'contentType': contentType,
-        'extension': extension,
-      },
-    );
+    final streamedResponse =
+        await request.send().timeout(const Duration(seconds: 30));
+    final response = await http.Response.fromStream(streamedResponse);
 
-    final presignResponse = await http
-        .get(presignUri, headers: {'Authorization': 'Bearer $token'}).timeout(
-            const Duration(seconds: 10));
-
-    if (presignResponse.statusCode != 200) {
-      final body = jsonDecode(presignResponse.body);
-      throw Exception(body['error'] ?? 'Failed to get upload URL');
+    if (response.statusCode != 201) {
+      final body = jsonDecode(response.body);
+      throw Exception(body['error'] ?? 'Failed to upload image');
     }
 
-    final presignData = jsonDecode(presignResponse.body)['data'];
-    final presignedUrl = presignData['presignedUrl'] as String;
-    final publicUrl = presignData['publicUrl'] as String;
-
-    // Step 2: Upload directly to S3 using presigned URL
-    final fileBytes = await imageFile.readAsBytes();
-    final uploadResponse = await http
-        .put(
-          Uri.parse(presignedUrl),
-          headers: {'Content-Type': contentType},
-          body: fileBytes,
-        )
-        .timeout(const Duration(seconds: 30));
-
-    if (uploadResponse.statusCode != 200) {
-      throw Exception('Failed to upload image to storage');
-    }
-
-    return publicUrl;
-  }
-
-  String _getExtension(String filePath) {
-    final lastDot = filePath.lastIndexOf('.');
-    if (lastDot == -1) return '.jpg';
-    return filePath.substring(lastDot);
-  }
-
-  String _getContentType(String extension) {
-    switch (extension.toLowerCase()) {
-      case '.jpg':
-      case '.jpeg':
-        return 'image/jpeg';
-      case '.png':
-        return 'image/png';
-      case '.gif':
-        return 'image/gif';
-      case '.webp':
-        return 'image/webp';
-      default:
-        return 'image/jpeg';
-    }
+    final body = jsonDecode(response.body);
+    return body['data']['url'];
   }
 }
