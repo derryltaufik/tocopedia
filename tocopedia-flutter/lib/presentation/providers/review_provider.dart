@@ -55,7 +55,7 @@ class ReviewProvider with ChangeNotifier {
 
   ProviderState get getBuyerReviewsState => _getBuyerReviewsState;
 
-  ProviderState _getSellerReviewsState = ProviderState.empty;
+  final ProviderState _getSellerReviewsState = ProviderState.empty;
 
   ProviderState get getSellerReviewsState => _getSellerReviewsState;
 

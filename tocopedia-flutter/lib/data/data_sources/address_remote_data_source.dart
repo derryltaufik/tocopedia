@@ -56,7 +56,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       "receiver_phone": receiverPhone,
     }..removeWhere((key, value) => value == null || value.toString().isEmpty));
 
-    final url = Uri.parse(BASE_URL).replace(path: '/addresses');
+    final url = Uri.parse(baseUrl).replace(path: '/addresses');
 
     final response = await client
         .post(
@@ -93,7 +93,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       }..removeWhere(
           (key, value) => value == null || value.toString().isEmpty));
 
-      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+      final url = Uri.parse(baseUrl).replace(path: '/addresses/$addressId');
 
       final response = await client
           .patch(
@@ -121,7 +121,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   @override
   Future<AddressModel> deleteAddress(String token, String addressId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+      final url = Uri.parse(baseUrl).replace(path: '/addresses/$addressId');
 
       final response = await client
           .delete(
@@ -148,7 +148,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   @override
   Future<AddressModel> getAddress(String token, String addressId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/addresses/$addressId');
+      final url = Uri.parse(baseUrl).replace(path: '/addresses/$addressId');
 
       final response = await client
           .get(
@@ -175,7 +175,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   @override
   Future<List<AddressModel>> getUserAddresses(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/addresses');
+      final url = Uri.parse(baseUrl).replace(path: '/addresses');
 
       final response = await client
           .get(

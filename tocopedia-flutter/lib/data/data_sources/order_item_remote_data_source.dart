@@ -32,7 +32,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
   @override
   Future<List<OrderItemModel>> getBuyerOrderItems(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/order-items/buyer');
+      final url = Uri.parse(baseUrl).replace(path: '/order-items/buyer');
 
       final response = await client
           .get(
@@ -59,7 +59,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
   @override
   Future<List<OrderItemModel>> getSellerOrderItems(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/order-items/seller');
+      final url = Uri.parse(baseUrl).replace(path: '/order-items/seller');
 
       final response = await client
           .get(
@@ -87,7 +87,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
   Future<OrderItemModel> getOrderItem(String token, String orderItemId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/order-items/$orderItemId');
+          Uri.parse(baseUrl).replace(path: '/order-items/$orderItemId');
 
       final response = await client
           .get(
@@ -115,7 +115,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
       String token, String orderItemId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/order-items/$orderItemId/cancel');
+          Uri.parse(baseUrl).replace(path: '/order-items/$orderItemId/cancel');
 
       final response = await client
           .patch(
@@ -142,7 +142,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
   Future<OrderItemModel> processOrderItem(
       String token, String orderItemId) async {
     try {
-      final url = Uri.parse(BASE_URL)
+      final url = Uri.parse(baseUrl)
           .replace(path: '/order-items/$orderItemId/process');
 
       final response = await client
@@ -171,7 +171,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
       {required String airwaybill}) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/order-items/$orderItemId/send');
+          Uri.parse(baseUrl).replace(path: '/order-items/$orderItemId/send');
 
       final response = await client
           .patch(
@@ -199,7 +199,7 @@ class OrderItemRemoteDataSourceImpl implements OrderItemRemoteDataSource {
   Future<OrderItemModel> completeOrderItem(
       String token, String orderItemId) async {
     try {
-      final url = Uri.parse(BASE_URL)
+      final url = Uri.parse(baseUrl)
           .replace(path: '/order-items/$orderItemId/complete');
 
       final response = await client

@@ -81,7 +81,7 @@ void main() {
       final uri = captured[0] as Uri;
       final headers = captured[1] as Map<String, String>;
 
-      expect(uri.toString(), startsWith('$BASE_URL/upload/presign'));
+      expect(uri.toString(), startsWith('$baseUrl/upload/presign'));
       expect(uri.queryParameters['contentType'], 'image/jpeg');
       expect(uri.queryParameters['extension'], '.jpg');
       expect(headers['Authorization'], 'Bearer $tToken');

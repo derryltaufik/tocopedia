@@ -99,8 +99,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
         Text(orderItem.seller!.name!, style: theme.textTheme.titleMedium),
         const SizedBox(height: 10),
         ...orderItem.orderItemDetails!
-            .map((product) => _buildProductTile(product, theme))
-            .toList(),
+            .map((product) => _buildProductTile(product, theme)),
         const SizedBox(height: 15),
         Text("Shipment Address", style: theme.textTheme.titleSmall),
         Text(
@@ -176,7 +175,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
                           return _buildOrderItemTile(
                               order.address!, orderItem, theme);
                         },
-                      ).toList(),
+                      ),
                       if (order.status! == "unpaid")
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,

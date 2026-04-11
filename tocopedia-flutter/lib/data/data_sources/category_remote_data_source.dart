@@ -21,7 +21,7 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   @override
   Future<List<CategoryModel>> getAllCategories() async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/categories');
+      final url = Uri.parse(baseUrl).replace(path: '/categories');
 
       final response = await client
           .get(
@@ -47,7 +47,7 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   @override
   Future<CategoryModel> getCategory(String categoryId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/categories/$categoryId');
+      final url = Uri.parse(baseUrl).replace(path: '/categories/$categoryId');
 
       final response = await client
           .get(

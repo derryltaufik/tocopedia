@@ -27,7 +27,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @override
   Future<OrderModel> checkout(String token, String addressId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/orders/checkout');
+      final url = Uri.parse(baseUrl).replace(path: '/orders/checkout');
 
       final response = await client
           .post(
@@ -54,7 +54,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @override
   Future<OrderModel> payOrder(String token, String orderId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/pay');
+      final url = Uri.parse(baseUrl).replace(path: '/orders/$orderId/pay');
 
       final response = await client
           .patch(
@@ -80,7 +80,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @override
   Future<OrderModel> cancelOrder(String token, String orderId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId/cancel');
+      final url = Uri.parse(baseUrl).replace(path: '/orders/$orderId/cancel');
 
       final response = await client
           .patch(
@@ -106,7 +106,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @override
   Future<OrderModel> getOrder(String token, String orderId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/orders/$orderId');
+      final url = Uri.parse(baseUrl).replace(path: '/orders/$orderId');
 
       final response = await client
           .get(
@@ -132,7 +132,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @override
   Future<List<OrderModel>> getUserOrders(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/orders');
+      final url = Uri.parse(baseUrl).replace(path: '/orders');
 
       final response = await client
           .get(

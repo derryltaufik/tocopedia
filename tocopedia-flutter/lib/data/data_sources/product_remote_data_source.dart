@@ -58,7 +58,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<ProductModel> getProduct(String id) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/products/$id');
+      final url = Uri.parse(baseUrl).replace(path: '/products/$id');
 
       final response = await client
           .get(url, headers: defaultHeader)
@@ -96,7 +96,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       }..removeWhere((key, value) => value == null || value.toString().isEmpty))
           .map((key, value) => MapEntry(key, value.toString()));
 
-      final url = Uri.parse(BASE_URL).replace(
+      final url = Uri.parse(baseUrl).replace(
         path: '/products/search',
         queryParameters: queryParams,
       );
@@ -123,7 +123,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<List<ProductModel>> getPopularProducts() async {
     try {
-      final url = Uri.parse(BASE_URL).replace(
+      final url = Uri.parse(baseUrl).replace(
         path: '/products/popular',
       );
 
@@ -166,7 +166,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       }..removeWhere(
           (key, value) => value == null || value.toString().isEmpty));
 
-      final url = Uri.parse(BASE_URL).replace(path: '/products');
+      final url = Uri.parse(baseUrl).replace(path: '/products');
 
       final response = await client
           .post(
@@ -194,7 +194,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<List<ProductModel>> getUserProducts(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/products/seller');
+      final url = Uri.parse(baseUrl).replace(path: '/products/seller');
 
       final response = await client
           .get(
@@ -251,7 +251,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       }..removeWhere(
           (key, value) => value == null || value.toString().isEmpty));
 
-      final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/products/$productId');
 
       final response = await client
           .patch(
@@ -279,7 +279,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<ProductModel> deleteProduct(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/products/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/products/$productId');
 
       final response = await client
           .delete(
