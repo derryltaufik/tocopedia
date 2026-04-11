@@ -31,6 +31,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }

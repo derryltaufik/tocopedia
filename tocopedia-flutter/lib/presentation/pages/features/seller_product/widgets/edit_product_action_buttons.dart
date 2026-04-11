@@ -122,8 +122,7 @@ class EditProductActionButtons extends StatelessWidget {
 class ChangePriceBottomSheet extends StatefulWidget {
   final int initialPrice;
 
-  const ChangePriceBottomSheet({Key? key, required this.initialPrice})
-      : super(key: key);
+  const ChangePriceBottomSheet({super.key, required this.initialPrice});
 
   @override
   State<ChangePriceBottomSheet> createState() => _ChangePriceBottomSheetState();

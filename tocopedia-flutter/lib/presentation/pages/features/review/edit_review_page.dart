@@ -17,9 +17,9 @@ class EditReviewPage extends StatefulWidget {
   final Review review;
 
   const EditReviewPage({
-    Key? key,
+    super.key,
     required this.review,
-  }) : super(key: key);
+  });
 
   @override
   State<EditReviewPage> createState() => _EditReviewPageState();
@@ -39,6 +39,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
     _reviewController.text = widget.review.review ?? "";
 
     Future.microtask(() {
+      if (!mounted) return;
       Provider.of<ReviewProvider>(context, listen: false)
           .getReview(widget.review.id!)
           .then(

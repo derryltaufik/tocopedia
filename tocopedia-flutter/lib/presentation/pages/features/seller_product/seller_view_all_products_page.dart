@@ -7,7 +7,7 @@ import 'package:tocopedia/presentation/providers/product_provider.dart';
 import 'package:tocopedia/presentation/pages/features/seller_product/widgets/product_list_tile.dart';
 
 class SellerViewAllProductsPage extends StatefulWidget {
-  const SellerViewAllProductsPage({Key? key}) : super(key: key);
+  const SellerViewAllProductsPage({super.key});
 
   @override
   State<SellerViewAllProductsPage> createState() =>
@@ -19,6 +19,7 @@ class _SellerViewAllProductsPageState extends State<SellerViewAllProductsPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<ProductProvider>(context, listen: false)
               .getUserProductsState !=
           ProviderState.loaded) {

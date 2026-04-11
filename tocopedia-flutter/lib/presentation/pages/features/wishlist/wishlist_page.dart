@@ -20,6 +20,7 @@ class _WishListPageState extends State<WishListPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<WishlistProvider>(context, listen: false)
               .getWishlistState !=
           ProviderState.loaded) {

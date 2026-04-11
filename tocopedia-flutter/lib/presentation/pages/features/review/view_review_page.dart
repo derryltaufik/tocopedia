@@ -17,7 +17,7 @@ class ViewReviewPage extends StatefulWidget {
 
   final String reviewId;
 
-  const ViewReviewPage({Key? key, required this.reviewId}) : super(key: key);
+  const ViewReviewPage({super.key, required this.reviewId});
 
   @override
   State<ViewReviewPage> createState() => _ViewReviewPageState();
@@ -28,6 +28,7 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }
@@ -141,11 +142,10 @@ class ViewProductCard extends StatelessWidget {
   final String image;
 
   const ViewProductCard(
-      {Key? key,
+      {super.key,
       required this.productId,
       required this.name,
-      required this.image})
-      : super(key: key);
+      required this.image});
 
   @override
   Widget build(BuildContext context) {

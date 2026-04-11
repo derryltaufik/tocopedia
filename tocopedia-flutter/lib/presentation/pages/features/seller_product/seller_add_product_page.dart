@@ -11,7 +11,7 @@ import 'package:tocopedia/presentation/providers/product_provider.dart';
 class SellerAddProductPage extends StatefulWidget {
   static const String routeName = "seller/products/add";
 
-  const SellerAddProductPage({Key? key}) : super(key: key);
+  const SellerAddProductPage({super.key});
 
   @override
   State<SellerAddProductPage> createState() => _SellerAddProductPageState();

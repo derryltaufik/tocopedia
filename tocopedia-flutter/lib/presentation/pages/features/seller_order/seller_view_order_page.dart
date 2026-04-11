@@ -8,7 +8,7 @@ import 'package:tocopedia/presentation/providers/order_item_provider.dart';
 import 'package:tocopedia/presentation/helper_variables/order_item_status_enum.dart';
 
 class SellerViewOrderPage extends StatefulWidget {
-  const SellerViewOrderPage({Key? key}) : super(key: key);
+  const SellerViewOrderPage({super.key});
 
   @override
   State<SellerViewOrderPage> createState() => _SellerViewOrderPageState();
@@ -40,6 +40,7 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
     super.initState();
     _tabController = TabController(length: 6, vsync: this);
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<OrderItemProvider>(context, listen: false)
               .getSellerOrderItemsState !=
           ProviderState.loaded) {

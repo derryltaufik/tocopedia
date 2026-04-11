@@ -13,7 +13,7 @@ class ProductReviewsPage extends StatefulWidget {
 
   final Product product;
 
-  const ProductReviewsPage({Key? key, required this.product}) : super(key: key);
+  const ProductReviewsPage({super.key, required this.product});
 
   @override
   State<ProductReviewsPage> createState() => _ProductReviewsPageState();
@@ -24,6 +24,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }

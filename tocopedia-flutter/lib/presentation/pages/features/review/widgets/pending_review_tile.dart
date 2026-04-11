@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/pages/features/review/add_review_page.dar
 class PendingReviewTile extends StatelessWidget {
   final Review review;
 
-  const PendingReviewTile({Key? key, required this.review}) : super(key: key);
+  const PendingReviewTile({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {

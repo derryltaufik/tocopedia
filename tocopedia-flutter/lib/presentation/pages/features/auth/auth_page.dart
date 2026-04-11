@@ -23,6 +23,7 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       Provider.of<UserProvider>(context, listen: false).autoLogin();
     });
   }

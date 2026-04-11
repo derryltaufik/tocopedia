@@ -27,6 +27,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }
