@@ -48,7 +48,7 @@ class PhotosHorizontalListView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         scrollDirection: Axis.horizontal,
         itemCount: images.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           return Center(
             child: GestureDetector(
@@ -70,7 +70,7 @@ class PhotosHorizontalListView extends StatelessWidget {
                   fit: BoxFit.cover,
                   height: size,
                   width: size,
-                  progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                  progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                       child: CircularProgressIndicator(
                           value: downloadProgress.progress)),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

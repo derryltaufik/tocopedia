@@ -39,7 +39,7 @@ class PendingReviewTile extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: review.productImage!,
                   fit: BoxFit.cover,
-                  progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                  progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                       child: CircularProgressIndicator(
                           value: downloadProgress.progress)),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -71,7 +71,7 @@ class PendingReviewTile extends StatelessWidget {
                         ),
                       ),
                       glow: false,
-                      itemBuilder: (_, __) => const Icon(Icons.star_rounded,
+                      itemBuilder: (_, _) => const Icon(Icons.star_rounded,
                           color: CustomColors.starColor),
                     ),
                   ],

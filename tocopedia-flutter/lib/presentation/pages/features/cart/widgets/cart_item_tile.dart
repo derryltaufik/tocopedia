@@ -59,7 +59,7 @@ class _CartItemTileState extends State<CartItemTile> {
       checked = value;
     });
     _shopCheckboxNotifier.setValue(value);
-    childrenValues.updateAll((_, __) => value);
+    childrenValues.updateAll((_, _) => value);
 
     if (value) {
       await Provider.of<CartProvider>(context, listen: false)

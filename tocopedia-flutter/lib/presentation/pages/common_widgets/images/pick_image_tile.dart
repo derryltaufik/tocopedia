@@ -48,7 +48,7 @@ class PickImageTile extends StatelessWidget {
         imageWidget = CachedNetworkImage(
           imageUrl: pickedImage,
           fit: BoxFit.cover,
-          progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+          progressIndicatorBuilder: (_, _, downloadProgress) => Center(
               child:
                   CircularProgressIndicator(value: downloadProgress.progress)),
           errorWidget: (context, url, error) => const Icon(Icons.error),

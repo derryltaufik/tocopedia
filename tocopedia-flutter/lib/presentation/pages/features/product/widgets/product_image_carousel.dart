@@ -31,7 +31,7 @@ class _ProductImagePreviewState extends State<ProductImageCarousel> {
                       images: widget.images, startingIndex: index)),
               child: CachedNetworkImage(
                 imageUrl: widget.images[index],
-                progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
