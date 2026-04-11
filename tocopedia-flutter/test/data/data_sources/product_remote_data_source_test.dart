@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:tocopedia/common/exception.dart';
 import 'package:tocopedia/data/data_sources/product_remote_data_source.dart';
-import 'package:tocopedia/data/models/category_model.dart';
 import 'package:tocopedia/data/models/product_model.dart';
 
 class MockHttpClient extends Mock implements http.Client {}

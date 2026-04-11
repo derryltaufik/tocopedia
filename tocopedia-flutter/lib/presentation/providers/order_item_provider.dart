@@ -169,6 +169,6 @@ class OrderItemProvider with ChangeNotifier {
   }
 
   bool _verifyToken() {
-    return (_authToken != null && _authToken!.isNotEmpty);
+    return (_authToken != null && _authToken.isNotEmpty);
   }
 }

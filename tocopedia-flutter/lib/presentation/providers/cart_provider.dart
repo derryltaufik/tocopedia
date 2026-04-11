@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/add_to_cart.dart';
-import 'package:tocopedia/domains/use_cases/cart/clear_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/get_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/remove_from_cart.dart';
 import 'package:tocopedia/domains/use_cases/cart/select_cart_item.dart';
@@ -11,7 +10,6 @@ import 'package:tocopedia/domains/use_cases/cart/select_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_cart_item.dart';
 import 'package:tocopedia/domains/use_cases/cart/unselect_seller.dart';
 import 'package:tocopedia/domains/use_cases/cart/update_cart.dart';
-import 'package:tocopedia/domains/use_cases/product/get_product.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
 class CartProvider with ChangeNotifier {
@@ -19,8 +17,6 @@ class CartProvider with ChangeNotifier {
   final AddToCart _addToCart;
   final RemoveFromCart _removeFromCart;
   final UpdateCart _updateCart;
-  final ClearCart _clearCart;
-  final GetProduct _getProduct;
   final SelectCartItem _selectCartItem;
   final UnselectCartItem _unselectCartItem;
   final SelectSeller _selectSeller;
@@ -80,8 +76,6 @@ class CartProvider with ChangeNotifier {
       required AddToCart addToCart,
       required RemoveFromCart removeFromCart,
       required UpdateCart updateCart,
-      required ClearCart clearCart,
-      required GetProduct getProduct,
       required SelectCartItem selectCartItem,
       required UnselectCartItem unselectCartItem,
       required SelectSeller selectSeller,
@@ -91,8 +85,6 @@ class CartProvider with ChangeNotifier {
         _addToCart = addToCart,
         _removeFromCart = removeFromCart,
         _updateCart = updateCart,
-        _clearCart = clearCart,
-        _getProduct = getProduct,
         _unselectCartItem = unselectCartItem,
         _selectCartItem = selectCartItem,
         _selectSeller = selectSeller,
@@ -241,6 +233,6 @@ class CartProvider with ChangeNotifier {
   }
 
   bool _verifyToken() {
-    return (_authToken != null && _authToken!.isNotEmpty);
+    return (_authToken != null && _authToken.isNotEmpty);
   }
 }

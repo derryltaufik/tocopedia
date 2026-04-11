@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/address.dart';
 import 'package:tocopedia/domains/use_cases/address/add_address.dart';
 import 'package:tocopedia/domains/use_cases/address/delete_address.dart';
-import 'package:tocopedia/domains/use_cases/address/get_address.dart';
 import 'package:tocopedia/domains/use_cases/address/get_user_addresses.dart';
 import 'package:tocopedia/domains/use_cases/address/update_address.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
@@ -11,7 +10,6 @@ class AddressProvider with ChangeNotifier {
   final AddAddress _addAddress;
   final UpdateAddress _updateAddress;
   final GetUserAddresses _getUserAddresses;
-  final GetAddress _getAddress;
   final DeleteAddress _deleteAddress;
   final String? _authToken;
 
@@ -29,12 +27,10 @@ class AddressProvider with ChangeNotifier {
       {required AddAddress addAddress,
       required UpdateAddress updateAddress,
       required GetUserAddresses getUserAddresses,
-      required GetAddress getAddress,
       required DeleteAddress deleteAddress,
       required String? authToken})
       : _addAddress = addAddress,
         _updateAddress = updateAddress,
-        _getAddress = getAddress,
         _getUserAddresses = getUserAddresses,
         _deleteAddress = deleteAddress,
         _authToken = authToken;
@@ -129,6 +125,6 @@ class AddressProvider with ChangeNotifier {
   }
 
   bool _verifyToken() {
-    return (_authToken != null && _authToken!.isNotEmpty);
+    return (_authToken != null && _authToken.isNotEmpty);
   }
 }

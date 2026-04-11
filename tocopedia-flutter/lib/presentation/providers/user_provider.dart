@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tocopedia/domains/entities/user.dart';
 import 'package:tocopedia/domains/use_cases/user/auto_login.dart';
-import 'package:tocopedia/domains/use_cases/user/get_user.dart';
 import 'package:tocopedia/domains/use_cases/user/login.dart';
 import 'package:tocopedia/domains/use_cases/user/logout.dart';
 import 'package:tocopedia/domains/use_cases/user/save_user.dart';
@@ -17,7 +16,6 @@ class UserProvider with ChangeNotifier {
   final Logout _logout;
   final SaveUser _saveUser;
   final AutoLogin _autoLogin;
-  final GetUser _getUser;
   final UpdateUser _updateUser;
 
   User? _user;
@@ -33,14 +31,12 @@ class UserProvider with ChangeNotifier {
     required Logout logout,
     required SaveUser saveUser,
     required AutoLogin autoLogin,
-    required GetUser getUser,
     required UpdateUser updateUser,
   })  : _signUp = signUp,
         _login = login,
         _logout = logout,
         _saveUser = saveUser,
         _autoLogin = autoLogin,
-        _getUser = getUser,
         _updateUser = updateUser;
 
   ProviderState _authState = ProviderState.empty;
