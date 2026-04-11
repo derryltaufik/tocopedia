@@ -7,6 +7,11 @@ on:
       - "tocopedia-flutter/**"
   workflow_dispatch:
 
+# Cancel superseded runs on the same PR to save minutes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -28,3 +33,34 @@ jobs:
       - name: Run tests
         working-directory: tocopedia-flutter
         run: flutter test
+
+  build-web:
+    needs: test
+    runs-on: ubuntu-latest
+    # On public repos, skip fork PRs so outside contributors don't burn
+    # the repo owner's Actions resources. Repo-member PRs and
+    # workflow_dispatch always run.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.6"
+
+      - name: Install dependencies
+        working-directory: tocopedia-flutter
+        run: flutter pub get
+
+      - name: Build web
+        working-directory: tocopedia-flutter
+        run: flutter build web --release
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web-build
+          path: tocopedia-flutter/build/web
+          retention-days: 3
