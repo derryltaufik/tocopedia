@@ -5,7 +5,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 
 class WishlistButton extends StatefulWidget {
-  const WishlistButton({Key? key, required this.productId}) : super(key: key);
+  const WishlistButton({super.key, required this.productId});
   final String productId;
 
   @override

@@ -11,7 +11,7 @@ import 'package:tocopedia/presentation/providers/user_provider.dart';
 class ViewAllAddressesPage extends StatefulWidget {
   static const String routeName = "/addresses/view-all";
 
-  const ViewAllAddressesPage({Key? key}) : super(key: key);
+  const ViewAllAddressesPage({super.key});
 
   @override
   State<ViewAllAddressesPage> createState() => _ViewAllAddressesPageState();

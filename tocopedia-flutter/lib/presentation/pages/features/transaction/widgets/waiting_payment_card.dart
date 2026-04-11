@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tocopedia/presentation/pages/features/order/view_all_orders_page.dart';
 
 class WaitingPaymentCard extends StatelessWidget {
-  const WaitingPaymentCard({Key? key}) : super(key: key);
+  const WaitingPaymentCard({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -101,14 +101,11 @@ class CheckboxFormField extends FormField<bool> {
   CheckboxFormField(
       {super.key,
       required Widget title,
-      required FormFieldSetter<bool> onSaved,
-      FormFieldValidator<bool>? validator,
-      bool initialValue = false,
+      required FormFieldSetter<bool> super.onSaved,
+      super.validator,
+      bool super.initialValue = false,
       bool autoValidate = false})
       : super(
-          onSaved: onSaved,
-          validator: validator,
-          initialValue: initialValue,
           builder: (FormFieldState<bool> state) {
             return Row(
               children: [
@@ -181,7 +178,7 @@ class QuantityField extends StatelessWidget {
   final double width;
 
   const QuantityField({
-    Key? key,
+    super.key,
     required this.controller,
     this.minimum = 1,
     this.maximum = 999999,
@@ -190,7 +187,7 @@ class QuantityField extends StatelessWidget {
     this.focusNode,
     this.autoFocus = false,
     this.width = 25,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

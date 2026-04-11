@@ -14,7 +14,7 @@ import 'package:tocopedia/presentation/providers/user_provider.dart';
 class CheckoutPage extends StatefulWidget {
   static const String routeName = "/checkout";
 
-  const CheckoutPage({Key? key}) : super(key: key);
+  const CheckoutPage({super.key});
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();

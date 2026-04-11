@@ -6,7 +6,7 @@ import 'package:tocopedia/presentation/pages/features/cart/widgets/checkout_item
 class CheckoutItemTile extends StatelessWidget {
   final CartItem cartItem;
 
-  const CheckoutItemTile({Key? key, required this.cartItem}) : super(key: key);
+  const CheckoutItemTile({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context) {

@@ -16,11 +16,10 @@ class CartItemDetailTile extends StatefulWidget {
   final Function updateCheckBoxState;
 
   const CartItemDetailTile(
-      {Key? key,
+      {super.key,
       required this.cartItemDetail,
       required this.checkBoxNotifier,
-      required this.updateCheckBoxState})
-      : super(key: key);
+      required this.updateCheckBoxState});
 
   @override
   State<CartItemDetailTile> createState() => _CartItemDetailTileState();

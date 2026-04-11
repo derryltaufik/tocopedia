@@ -25,10 +25,10 @@ class AddReviewPage extends StatefulWidget {
   final Review review;
 
   const AddReviewPage({
-    Key? key,
+    super.key,
     this.initialRating = 0,
     required this.review,
-  }) : super(key: key);
+  });
 
   @override
   State<AddReviewPage> createState() => _AddReviewPageState();

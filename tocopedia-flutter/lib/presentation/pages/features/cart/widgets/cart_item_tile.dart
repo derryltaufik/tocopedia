@@ -16,7 +16,7 @@ class ShopCheckboxNotifier extends ValueNotifier<bool> {
 class CartItemTile extends StatefulWidget {
   final CartItem cartItem;
 
-  const CartItemTile({Key? key, required this.cartItem}) : super(key: key);
+  const CartItemTile({super.key, required this.cartItem});
 
   @override
   State<CartItemTile> createState() => _CartItemTileState();

@@ -6,8 +6,7 @@ import 'package:tocopedia/presentation/pages/common_widgets/images/images_galler
 class ProductImageCarousel extends StatefulWidget {
   final List<String> images;
 
-  const ProductImageCarousel({Key? key, required this.images})
-      : super(key: key);
+  const ProductImageCarousel({super.key, required this.images});
 
   @override
   State<ProductImageCarousel> createState() => _ProductImagePreviewState();

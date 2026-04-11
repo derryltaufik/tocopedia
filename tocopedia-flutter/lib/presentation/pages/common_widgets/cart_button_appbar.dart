@@ -5,8 +5,7 @@ class CartButtonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final TabBar? bottom;
 
-  const CartButtonAppBar({Key? key, required this.title, this.bottom})
-      : super(key: key);
+  const CartButtonAppBar({super.key, required this.title, this.bottom});
 
   @override
   Widget build(BuildContext context) {

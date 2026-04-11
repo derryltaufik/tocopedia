@@ -12,7 +12,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class HomePage extends StatefulWidget {
   static const String routeName = "/";
 
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

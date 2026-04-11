@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class ViewAllOrdersPage extends StatefulWidget {
   static const String routeName = "/orders/view-all";
 
-  const ViewAllOrdersPage({Key? key}) : super(key: key);
+  const ViewAllOrdersPage({super.key});
 
   @override
   State<ViewAllOrdersPage> createState() => _ViewAllOrdersPageState();

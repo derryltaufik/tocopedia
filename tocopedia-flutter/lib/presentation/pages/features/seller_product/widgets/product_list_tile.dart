@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/pages/features/seller_product/widgets/edi
 class ProductListTile extends StatelessWidget {
   final Product product;
 
-  const ProductListTile({Key? key, required this.product}) : super(key: key);
+  const ProductListTile({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,7 @@ class SellerEditProductPage extends StatefulWidget {
   static const String routeName = "seller/products/edit";
   final Product product;
 
-  const SellerEditProductPage({Key? key, required this.product})
-      : super(key: key);
+  const SellerEditProductPage({super.key, required this.product});
 
   @override
   State<SellerEditProductPage> createState() => _SellerEditProductPageState();

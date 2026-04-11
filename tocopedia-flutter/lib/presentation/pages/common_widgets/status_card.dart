@@ -5,8 +5,7 @@ class StatusCard extends StatelessWidget {
   final String text;
   final Color color;
 
-  const StatusCard({Key? key, required this.text, required this.color})
-      : super(key: key);
+  const StatusCard({super.key, required this.text, required this.color});
 
   @override
   Widget build(BuildContext context) {

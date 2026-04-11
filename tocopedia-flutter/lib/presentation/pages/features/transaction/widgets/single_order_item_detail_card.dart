@@ -11,8 +11,7 @@ import 'package:tocopedia/presentation/providers/local_settings_provider.dart';
 class SingleOrderItemDetailCard extends StatelessWidget {
   final OrderItemDetail orderItemDetail;
 
-  const SingleOrderItemDetailCard({Key? key, required this.orderItemDetail})
-      : super(key: key);
+  const SingleOrderItemDetailCard({super.key, required this.orderItemDetail});
 
   Future<void> addToCart(BuildContext context) async {
     await handleFutureFunction(

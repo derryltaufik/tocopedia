@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SingleChildFullPageScrollView extends StatelessWidget {
   final Widget? child;
 
-  const SingleChildFullPageScrollView({Key? key, this.child}) : super(key: key);
+  const SingleChildFullPageScrollView({super.key, this.child});
 
   const SingleChildFullPageScrollView.loading({super.key})
       : child = const CircularProgressIndicator();
