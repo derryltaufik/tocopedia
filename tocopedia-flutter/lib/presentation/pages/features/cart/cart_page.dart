@@ -91,7 +91,7 @@ class _CartPageState extends State<CartPage> {
                 color: theme.scaffoldBackgroundColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(1),
+                    color: Colors.grey.withValues(alpha: 1),
                     spreadRadius: 2,
                     blurRadius: 2,
                     offset: const Offset(0, 2),

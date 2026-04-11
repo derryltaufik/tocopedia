@@ -37,7 +37,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
           ?.firstWhere((element) => element.id == widget.initialCategory!.id);
     }
     return DropdownButtonFormField<Category>(
-      value: dropdownValue,
+      initialValue: dropdownValue,
       validator: (value) {
         if (value == null) return "Select category";
         return null;
