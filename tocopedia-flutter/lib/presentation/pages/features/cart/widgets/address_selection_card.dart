@@ -27,12 +27,12 @@ class AddressSelectionCard extends StatelessWidget {
           side: BorderSide(
             color: isSelected
                 ? theme.colorScheme.primary
-                : theme.colorScheme.outline.withOpacity(0.5),
+                : theme.colorScheme.outline.withValues(alpha: 0.5),
           ),
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
         color: isSelected
-            ? theme.colorScheme.secondaryContainer.withOpacity(.25)
+            ? theme.colorScheme.secondaryContainer.withValues(alpha: .25)
             : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

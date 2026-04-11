@@ -156,7 +156,7 @@ class ViewProductCard extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
           ),
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),

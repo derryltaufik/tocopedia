@@ -114,12 +114,12 @@ class SingleAddressCard extends StatelessWidget {
         side: BorderSide(
           color: isDefault
               ? theme.colorScheme.primary
-              : theme.colorScheme.outline.withOpacity(0.5),
+              : theme.colorScheme.outline.withValues(alpha: 0.5),
         ),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       color: isDefault
-          ? theme.colorScheme.secondaryContainer.withOpacity(.25)
+          ? theme.colorScheme.secondaryContainer.withValues(alpha: .25)
           : null,
       child: Column(
         children: [
