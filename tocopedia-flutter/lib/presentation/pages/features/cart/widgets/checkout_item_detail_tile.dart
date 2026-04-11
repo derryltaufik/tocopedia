@@ -29,7 +29,7 @@ class CheckoutItemDetailTile extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: product!.images![0],
               fit: BoxFit.cover,
-              progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+              progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                   child: CircularProgressIndicator(
                       value: downloadProgress.progress)),
               errorWidget: (context, url, error) => const Icon(Icons.error),

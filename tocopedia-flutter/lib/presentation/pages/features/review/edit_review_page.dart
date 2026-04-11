@@ -109,7 +109,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
                             width: 50,
                             height: 50,
                             progressIndicatorBuilder:
-                                (_, __, downloadProgress) => Center(
+                                (_, _, downloadProgress) => Center(
                                     child: CircularProgressIndicator(
                                         value: downloadProgress.progress)),
                             errorWidget: (context, url, error) =>
@@ -134,7 +134,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
                           initialRating: widget.review.rating!.toDouble(),
                           glow: false,
                           itemSize: 60,
-                          itemBuilder: (_, __) => const Icon(Icons.star_rounded,
+                          itemBuilder: (_, _) => const Icon(Icons.star_rounded,
                               color: CustomColors.starColor),
                           onRatingUpdate: (double value) =>
                               setState(() => _rating = value.toInt()),

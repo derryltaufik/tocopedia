@@ -109,7 +109,7 @@ class _ImagesGalleryPageState extends State<ImagesGalleryPage> {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           scrollDirection: Axis.horizontal,
                           itemCount: images.length,
-                          separatorBuilder: (_, __) => const SizedBox(width: 8),
+                          separatorBuilder: (_, _) => const SizedBox(width: 8),
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () => updateIndex(index),
@@ -134,7 +134,7 @@ class _ImagesGalleryPageState extends State<ImagesGalleryPage> {
                                   fit: BoxFit.cover,
                                   height: size,
                                   width: size,
-                                  progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                                  progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                                       child: CircularProgressIndicator(
                                           value: downloadProgress.progress)),
                                   errorWidget: (context, url, error) => const Icon(Icons.error),

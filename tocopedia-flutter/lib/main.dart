@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<UserProvider, ProductProvider>(
           create: (_) => di.locator<ProductProvider>(),
-          update: (_, value, __) =>
+          update: (_, value, _) =>
               di.locator<ProductProvider>(param1: value.user?.token),
         ),
         ChangeNotifierProxyProvider<UserProvider, CartProvider>(
@@ -69,17 +69,17 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<UserProvider, OrderProvider>(
           create: (_) => di.locator<OrderProvider>(),
-          update: (_, value, __) =>
+          update: (_, value, _) =>
               di.locator<OrderProvider>(param1: value.user?.token),
         ),
         ChangeNotifierProxyProvider<UserProvider, WishlistProvider>(
           create: (_) => di.locator<WishlistProvider>(),
-          update: (_, value, __) =>
+          update: (_, value, _) =>
               di.locator<WishlistProvider>(param1: value.user?.token),
         ),
         ChangeNotifierProxyProvider<UserProvider, OrderItemProvider>(
           create: (_) => di.locator<OrderItemProvider>(),
-          update: (_, value, __) =>
+          update: (_, value, _) =>
               di.locator<OrderItemProvider>(param1: value.user?.token),
         ),
         ChangeNotifierProxyProvider<UserProvider, AddressProvider>(

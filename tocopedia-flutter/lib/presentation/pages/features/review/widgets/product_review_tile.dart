@@ -48,7 +48,7 @@ class _ProductReviewTileState extends State<ProductReviewTile> {
               itemSize: 20,
               ignoreGestures: true,
               initialRating: widget.review.rating!.toDouble(),
-              itemBuilder: (_, __) =>
+              itemBuilder: (_, _) =>
                   const Icon(Icons.star_rounded, color: CustomColors.starColor),
               onRatingUpdate: (_) {},
             ),

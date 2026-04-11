@@ -63,7 +63,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                 imageUrl: value.image!,
                 height: 30,
                 width: 30,
-                progressIndicatorBuilder: (_, __, downloadProgress) => Center(
+                progressIndicatorBuilder: (_, _, downloadProgress) => Center(
                     child: CircularProgressIndicator(
                         value: downloadProgress.progress)),
                 errorWidget: (context, url, error) => const Icon(Icons.error),

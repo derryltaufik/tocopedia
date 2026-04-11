@@ -34,7 +34,7 @@ class HistoryReviewTile extends StatelessWidget {
                   itemSize: 20,
                   ignoreGestures: true,
                   initialRating: review.rating?.toDouble() ?? 0,
-                  itemBuilder: (_, __) => const Icon(Icons.star_rounded,
+                  itemBuilder: (_, _) => const Icon(Icons.star_rounded,
                       color: CustomColors.starColor),
                   onRatingUpdate: (_) {},
                 ),

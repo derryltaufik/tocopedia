@@ -11,7 +11,7 @@ class CartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Consumer<CartProvider>(builder: (_, cartProvider, __) {
+      icon: Consumer<CartProvider>(builder: (_, cartProvider, _) {
         return Badge.count(
             count: cartProvider.totalItemCount,
             child: const Icon(Icons.shopping_cart_outlined, size: 25));

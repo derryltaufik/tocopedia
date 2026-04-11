@@ -177,7 +177,7 @@ class _CartItemDetailTileState extends State<CartItemDetailTile> {
                         child: CachedNetworkImage(
                           imageUrl: product.images![0],
                           fit: BoxFit.cover,
-                          progressIndicatorBuilder: (_, __, downloadProgress) =>
+                          progressIndicatorBuilder: (_, _, downloadProgress) =>
                               Center(
                                   child: CircularProgressIndicator(
                                       value: downloadProgress.progress)),
