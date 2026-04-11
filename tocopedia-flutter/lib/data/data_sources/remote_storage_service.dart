@@ -19,7 +19,7 @@ class RemoteStorageServiceImpl implements RemoteStorageService {
     final extension = _getExtension(imageFile.path);
     final contentType = _getContentType(extension);
 
-    final presignUri = Uri.parse('$BASE_URL/upload/presign').replace(
+    final presignUri = Uri.parse('$baseUrl/upload/presign').replace(
       queryParameters: {
         'contentType': contentType,
         'extension': extension,

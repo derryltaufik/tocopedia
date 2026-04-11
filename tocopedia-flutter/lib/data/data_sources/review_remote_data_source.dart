@@ -58,7 +58,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
           (key, value) => value == null || value.toString().isEmpty));
 
       final url =
-          Uri.parse(BASE_URL).replace(path: '/reviews/$orderItemDetailId');
+          Uri.parse(baseUrl).replace(path: '/reviews/$orderItemDetailId');
 
       final response = await client
           .post(
@@ -98,7 +98,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
       }..removeWhere(
           (key, value) => value == null || value.toString().isEmpty));
 
-      final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+      final url = Uri.parse(baseUrl).replace(path: '/reviews/$reviewId');
 
       final response = await client
           .patch(
@@ -126,7 +126,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
   @override
   Future<List<ReviewModel>> getBuyerReviews(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/reviews/buyer');
+      final url = Uri.parse(baseUrl).replace(path: '/reviews/buyer');
 
       final response = await client
           .get(
@@ -155,7 +155,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
   Future<List<ReviewModel>> getProductReviews(String productId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/reviews/products/$productId');
+          Uri.parse(baseUrl).replace(path: '/reviews/products/$productId');
 
       final response = await client
           .get(
@@ -183,7 +183,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
   Future<List<ReviewModel>> getSellerReviews(String sellerId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/reviews/seller/$sellerId');
+          Uri.parse(baseUrl).replace(path: '/reviews/seller/$sellerId');
 
       final response = await client
           .get(
@@ -210,7 +210,7 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
   @override
   Future<ReviewModel> getReview(String reviewId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/reviews/$reviewId');
+      final url = Uri.parse(baseUrl).replace(path: '/reviews/$reviewId');
 
       final response = await client
           .get(

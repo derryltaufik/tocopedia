@@ -23,7 +23,7 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   @override
   Future<WishlistModel> addWishlist(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/wishlist/$productId');
 
       final response = await client
           .post(
@@ -49,7 +49,7 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   @override
   Future<WishlistModel> deleteWishlist(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/wishlist/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/wishlist/$productId');
 
       final response = await client
           .delete(
@@ -75,7 +75,7 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   @override
   Future<WishlistModel> getWishlist(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/wishlist');
+      final url = Uri.parse(baseUrl).replace(path: '/wishlist');
 
       final response = await client
           .get(

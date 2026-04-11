@@ -191,9 +191,7 @@ class ProductModel {
           : CategoryModel.fromMap(map['category']),
       totalSold: map['total_sold'],
       totalRating: map['total_rating'],
-      averageRating: map['average_rating'] == null
-          ? null
-          : map['average_rating']!.toDouble(),
+      averageRating: map['average_rating']?.toDouble(),
       createdAt:
           map['createdAt'] == null ? null : DateTime.parse(map['createdAt']),
       updatedAt:

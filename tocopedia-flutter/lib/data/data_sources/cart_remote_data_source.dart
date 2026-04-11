@@ -35,7 +35,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<CartModel> getCart(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart');
+      final url = Uri.parse(baseUrl).replace(path: '/cart');
 
       final response = await client
           .get(
@@ -61,7 +61,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<CartModel> clearCart(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart/clear');
+      final url = Uri.parse(baseUrl).replace(path: '/cart/clear');
 
       final response = await client
           .patch(
@@ -88,7 +88,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<CartModel> addToCart(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart/add/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/cart/add/$productId');
 
       final response = await client
           .patch(
@@ -114,7 +114,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<CartModel> removeFromCart(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart/remove/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/cart/remove/$productId');
 
       final response = await client
           .patch(
@@ -140,7 +140,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<CartModel> selectCartItem(String token, String productId) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart/select/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/cart/select/$productId');
 
       final response = await client
           .patch(
@@ -167,7 +167,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   Future<CartModel> selectSeller(String token, String sellerId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/cart/select/seller/$sellerId');
+          Uri.parse(baseUrl).replace(path: '/cart/select/seller/$sellerId');
       final response = await client
           .patch(
             url,
@@ -193,7 +193,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   Future<CartModel> unSelectCartItem(String token, String productId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/cart/unselect/$productId');
+          Uri.parse(baseUrl).replace(path: '/cart/unselect/$productId');
 
       final response = await client
           .patch(
@@ -220,7 +220,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   Future<CartModel> unselectSeller(String token, String sellerId) async {
     try {
       final url =
-          Uri.parse(BASE_URL).replace(path: '/cart/unselect/seller/$sellerId');
+          Uri.parse(baseUrl).replace(path: '/cart/unselect/seller/$sellerId');
 
       final response = await client
           .patch(
@@ -247,7 +247,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   Future<CartModel> updateCart(
       String token, String productId, int quantity) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/cart/update/$productId');
+      final url = Uri.parse(baseUrl).replace(path: '/cart/update/$productId');
 
       final response = await client
           .patch(

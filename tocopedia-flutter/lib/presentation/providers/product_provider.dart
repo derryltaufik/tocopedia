@@ -60,7 +60,7 @@ class ProductProvider with ChangeNotifier {
         _getProduct = getProduct,
         _authToken = authToken;
 
-  ProviderState _searchProductState = ProviderState.empty;
+  final ProviderState _searchProductState = ProviderState.empty;
 
   ProviderState get searchProductState => _searchProductState;
 

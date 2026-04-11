@@ -25,7 +25,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UserModel> signUp(String email, String password, String name) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/auth/signup');
+      final url = Uri.parse(baseUrl).replace(path: '/auth/signup');
 
       final response = await client
           .post(
@@ -55,7 +55,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UserModel> login(String email, String password) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/auth/login');
+      final url = Uri.parse(baseUrl).replace(path: '/auth/login');
 
       final response = await client
           .post(
@@ -84,7 +84,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<UserModel> getUser(String token) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/users');
+      final url = Uri.parse(baseUrl).replace(path: '/users');
 
       final response = await client
           .get(
@@ -112,7 +112,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   Future<UserModel> updateUser(String token,
       {String? name, String? addressId}) async {
     try {
-      final url = Uri.parse(BASE_URL).replace(path: '/users');
+      final url = Uri.parse(baseUrl).replace(path: '/users');
       final response = await client
           .patch(
             url,
