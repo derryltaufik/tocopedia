@@ -7,7 +7,7 @@ import 'package:tocopedia/presentation/pages/features/order/view_order_page.dart
 class SingleOrderCard extends StatelessWidget {
   final Order order;
 
-  const SingleOrderCard({Key? key, required this.order}) : super(key: key);
+  const SingleOrderCard({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {

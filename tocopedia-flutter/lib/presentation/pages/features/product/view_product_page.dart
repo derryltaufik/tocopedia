@@ -20,7 +20,7 @@ class ViewProductPage extends StatefulWidget {
 
   final String productId;
 
-  const ViewProductPage({Key? key, required this.productId}) : super(key: key);
+  const ViewProductPage({super.key, required this.productId});
 
   @override
   State<ViewProductPage> createState() => _ViewProductPageState();

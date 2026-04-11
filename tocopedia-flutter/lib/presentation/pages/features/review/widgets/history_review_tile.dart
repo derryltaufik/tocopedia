@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/pages/features/review/view_review_page.da
 class HistoryReviewTile extends StatelessWidget {
   final Review review;
 
-  const HistoryReviewTile({Key? key, required this.review}) : super(key: key);
+  const HistoryReviewTile({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {

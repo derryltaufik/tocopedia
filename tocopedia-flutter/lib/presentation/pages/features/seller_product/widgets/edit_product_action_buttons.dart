@@ -122,8 +122,7 @@ class EditProductActionButtons extends StatelessWidget {
 class ChangePriceBottomSheet extends StatefulWidget {
   final int initialPrice;
 
-  const ChangePriceBottomSheet({Key? key, required this.initialPrice})
-      : super(key: key);
+  const ChangePriceBottomSheet({super.key, required this.initialPrice});
 
   @override
   State<ChangePriceBottomSheet> createState() => _ChangePriceBottomSheetState();
@@ -190,8 +189,7 @@ class ChangeStockBottomSheet extends StatefulWidget {
   final int initialStock;
 
   const ChangeStockBottomSheet(
-      {Key? key, required this.initialActive, required this.initialStock})
-      : super(key: key);
+      {super.key, required this.initialActive, required this.initialStock});
 
   @override
   State<ChangeStockBottomSheet> createState() => _ChangeStockBottomSheetState();
@@ -300,8 +298,7 @@ class ShowMoreOptionsBottomSheet extends StatelessWidget {
   final void Function()? onView;
   final void Function()? onDelete;
 
-  const ShowMoreOptionsBottomSheet({Key? key, this.onView, this.onDelete})
-      : super(key: key);
+  const ShowMoreOptionsBottomSheet({super.key, this.onView, this.onDelete});
 
   @override
   Widget build(BuildContext context) {

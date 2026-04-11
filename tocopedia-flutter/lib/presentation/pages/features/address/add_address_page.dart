@@ -8,7 +8,7 @@ import 'package:tocopedia/presentation/providers/user_provider.dart';
 class AddAddressPage extends StatefulWidget {
   static const String routeName = "addresses/add";
 
-  const AddAddressPage({Key? key}) : super(key: key);
+  const AddAddressPage({super.key});
 
   @override
   State<AddAddressPage> createState() => _AddAddressPageState();

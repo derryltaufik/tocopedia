@@ -7,8 +7,7 @@ import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 class WishlistActionButtons extends StatelessWidget {
   final String productId;
 
-  const WishlistActionButtons({Key? key, required this.productId})
-      : super(key: key);
+  const WishlistActionButtons({super.key, required this.productId});
 
   Future<void> addToCart(BuildContext context) async {
     await handleFutureFunction(

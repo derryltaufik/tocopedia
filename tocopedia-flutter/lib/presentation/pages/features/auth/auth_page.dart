@@ -12,7 +12,7 @@ enum AuthFormMode { signUp, login }
 class AuthPage extends StatefulWidget {
   static const String routeName = '/auth';
 
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();

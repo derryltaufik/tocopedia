@@ -11,7 +11,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class TransactionPage extends StatefulWidget {
   static const String routeName = "/transactions";
 
-  const TransactionPage({Key? key}) : super(key: key);
+  const TransactionPage({super.key});
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();

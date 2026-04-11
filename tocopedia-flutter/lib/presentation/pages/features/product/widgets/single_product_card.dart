@@ -8,8 +8,7 @@ import 'package:tocopedia/presentation/pages/features/product/widgets/wishlist_a
 
 class SingleProductCard extends StatelessWidget {
   const SingleProductCard(
-      {Key? key, required this.product, this.isWishlist = false})
-      : super(key: key);
+      {super.key, required this.product, this.isWishlist = false});
 
   final Product product;
   final bool isWishlist;

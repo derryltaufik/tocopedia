@@ -4,12 +4,12 @@ import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 
 class AddressSelectionCard extends StatelessWidget {
   const AddressSelectionCard({
-    Key? key,
+    super.key,
     required this.address,
     this.isDefault = false,
     this.isSelected = true,
     this.width = 200,
-  }) : super(key: key);
+  });
 
   final Address address;
   final bool isDefault;

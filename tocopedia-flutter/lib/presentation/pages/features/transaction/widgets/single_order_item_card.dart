@@ -10,8 +10,7 @@ import 'package:tocopedia/presentation/pages/common_widgets/status_card.dart';
 class SingleOrderItemCard extends StatelessWidget {
   final OrderItem orderItem;
 
-  const SingleOrderItemCard({Key? key, required this.orderItem})
-      : super(key: key);
+  const SingleOrderItemCard({super.key, required this.orderItem});
 
   @override
   Widget build(BuildContext context) {

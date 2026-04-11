@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/pages/features/product/widgets/single_pro
 import 'package:tocopedia/presentation/providers/wishlist_provider.dart';
 
 class WishListPage extends StatefulWidget {
-  const WishListPage({Key? key}) : super(key: key);
+  const WishListPage({super.key});
 
   @override
   State<WishListPage> createState() => _WishListPageState();

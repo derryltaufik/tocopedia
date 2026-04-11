@@ -9,9 +9,9 @@ class CheckoutItemDetailTile extends StatelessWidget {
   final CartItemDetail cartItemDetail;
 
   const CheckoutItemDetailTile({
-    Key? key,
+    super.key,
     required this.cartItemDetail,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

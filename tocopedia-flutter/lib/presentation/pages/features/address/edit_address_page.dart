@@ -18,8 +18,7 @@ class EditAddressPage extends StatefulWidget {
   final bool isDefault;
 
   const EditAddressPage(
-      {Key? key, required this.address, this.isDefault = false})
-      : super(key: key);
+      {super.key, required this.address, this.isDefault = false});
 
   @override
   State<EditAddressPage> createState() => _EditAddressPageState();

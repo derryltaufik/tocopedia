@@ -13,8 +13,7 @@ class PickImageTile extends StatelessWidget {
   final String? label;
 
   const PickImageTile(
-      {Key? key, this.label, required this.index, required this.size})
-      : super(key: key);
+      {super.key, this.label, required this.index, required this.size});
 
   void pickImage(BuildContext context) async {
     final ImageSource? imageSource = await showModalBottomSheet(
@@ -109,7 +108,7 @@ class PickImageTile extends StatelessWidget {
 }
 
 class ImageSourceSelectionBottomSheet extends StatelessWidget {
-  const ImageSourceSelectionBottomSheet({Key? key}) : super(key: key);
+  const ImageSourceSelectionBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

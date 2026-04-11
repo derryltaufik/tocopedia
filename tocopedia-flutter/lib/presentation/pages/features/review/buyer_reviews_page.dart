@@ -12,7 +12,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class BuyerReviewsPage extends StatefulWidget {
   static const String routeName = "/reviews/buyer";
 
-  const BuyerReviewsPage({Key? key}) : super(key: key);
+  const BuyerReviewsPage({super.key});
 
   @override
   State<BuyerReviewsPage> createState() => _BuyerReviewsPageState();

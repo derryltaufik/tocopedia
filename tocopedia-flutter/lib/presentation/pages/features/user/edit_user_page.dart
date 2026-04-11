@@ -7,7 +7,7 @@ import 'package:tocopedia/presentation/providers/user_provider.dart';
 class EditUserPage extends StatefulWidget {
   static const String routeName = '/users/edit';
 
-  const EditUserPage({Key? key}) : super(key: key);
+  const EditUserPage({super.key});
 
   @override
   State<EditUserPage> createState() => _EditUserPageState();

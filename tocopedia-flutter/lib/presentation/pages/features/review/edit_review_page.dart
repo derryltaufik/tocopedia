@@ -17,9 +17,9 @@ class EditReviewPage extends StatefulWidget {
   final Review review;
 
   const EditReviewPage({
-    Key? key,
+    super.key,
     required this.review,
-  }) : super(key: key);
+  });
 
   @override
   State<EditReviewPage> createState() => _EditReviewPageState();

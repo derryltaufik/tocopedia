@@ -17,8 +17,7 @@ class ViewOrderItemPage extends StatefulWidget {
 
   final String orderItemId;
 
-  const ViewOrderItemPage({Key? key, required this.orderItemId})
-      : super(key: key);
+  const ViewOrderItemPage({super.key, required this.orderItemId});
 
   @override
   State<ViewOrderItemPage> createState() => _ViewOrderItemPageState();

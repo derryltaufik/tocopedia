@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 class UserPage extends StatelessWidget {
   static const String routeName = "/users";
 
-  const UserPage({Key? key}) : super(key: key);
+  const UserPage({super.key});
 
   Future<void> logout(BuildContext context) async {
     await handleFutureFunction(

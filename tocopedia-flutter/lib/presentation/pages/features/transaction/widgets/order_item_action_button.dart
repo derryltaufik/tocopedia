@@ -154,7 +154,7 @@ class OrderItemActionButton extends StatelessWidget {
 }
 
 class InputAirwayBillDialog extends StatefulWidget {
-  const InputAirwayBillDialog({Key? key}) : super(key: key);
+  const InputAirwayBillDialog({super.key});
 
   @override
   State<InputAirwayBillDialog> createState() => _InputAirwayBillDialogState();

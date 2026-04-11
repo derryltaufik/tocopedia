@@ -10,7 +10,7 @@ import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 class CartPage extends StatefulWidget {
   static const String routeName = "/cart";
 
-  const CartPage({Key? key}) : super(key: key);
+  const CartPage({super.key});
 
   @override
   State<CartPage> createState() => _CartPageState();

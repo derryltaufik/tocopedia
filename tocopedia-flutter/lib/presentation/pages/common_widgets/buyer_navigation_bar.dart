@@ -6,7 +6,7 @@ import 'package:tocopedia/presentation/pages/features/wishlist/wishlist_page.dar
 import 'package:tocopedia/presentation/pages/features/review/buyer_reviews_page.dart';
 
 class BuyerNavBar extends StatefulWidget {
-  const BuyerNavBar({Key? key}) : super(key: key);
+  const BuyerNavBar({super.key});
 
   @override
   State<BuyerNavBar> createState() => _BuyerNavBarState();

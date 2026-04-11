@@ -13,8 +13,7 @@ class SingleAddressCard extends StatelessWidget {
   final bool isDefault;
 
   const SingleAddressCard(
-      {Key? key, required this.address, this.isDefault = true})
-      : super(key: key);
+      {super.key, required this.address, this.isDefault = true});
 
   Future<void> setAsDefault(BuildContext context) async {
     await handleFutureFunction(

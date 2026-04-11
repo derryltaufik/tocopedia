@@ -9,7 +9,7 @@ import 'package:tocopedia/presentation/pages/common_widgets/images/photos_horizo
 class ProductReviewTile extends StatefulWidget {
   final Review review;
 
-  const ProductReviewTile({Key? key, required this.review}) : super(key: key);
+  const ProductReviewTile({super.key, required this.review});
 
   @override
   State<ProductReviewTile> createState() => _ProductReviewTileState();

@@ -5,7 +5,7 @@ import 'package:tocopedia/presentation/pages/common_widgets/product_search_bar.d
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String query;
 
-  const HomeAppBar({Key? key, this.query = ""}) : super(key: key);
+  const HomeAppBar({super.key, this.query = ""});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

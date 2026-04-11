@@ -4,7 +4,7 @@ import 'package:tocopedia/presentation/pages/features/seller_product/seller_view
 import 'package:tocopedia/presentation/pages/features/user/user_page.dart';
 
 class SellerNavBar extends StatefulWidget {
-  const SellerNavBar({Key? key}) : super(key: key);
+  const SellerNavBar({super.key});
 
   @override
   State<SellerNavBar> createState() => _SellerNavBarState();
