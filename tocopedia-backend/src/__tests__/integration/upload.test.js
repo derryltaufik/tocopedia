@@ -4,7 +4,6 @@ const { createTestUser } = require("../helpers");
 
 // Mock S3 service
 jest.mock("../../services/s3", () => ({
-  uploadFile: jest.fn().mockResolvedValue("https://cdn.example.com/uploads/test.jpg"),
   getPresignedUploadUrl: jest.fn().mockResolvedValue({
     presignedUrl: "https://s3.example.com/presigned-url",
     publicUrl: "https://cdn.example.com/uploads/test.jpg",
@@ -97,56 +96,6 @@ describe("Upload Endpoints", () => {
 
       expect(res.status).toBe(500);
       expect(res.body.error).toBe("Failed to generate upload URL");
-    });
-  });
-
-  describe("POST /upload", () => {
-    it("should return 201 with URL on successful upload", async () => {
-      const res = await request(app)
-        .post("/upload")
-        .set("Authorization", `Bearer ${token}`)
-        .attach("image", Buffer.from("fake-image-data"), {
-          filename: "test.jpg",
-          contentType: "image/jpeg",
-        });
-
-      expect(res.status).toBe(201);
-      expect(res.body.data.url).toBe("https://cdn.example.com/uploads/test.jpg");
-    });
-
-    it("should return 400 when no file provided", async () => {
-      const res = await request(app)
-        .post("/upload")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(res.status).toBe(400);
-      expect(res.body.error).toMatch(/No image file provided/);
-    });
-
-    it("should return 401 without auth token", async () => {
-      const res = await request(app)
-        .post("/upload")
-        .attach("image", Buffer.from("fake-image-data"), {
-          filename: "test.jpg",
-          contentType: "image/jpeg",
-        });
-
-      expect(res.status).toBe(401);
-    });
-
-    it("should return 500 when upload fails", async () => {
-      s3Service.uploadFile.mockRejectedValueOnce(new Error("S3 error"));
-
-      const res = await request(app)
-        .post("/upload")
-        .set("Authorization", `Bearer ${token}`)
-        .attach("image", Buffer.from("fake-image-data"), {
-          filename: "test.jpg",
-          contentType: "image/jpeg",
-        });
-
-      expect(res.status).toBe(500);
-      expect(res.body.error).toBe("Upload failed");
     });
   });
 });
