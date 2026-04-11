@@ -29,6 +29,7 @@ class _BuyerReviewsPageState extends State<BuyerReviewsPage>
     _tabController = TabController(length: 2, vsync: this);
 
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<ReviewProvider>(context, listen: false)
               .getBuyerReviewsState !=
           ProviderState.loaded) {

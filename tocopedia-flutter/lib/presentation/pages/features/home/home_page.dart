@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<ProductProvider>(context, listen: false)
                   .getPopularProductsState !=
               ProviderState.loaded ||

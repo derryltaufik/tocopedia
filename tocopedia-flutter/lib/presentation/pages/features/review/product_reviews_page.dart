@@ -24,6 +24,7 @@ class _ProductReviewsPageState extends State<ProductReviewsPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }

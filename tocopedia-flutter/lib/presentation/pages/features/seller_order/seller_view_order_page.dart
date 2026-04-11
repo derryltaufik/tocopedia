@@ -40,6 +40,7 @@ class _SellerViewOrderPageState extends State<SellerViewOrderPage>
     super.initState();
     _tabController = TabController(length: 6, vsync: this);
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<OrderItemProvider>(context, listen: false)
               .getSellerOrderItemsState !=
           ProviderState.loaded) {

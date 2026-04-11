@@ -22,6 +22,7 @@ class _ViewAllAddressesPageState extends State<ViewAllAddressesPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<AddressProvider>(context, listen: false)
               .getUserAddressesState !=
           ProviderState.loaded) {

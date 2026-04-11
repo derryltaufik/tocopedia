@@ -37,8 +37,10 @@ class _WishlistButtonState extends State<WishlistButton> {
     if (Provider.of<WishlistProvider>(context, listen: false)
             .getWishlistState !=
         ProviderState.loaded) {
-      Future.microtask(() =>
-          Provider.of<WishlistProvider>(context, listen: false).getWishlist());
+      Future.microtask(() {
+        if (!mounted) return;
+        Provider.of<WishlistProvider>(context, listen: false).getWishlist();
+      });
     }
   }
 

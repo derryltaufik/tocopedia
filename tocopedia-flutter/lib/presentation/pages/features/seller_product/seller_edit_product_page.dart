@@ -76,6 +76,7 @@ class _SellerEditProductPageState extends State<SellerEditProductPage> {
     _selectedCategory = widget.product.category;
 
     Future.microtask(() {
+      if (!mounted) return;
       Provider.of<ProductProvider>(context, listen: false)
           .getProduct(widget.product.id!)
           .then((value) => setState(

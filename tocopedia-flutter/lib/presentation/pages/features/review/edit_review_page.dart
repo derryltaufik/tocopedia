@@ -39,6 +39,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
     _reviewController.text = widget.review.review ?? "";
 
     Future.microtask(() {
+      if (!mounted) return;
       Provider.of<ReviewProvider>(context, listen: false)
           .getReview(widget.review.id!)
           .then(

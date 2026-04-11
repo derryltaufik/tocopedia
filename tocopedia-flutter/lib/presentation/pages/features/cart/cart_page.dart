@@ -21,6 +21,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<CartProvider>(context, listen: false).getCartState !=
           ProviderState.loaded) {
         _fetchData(context);

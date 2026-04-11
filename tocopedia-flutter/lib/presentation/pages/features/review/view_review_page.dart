@@ -28,6 +28,7 @@ class _ViewReviewPageState extends State<ViewReviewPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       _fetchData(context);
     });
   }

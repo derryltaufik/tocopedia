@@ -21,6 +21,7 @@ class _ViewAllOrdersPageState extends State<ViewAllOrdersPage> {
     super.initState();
 
     Future.microtask(() {
+      if (!mounted) return;
       if (Provider.of<OrderProvider>(context, listen: false)
               .getUserOrdersState !=
           ProviderState.loaded) {
