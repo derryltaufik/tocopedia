@@ -235,7 +235,6 @@ void init() {
       logout: locator(),
       saveUser: locator(),
       autoLogin: locator(),
-      getUser: locator(),
       updateUser: locator(),
     ),
   );
@@ -263,7 +262,6 @@ void init() {
   locator.registerFactoryParam(
     (String? param1, _) => CartProvider(
       addToCart: locator(),
-      clearCart: locator(),
       getCart: locator(),
       removeFromCart: locator(),
       updateCart: locator(),
@@ -271,7 +269,6 @@ void init() {
       unselectCartItem: locator(),
       selectSeller: locator(),
       unselectSeller: locator(),
-      getProduct: locator(),
       authToken: param1,
     ),
   );
@@ -304,7 +301,6 @@ void init() {
     (String? param1, _) => AddressProvider(
       addAddress: locator(),
       deleteAddress: locator(),
-      getAddress: locator(),
       getUserAddresses: locator(),
       updateAddress: locator(),
       authToken: param1,
@@ -324,7 +320,6 @@ void init() {
     (String? param1, _) => ReviewProvider(
       getBuyerReviews: locator(),
       getProductReviews: locator(),
-      getSellerReviews: locator(),
       addReview: locator(),
       updateReview: locator(),
       getReview: locator(),

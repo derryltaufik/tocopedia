@@ -7,7 +7,6 @@ import 'package:tocopedia/domains/use_cases/review/add_review.dart';
 import 'package:tocopedia/domains/use_cases/review/get_buyer_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_product_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/get_review.dart';
-import 'package:tocopedia/domains/use_cases/review/get_seller_reviews.dart';
 import 'package:tocopedia/domains/use_cases/review/update_review.dart';
 import 'package:tocopedia/presentation/helper_variables/provider_state.dart';
 
@@ -15,7 +14,6 @@ class ReviewProvider with ChangeNotifier {
   final AddReview _addReview;
   final UpdateReview _updateReview;
   final GetBuyerReviews _getBuyerReviews;
-  final GetSellerReviews _getSellerReviews;
   final GetProductReviews _getProductReviews;
   final GetReview _getReview;
 
@@ -41,14 +39,12 @@ class ReviewProvider with ChangeNotifier {
 
   ReviewProvider({
     required GetProductReviews getProductReviews,
-    required GetSellerReviews getSellerReviews,
     required GetBuyerReviews getBuyerReviews,
     required AddReview addReview,
     required UpdateReview updateReview,
     required GetReview getReview,
     required String? authToken,
   })  : _getProductReviews = getProductReviews,
-        _getSellerReviews = getSellerReviews,
         _getBuyerReviews = getBuyerReviews,
         _addReview = addReview,
         _updateReview = updateReview,
@@ -180,6 +176,6 @@ class ReviewProvider with ChangeNotifier {
   }
 
   bool _verifyToken() {
-    return (_authToken != null && _authToken!.isNotEmpty);
+    return (_authToken != null && _authToken.isNotEmpty);
   }
 }
