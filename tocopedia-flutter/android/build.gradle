@@ -12,6 +12,11 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(":app")
 }
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.add("-Xlint:-options")
+    }
+}
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
